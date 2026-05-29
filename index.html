@@ -3,1112 +3,236 @@
 
 <head>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
-  <title>GFC Validation App</title>
+    <title>GFC Validation Tool</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link rel="stylesheet"
+          href="css/style.css">
 
-  <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial,sans-serif;
-    }
-
-    body{
-      background:#f3f4f6;
-      padding:20px;
-    }
-
-    .top-bar{
-      display:flex;
-      gap:20px;
-      margin-bottom:20px;
-      flex-wrap:wrap;
-      align-items:end;
-    }
-
-    .container{
-      display:flex;
-      gap:20px;
-      height:calc(100vh - 140px);
-    }
-
-    .viewer{
-      flex:2;
-      background:white;
-      border-radius:12px;
-      padding:10px;
-      overflow:auto;
-      box-shadow:0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .panel{
-      flex:1;
-      background:white;
-      border-radius:12px;
-      padding:20px;
-      overflow-y:auto;
-      box-shadow:0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    canvas{
-      width:100%;
-      border:1px solid #ccc;
-    }
-
-    label{
-      display:block;
-      margin-top:15px;
-      margin-bottom:5px;
-      font-weight:bold;
-    }
-
-    select,
-    textarea,
-    input{
-      width:100%;
-      padding:10px;
-      border-radius:6px;
-      border:1px solid #ccc;
-    }
-
-    textarea{
-      min-height:80px;
-    }
-
-    .checklist-item{
-      border:1px solid #ddd;
-      padding:12px;
-      border-radius:8px;
-      margin-top:12px;
-    }
-
-    .status-buttons{
-      display:flex;
-      gap:10px;
-      margin-top:10px;
-      margin-bottom:10px;
-    }
-
-    .status-buttons button{
-      flex:1;
-      border:none;
-      padding:8px;
-      border-radius:6px;
-      cursor:pointer;
-      color:white;
-      font-weight:bold;
-    }
-
-    .present{
-      background:#28a745;
-    }
-
-    .missing{
-      background:#dc3545;
-    }
-
-    .na{
-      background:#6c757d;
-    }
-
-    .navigation{
-      display:flex;
-      justify-content:space-between;
-      margin-top:15px;
-    }
-
-    .navigation button,
-    .action-btn{
-      background:#007bff;
-      color:white;
-      border:none;
-      padding:10px 16px;
-      border-radius:6px;
-      cursor:pointer;
-    }
-
-    .report-section{
-      background:white;
-      margin-top:20px;
-      padding:20px;
-      border-radius:12px;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:15px;
-    }
-
-    th,td{
-      border:1px solid #ddd;
-      padding:10px;
-      text-align:left;
-    }
-
-    th{
-      background:#f1f1f1;
-    }
-
-    .page-info{
-      margin-top:10px;
-      font-weight:bold;
-    }
-
-  </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </head>
 
 <body>
 
-  <div class="top-bar">
+<header>
 
-    <div>
-      <label>Upload GFC PDF</label>
-      <input type="file" id="pdfUpload" accept="application/pdf">
+    <h1>GFC Validation Tool</h1>
+
+</header>
+
+<section class="upload-section">
+
+    <div class="upload-card">
+
+        <label>
+            Upload GFC Docket PDF
+        </label>
+
+        <input type="file"
+               id="gfcPdfInput"
+               accept=".pdf">
+
     </div>
 
-    <div>
-      <label>Upload BOQ PDF</label>
-      <input type="file" id="boqUpload" accept="application/pdf">
+    <div class="upload-card">
+
+        <label>
+            Upload BOQ PDF
+        </label>
+
+        <input type="file"
+               id="boqPdfInput"
+               accept=".pdf">
+
     </div>
 
-    <button class="action-btn" onclick="generateFinalReport()">
-      Generate Report
+</section>
+
+<section class="main-layout">
+
+    <!-- LEFT -->
+
+    <div class="viewer-panel">
+
+        <div class="viewer-toolbar">
+
+            <button id="prevPageBtn">
+                Previous
+            </button>
+
+            <span>
+                Page
+                <span id="currentPage">
+                    1
+                </span>
+                /
+                <span id="totalPages">
+                    0
+                </span>
+            </span>
+
+            <button id="nextPageBtn">
+                Next
+            </button>
+
+        </div>
+
+        <canvas id="pdfCanvas"></canvas>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="validation-panel">
+
+        <h2>Validation</h2>
+
+        <!-- ROOM -->
+
+        <label>
+            Room
+        </label>
+
+        <select id="roomDropdown">
+
+            <option value="">
+                Select Room
+            </option>
+
+        </select>
+
+        <!-- ITEMS -->
+
+        <label>
+            Item Name(s)
+        </label>
+
+        <select id="itemDropdown"
+                multiple>
+
+        </select>
+
+        <!-- CATEGORY -->
+
+        <label>
+            Drawing Category
+        </label>
+
+        <select id="categoryDropdown"
+                multiple>
+
+            <option value="falseCeiling">
+                False Ceiling
+            </option>
+
+            <option value="electrical">
+                Electrical
+            </option>
+
+            <option value="plumbing">
+                Plumbing
+            </option>
+
+            <option value="flooring">
+                Flooring
+            </option>
+
+            <option value="carpentry">
+                Carpentry
+            </option>
+
+            <option value="elevation">
+                Elevation
+            </option>
+
+        </select>
+
+        <!-- DRAWING STATUS -->
+
+        <div class="drawing-status">
+
+            <label>
+
+                <input type="checkbox"
+                       id="drawingNotAvailable">
+
+                Drawing Not Available
+
+            </label>
+
+        </div>
+
+        <textarea
+                id="drawingMissingReason"
+                placeholder="Reason if drawing not available">
+        </textarea>
+
+        <!-- CHECKLIST -->
+
+        <div id="checklistContainer">
+
+        </div>
+
+        <!-- REMARKS -->
+
+        <label>
+            Overall Remarks
+        </label>
+
+        <textarea id="overallRemarks">
+
+        </textarea>
+
+        <button id="saveValidationBtn">
+
+            Save Page Validation
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- REPORT SECTION -->
+
+<section class="report-section">
+
+    <h2>Reports</h2>
+
+    <button id="generateReportBtn">
+
+        Generate Reports
+
     </button>
 
-  </div>
+    <button id="exportExcelBtn">
 
-  <div class="container">
+        Export Excel
 
-    <div class="viewer">
+    </button>
 
-      <canvas id="pdfCanvas"></canvas>
-
-      <div class="page-info">
-        Page <span id="currentPage">0</span> of
-        <span id="totalPages">0</span>
-      </div>
-
-      <div class="navigation">
-
-        <button onclick="prevPage()">
-          Previous
-        </button>
-
-        <button onclick="nextPage()">
-          Next
-        </button>
-
-      </div>
+    <div id="reportContainer">
 
     </div>
 
-    <div class="panel">
-
-      <h2>Validation Panel</h2>
-
-      <label>Room Name</label>
-
-      <select id="roomSelect">
-        <option value="">Select Room</option>
-      </select>
-
-      <label>Drawing Categories</label>
-
-      <select
-        id="drawingType"
-        multiple
-        onchange="loadChecklist()"
-        style="height:120px;"
-      >
-
-        <option value="false_ceiling">
-          False Ceiling
-        </option>
-
-        <option value="electrical">
-          Electrical
-        </option>
-
-        <option value="plumbing">
-          Plumbing
-        </option>
-
-        <option value="flooring">
-          Flooring
-        </option>
-
-        <option value="elevation">
-          Elevation
-        </option>
-
-      </select>
-
-      <label>SKU / Item Names</label>
-
-      <select
-        id="skuSelect"
-        multiple
-        style="height:150px;"
-      >
-      </select>
-
-      <div id="checklistContainer"></div>
-
-      <label>Overall Remarks</label>
-
-      <textarea id="overallRemarks"></textarea>
-
-      <button
-        class="action-btn"
-        style="margin-top:20px;width:100%;"
-        onclick="savePageValidation()"
-      >
-        Save Validation
-      </button>
-
-    </div>
-
-  </div>
-
-  <div class="report-section" id="reportSection"></div>
-
-<script>
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-let pdfDoc = null;
-let currentPageNum = 1;
-let totalPages = 0;
-
-let skuData = [];
-let roomData = [];
-let validationData = [];
-
-const checklists = {
-
-  false_ceiling: [
-    'Ceiling Layout',
-    'Ceiling Levels',
-    'Section Details',
-    'Light Coordination',
-    'AC Coordination',
-    'Legend',
-    'Dimensions'
-  ],
-
-  electrical: [
-    'Switchboard Layout',
-    'Circuit Routing',
-    'DB Connection',
-    'Load Details',
-    'Ceiling Looping',
-    'Legend'
-  ],
-
-  plumbing: [
-    'Drain Point',
-    'Water Inlet',
-    'Trap Detail',
-    'Isometric',
-    'Legend'
-  ],
-
-  flooring: [
-    'Tile Layout',
-    'Pattern Detail',
-    'Skirting Detail',
-    'Dimensions'
-  ],
-
-  elevation: [
-    'Dimensions',
-    'Material Details',
-    'Section Reference',
-    'Hardware Details'
-  ]
-};
-
-// =======================
-// PDF VIEWER
-// =======================
-
-document
-  .getElementById('pdfUpload')
-  .addEventListener('change', async function(e){
-
-    const file = e.target.files[0];
-
-    if(!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = async function(){
-
-      const typedArray = new Uint8Array(this.result);
-
-      pdfDoc = await pdfjsLib
-        .getDocument(typedArray)
-        .promise;
-
-      totalPages = pdfDoc.numPages;
-
-      document.getElementById('totalPages')
-        .innerText = totalPages;
-
-      currentPageNum = 1;
-
-      renderPage(currentPageNum);
-    };
-
-    reader.readAsArrayBuffer(file);
-});
-
-// =======================
-// RENDER PAGE
-// =======================
-
-async function renderPage(num){
-
-  if(!pdfDoc) return;
-
-  const page = await pdfDoc.getPage(num);
-
-  const canvas =
-    document.getElementById('pdfCanvas');
-
-  const ctx = canvas.getContext('2d');
-
-  const viewport =
-    page.getViewport({scale:1.5});
-
-  canvas.height = viewport.height;
-  canvas.width = viewport.width;
-
-  await page.render({
-    canvasContext:ctx,
-    viewport:viewport
-  }).promise;
-
-  document.getElementById('currentPage')
-    .innerText = num;
-
-  loadSavedValidation(num);
-}
-
-// =======================
-// PAGE NAVIGATION
-// =======================
-
-function prevPage(){
-
-  if(currentPageNum <= 1) return;
-
-  currentPageNum--;
-
-  renderPage(currentPageNum);
-}
-
-function nextPage(){
-
-  if(currentPageNum >= totalPages) return;
-
-  currentPageNum++;
-
-  renderPage(currentPageNum);
-}
-
-// =======================
-// BOQ PARSER
-// =======================
-
-async function parseStructuredBOQ(pdf){
-
-  skuData = [];
-  roomData = [];
-
-  const boqRows = [];
-
-  let currentRoom = '';
-
-  const roomKeywords = [
-    'LIVING',
-    'KITCHEN',
-    'FOYER',
-    'BEDROOM',
-    'MASTER BEDROOM',
-    'BATHROOM',
-    'TOILET',
-    'DINING',
-    'BALCONY',
-    'UTILITY',
-    'PASSAGE',
-    'BEFORE ENTRANCE',
-    'ADDITIONAL ROOM'
-  ];
-
-  for(let p = 1; p <= pdf.numPages; p++){
-
-    const page = await pdf.getPage(p);
-
-    const textContent =
-      await page.getTextContent();
-
-    const items = textContent.items.sort((a,b)=>{
-
-      const yDiff =
-        b.transform[5] - a.transform[5];
-
-      if(Math.abs(yDiff) > 3){
-        return yDiff;
-      }
-
-      return a.transform[4] - b.transform[4];
-    });
-
-    // CREATE ROWS
-
-    const rows = [];
-
-    items.forEach(item=>{
-
-      const y = item.transform[5];
-
-      let row = rows.find(r=>
-        Math.abs(r.y - y) < 3
-      );
-
-      if(!row){
-
-        row = {
-          y:y,
-          items:[]
-        };
-
-        rows.push(row);
-      }
-
-      row.items.push({
-        text:item.str,
-        x:item.transform[4]
-      });
-    });
-
-    // PROCESS ROWS
-
-    rows.forEach(row=>{
-
-      row.items.sort((a,b)=>a.x-b.x);
-
-      const rowText = row.items
-        .map(i=>i.text)
-        .join(' ')
-        .replace(/\s+/g,' ')
-        .trim();
-
-      if(rowText.length < 2) return;
-
-      const upper = rowText.toUpperCase();
-
-      // ROOM DETECTION
-
-      const detectedRoom =
-        roomKeywords.find(room=>
-          upper.includes(room)
-        );
-
-      if(
-        detectedRoom &&
-        rowText.length < 80
-      ){
-
-        currentRoom = detectedRoom;
-
-        if(!roomData.includes(currentRoom)){
-          roomData.push(currentRoom);
-        }
-      }
-
-      // ITEM DETECTION
-
-      if(rowText.match(/^QI-/i)){
-
-        const split = rowText.split(' ');
-
-        const itemCode = split[0];
-
-        let itemName = split
-          .slice(1)
-          .join(' ');
-
-        itemName = itemName
-          .replace(/Brand\s*:.*/i,'')
-          .replace(/Location\s*:.*/i,'')
-          .replace(/Description\s*:.*/i,'')
-          .replace(/\[[^\]]+\]/g,'')
-          .replace(/\s+/g,' ')
-          .trim();
-
-        if(
-          itemName.length < 4 ||
-          itemName.includes('Qty') ||
-          itemName.includes('Price')
-        ){
-          return;
-        }
-
-        if(!skuData.includes(itemName)){
-          skuData.push(itemName);
-        }
-
-        boqRows.push({
-          room:currentRoom,
-          itemCode:itemCode,
-          itemName:itemName,
-          fullRow:rowText
-        });
-      }
-
-      // SKU FIELD
-
-      if(rowText.includes('SKU :')){
-
-        let extractedSku = rowText
-          .split('SKU :')[1]
-          ?.split('Description')[0]
-          ?.trim();
-
-        if(
-          extractedSku &&
-          extractedSku.length > 3 &&
-          !skuData.includes(extractedSku)
-        ){
-
-          skuData.push(extractedSku);
-
-          boqRows.push({
-            room:currentRoom,
-            itemCode:'',
-            itemName:extractedSku,
-            fullRow:rowText
-          });
-        }
-      }
-
-    });
-  }
-
-  skuData = [...new Set(skuData)];
-  roomData = [...new Set(roomData)];
-
-  console.log(roomData);
-  console.log(skuData);
-
-  window.structuredBoqData = boqRows;
-
-  populateDropdowns();
-
-  exportBoqToExcel(boqRows);
-}
-
-// =======================
-// BOQ UPLOAD
-// =======================
-
-document
-  .getElementById('boqUpload')
-  .addEventListener('change', async function(e){
-
-    const file = e.target.files[0];
-
-    if(!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = async function(event){
-
-      try{
-
-        const typedArray =
-          new Uint8Array(event.target.result);
-
-        const pdf = await pdfjsLib
-          .getDocument(typedArray)
-          .promise;
-
-        await parseStructuredBOQ(pdf);
-
-        alert('BOQ Parsed Successfully');
-
-      }catch(error){
-
-        console.error(error);
-
-        alert('Error parsing BOQ');
-      }
-    };
-
-    reader.readAsArrayBuffer(file);
-});
-
-// =======================
-// DROPDOWNS
-// =======================
-
-function populateDropdowns(){
-
-  const roomSelect =
-    document.getElementById('roomSelect');
-
-  const skuSelect =
-    document.getElementById('skuSelect');
-
-  roomSelect.innerHTML =
-    '<option value="">Select Room</option>';
-
-  skuSelect.innerHTML = '';
-
-  roomData.forEach(room=>{
-
-    const option =
-      document.createElement('option');
-
-    option.value = room;
-    option.textContent = room;
-
-    roomSelect.appendChild(option);
-  });
-
-  skuData.forEach(sku=>{
-
-    const option =
-      document.createElement('option');
-
-    option.value = sku;
-    option.textContent = sku;
-
-    skuSelect.appendChild(option);
-  });
-}
-
-// =======================
-// CHECKLIST
-// =======================
-
-function loadChecklist(){
-
-  const selectedCategories =
-    Array.from(
-      document
-        .getElementById('drawingType')
-        .selectedOptions
-    ).map(option=>option.value);
-
-  const container =
-    document.getElementById(
-      'checklistContainer'
-    );
-
-  container.innerHTML = '';
-
-  let combinedChecklist = [];
-
-  selectedCategories.forEach(category=>{
-
-    const categoryChecklist =
-      checklists[category] || [];
-
-    categoryChecklist.forEach(item=>{
-
-      if(!combinedChecklist.includes(item)){
-        combinedChecklist.push(item);
-      }
-    });
-  });
-
-  combinedChecklist.forEach((item,index)=>{
-
-    const div =
-      document.createElement('div');
-
-    div.className = 'checklist-item';
-
-    div.innerHTML = `
-      <h4>${item}</h4>
-
-      <div class="status-buttons">
-
-        <button
-          type="button"
-          class="present"
-          onclick="setStatus(${index},'Present')"
-        >
-          Present
-        </button>
-
-        <button
-          type="button"
-          class="missing"
-          onclick="setStatus(${index},'Missing')"
-        >
-          Missing
-        </button>
-
-        <button
-          type="button"
-          class="na"
-          onclick="setStatus(${index},'N/A')"
-        >
-          N/A
-        </button>
-
-      </div>
-
-      <input
-        type="hidden"
-        id="status-${index}"
-        value=""
-      >
-
-      <textarea
-        id="remark-${index}"
-        placeholder="Remarks"
-      ></textarea>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-// =======================
-// SET STATUS
-// =======================
-
-function setStatus(index,status){
-
-  document.getElementById(
-    `status-${index}`
-  ).value = status;
-}
-
-// =======================
-// SAVE VALIDATION
-// =======================
-
-function savePageValidation(){
-
-  const roomName =
-    document.getElementById('roomSelect')
-    .value;
-
-  const drawingTypes =
-    Array.from(
-      document
-        .getElementById('drawingType')
-        .selectedOptions
-    ).map(option=>option.value);
-
-  const skus =
-    Array.from(
-      document
-        .getElementById('skuSelect')
-        .selectedOptions
-    ).map(option=>option.value);
-
-  const overallRemarks =
-    document.getElementById(
-      'overallRemarks'
-    ).value;
-
-  if(
-    !roomName ||
-    drawingTypes.length === 0 ||
-    skus.length === 0
-  ){
-    alert(
-      'Please select room, category and SKU'
-    );
-    return;
-  }
-
-  let checklist = [];
-
-  drawingTypes.forEach(category=>{
-
-    const categoryChecklist =
-      checklists[category] || [];
-
-    categoryChecklist.forEach(item=>{
-
-      if(!checklist.includes(item)){
-        checklist.push(item);
-      }
-    });
-  });
-
-  const checklistResults = [];
-
-  checklist.forEach((item,index)=>{
-
-    checklistResults.push({
-
-      item:item,
-
-      status:
-        document.getElementById(
-          `status-${index}`
-        ).value,
-
-      remarks:
-        document.getElementById(
-          `remark-${index}`
-        ).value
-    });
-  });
-
-  const pageData = {
-
-    page:currentPageNum,
-
-    roomName:roomName,
-
-    drawingTypes:drawingTypes,
-
-    skus:skus,
-
-    overallRemarks:overallRemarks,
-
-    checklistResults:checklistResults
-  };
-
-  const existingIndex =
-    validationData.findIndex(
-      v=>v.page === currentPageNum
-    );
-
-  if(existingIndex >= 0){
-
-    validationData[existingIndex] =
-      pageData;
-
-  }else{
-
-    validationData.push(pageData);
-  }
-
-  alert(
-    `Validation Saved for Page ${currentPageNum}`
-  );
-}
-
-// =======================
-// LOAD SAVED
-// =======================
-
-function loadSavedValidation(pageNum){
-
-  const saved =
-    validationData.find(
-      v=>v.page === pageNum
-    );
-
-  if(!saved){
-
-    document.getElementById(
-      'roomSelect'
-    ).value = '';
-
-    document.getElementById(
-      'overallRemarks'
-    ).value = '';
-
-    document.getElementById(
-      'checklistContainer'
-    ).innerHTML = '';
-
-    return;
-  }
-
-  document.getElementById(
-    'roomSelect'
-  ).value = saved.roomName;
-
-  Array.from(
-    document.getElementById(
-      'drawingType'
-    ).options
-  ).forEach(option=>{
-
-    option.selected =
-      saved.drawingTypes.includes(
-        option.value
-      );
-  });
-
-  Array.from(
-    document.getElementById(
-      'skuSelect'
-    ).options
-  ).forEach(option=>{
-
-    option.selected =
-      saved.skus.includes(
-        option.value
-      );
-  });
-
-  document.getElementById(
-    'overallRemarks'
-  ).value = saved.overallRemarks;
-
-  loadChecklist();
-
-  saved.checklistResults
-    .forEach((item,index)=>{
-
-      document.getElementById(
-        `status-${index}`
-      ).value = item.status;
-
-      document.getElementById(
-        `remark-${index}`
-      ).value = item.remarks;
-    });
-}
-
-// =======================
-// FINAL REPORT
-// =======================
-
-function generateFinalReport(){
-
-  if(validationData.length === 0){
-
-    alert('No validations saved');
-
-    return;
-  }
-
-  let html = `
-    <h2>Final Validation Report</h2>
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>Page</th>
-          <th>Room</th>
-          <th>Categories</th>
-          <th>SKUs</th>
-          <th>Checklist Item</th>
-          <th>Status</th>
-          <th>Remarks</th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-  `;
-
-  validationData.forEach(page=>{
-
-    page.checklistResults.forEach(item=>{
-
-      if(item.status === 'Missing'){
-
-        html += `
-          <tr>
-
-            <td>${page.page}</td>
-
-            <td>${page.roomName}</td>
-
-            <td>
-              ${page.drawingTypes.join(', ')}
-            </td>
-
-            <td>
-              ${page.skus.join(', ')}
-            </td>
-
-            <td>${item.item}</td>
-
-            <td>${item.status}</td>
-
-            <td>${item.remarks}</td>
-
-          </tr>
-        `;
-      }
-    });
-  });
-
-  html += `
-      </tbody>
-    </table>
-  `;
-
-  document.getElementById(
-    'reportSection'
-  ).innerHTML = html;
-}
-
-// =======================
-// EXPORT CSV
-// =======================
-
-function exportBoqToExcel(rows){
-
-  if(!rows || rows.length === 0) return;
-
-  let csvContent =
-    'Room,Item Code,Item Name\n';
-
-  rows.forEach(row=>{
-
-    csvContent +=
-      `"${row.room}","${row.itemCode}","${row.itemName}"\n`;
-  });
-
-  const blob = new Blob(
-    [csvContent],
-    {
-      type:'text/csv;charset=utf-8;'
-    }
-  );
-
-  const link =
-    document.createElement('a');
-
-  const url =
-    URL.createObjectURL(blob);
-
-  link.setAttribute('href',url);
-
-  link.setAttribute(
-    'download',
-    'parsed_boq.csv'
-  );
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  document.body.removeChild(link);
-}
-
-</script>
+</section>
+
+<script src="config/checklistConfig.js"></script>
+<script src="config/categoryMapping.js"></script>
+
+<script src="js/validationStore.js"></script>
+<script src="js/checklistEngine.js"></script>
+<script src="js/pdfViewer.js"></script>
+<script src="js/boqParser.js"></script>
+<script src="js/reportGenerator.js"></script>
+<script src="js/excelExport.js"></script>
+<script src="js/app.js"></script>
 
 </body>
 </html>
