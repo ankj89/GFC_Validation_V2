@@ -112,6 +112,40 @@ function saveCurrentPageValidation() {
 
 }
 
+function getRoomSelectedItems() {
+
+    const roomMap = {};
+
+    validationStore.forEach(
+        page => {
+
+            if(
+                !roomMap[
+                    page.room
+                ]
+            ) {
+
+                roomMap[
+                    page.room
+                ] = new Set();
+            }
+
+            page.items.forEach(
+                item => {
+
+                    roomMap[
+                        page.room
+                    ].add(item);
+
+                }
+            );
+
+        }
+    );
+
+    return roomMap;
+}
+
 // =========================================
 // LOAD PAGE VALIDATION
 // =========================================
@@ -330,6 +364,55 @@ function getValidatedItems() {
 
     return validatedItems;
 
+}
+
+function getBOQCoverage() {
+
+    const selectedItems =
+        getRoomSelectedItems();
+
+    const report = [];
+
+    Object.keys(
+        projectMaster.roomItemMap
+    ).forEach(room => {
+
+        const boqItems =
+            projectMaster
+            .roomItemMap[
+                room
+            ];
+
+        boqItems.forEach(item => {
+
+            const found =
+
+                selectedItems[room]
+
+                &&
+
+                selectedItems[
+                    room
+                ].has(item);
+
+            report.push({
+
+                room:
+                    room,
+
+                item:
+                    item,
+
+                validated:
+                    found === true
+
+            });
+
+        });
+
+    });
+
+    return report;
 }
 
 // =========================================
