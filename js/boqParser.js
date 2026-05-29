@@ -101,16 +101,12 @@ async function parseBOQ(pdf) {
 
     let currentRoom = "";
 
-    for (
-        let pageNo = 1;
-        pageNo <= pdf.numPages;
-        pageNo++
-    ) {
+    let pendingItem = null;
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
 
         const page =
-            await pdf.getPage(
-                pageNo
-            );
+            await pdf.getPage(pageNum);
 
         const textContent =
             await page.getTextContent();
@@ -120,159 +116,170 @@ async function parseBOQ(pdf) {
                 textContent.items
             );
 
-        rows.forEach(row => {
+        rows.forEach(rawRow => {
 
-            const text =
-                row.trim();
+            const row =
+                rawRow
+                    .replace(/\s+/g, " ")
+                    .trim();
 
-            // ==================
+            if (!row) return;
+
+            // ======================
             // ROOM HEADER
-            // ==================
+            // ======================
 
-            if (
-                isRoomHeader(text)
-            ) {
+            if (isActualRoomHeader(row)) {
 
-                currentRoom =
-                    text;
+                currentRoom = row;
 
                 if (
-                    !projectMaster.rooms
-                        .includes(
-                            currentRoom
-                        )
+                    !projectMaster.rooms.includes(
+                        currentRoom
+                    )
                 ) {
 
-                    projectMaster.rooms
-                        .push(
-                            currentRoom
-                        );
+                    projectMaster.rooms.push(
+                        currentRoom
+                    );
 
-                    projectMaster
-                        .roomItemMap[
+                    projectMaster.roomItemMap[
                         currentRoom
                     ] = [];
-
                 }
 
                 return;
             }
 
-            // ==================
+            // ======================
             // ITEM NAME
-            // ==================
+            // ======================
 
             if (
-                text.includes(
+                row.startsWith(
                     "Item Name"
                 )
             ) {
 
                 const itemName =
-                    extractValue(
-                        text,
-                        "Item Name"
-                    );
+                    row
+                        .replace(
+                            "Item Name",
+                            ""
+                        )
+                        .replace(
+                            ":",
+                            ""
+                        )
+                        .trim();
 
                 if (
                     itemName &&
                     currentRoom
                 ) {
 
+                    pendingItem =
+                        itemName;
+
                     addItemToRoom(
                         currentRoom,
                         itemName
                     );
-
                 }
 
+                return;
             }
 
-            // ==================
+            // ======================
             // SUPER CATEGORY
-            // ==================
+            // ======================
 
             if (
-                text.includes(
+                row.startsWith(
                     "Super Category"
                 )
             ) {
 
-                const category =
-                    extractValue(
-                        text,
-                        "Super Category"
-                    );
-
-                const lastItem =
-                    getLastRoomItem(
-                        currentRoom
-                    );
+                const superCategory =
+                    row
+                        .replace(
+                            "Super Category",
+                            ""
+                        )
+                        .replace(
+                            ":",
+                            ""
+                        )
+                        .trim();
 
                 if (
-                    lastItem &&
-                    category
+                    pendingItem
                 ) {
 
                     ensureItemMap(
-                        lastItem
+                        pendingItem
                     );
 
                     projectMaster
                         .itemCategoryMap[
-                        lastItem
+                        pendingItem
                     ]
                         .superCategory =
-                        category;
-
+                        superCategory;
                 }
 
+                return;
             }
 
-            // ==================
+            // ======================
             // SUB CATEGORY
-            // ==================
+            // ======================
 
             if (
-                text.includes(
+                row.startsWith(
                     "Sub Super Category"
                 )
             ) {
 
                 const subCategory =
-                    extractValue(
-                        text,
-                        "Sub Super Category"
-                    );
-
-                const lastItem =
-                    getLastRoomItem(
-                        currentRoom
-                    );
+                    row
+                        .replace(
+                            "Sub Super Category",
+                            ""
+                        )
+                        .replace(
+                            ":",
+                            ""
+                        )
+                        .trim();
 
                 if (
-                    lastItem &&
-                    subCategory
+                    pendingItem
                 ) {
 
                     ensureItemMap(
-                        lastItem
+                        pendingItem
                     );
 
                     projectMaster
                         .itemCategoryMap[
-                        lastItem
+                        pendingItem
                     ]
                         .subCategory =
                         subCategory;
-
                 }
 
+                return;
             }
 
         });
 
     }
+
+    console.log(
+        "Project Master",
+        projectMaster
+    );
 
 }
 
