@@ -1,244 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>GFC Validation App</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
     }
 
-    body {
-      background: #f4f4f4;
-      padding: 20px;
+    body{
+      background:#f3f4f6;
+      padding:20px;
     }
 
-    .top-bar {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-      align-items: center;
-      flex-wrap: wrap;
+    .top-bar{
+      display:flex;
+      gap:20px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+      align-items:end;
     }
 
-    .container {
-      display: flex;
-      gap: 20px;
-      height: calc(100vh - 120px);
+    .container{
+      display:flex;
+      gap:20px;
+      height:calc(100vh - 140px);
     }
 
-    .viewer {
-      flex: 2;
-      background: white;
-      border-radius: 10px;
-      padding: 10px;
-      overflow: auto;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .viewer{
+      flex:2;
+      background:white;
+      border-radius:12px;
+      padding:10px;
+      overflow:auto;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
     }
 
-    .panel {
-      flex: 1;
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      overflow-y: auto;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .panel{
+      flex:1;
+      background:white;
+      border-radius:12px;
+      padding:20px;
+      overflow-y:auto;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
     }
 
-    canvas {
-      width: 100%;
-      border: 1px solid #ddd;
+    canvas{
+      width:100%;
+      border:1px solid #ccc;
     }
 
-    h2 {
-      margin-bottom: 15px;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
+    label{
+      display:block;
+      margin-top:15px;
+      margin-bottom:5px;
+      font-weight:bold;
     }
 
     select,
     textarea,
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+    input{
+      width:100%;
+      padding:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
     }
 
-    textarea {
-      min-height: 80px;
-      resize: vertical;
+    textarea{
+      min-height:80px;
     }
 
-    .checklist-item {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 10px;
+    .checklist-item{
+      border:1px solid #ddd;
+      padding:12px;
+      border-radius:8px;
+      margin-top:12px;
     }
 
-    .checklist-item h4 {
-      margin-bottom: 10px;
+    .status-buttons{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+      margin-bottom:10px;
     }
 
-    .status-buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
+    .status-buttons button{
+      flex:1;
+      border:none;
+      padding:8px;
+      border-radius:6px;
+      cursor:pointer;
+      color:white;
+      font-weight:bold;
     }
 
-    .status-buttons button {
-      flex: 1;
-      padding: 8px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      color: white;
+    .present{
+      background:#28a745;
     }
 
-    .present {
-      background: #28a745;
+    .missing{
+      background:#dc3545;
     }
 
-    .missing {
-      background: #dc3545;
+    .na{
+      background:#6c757d;
     }
 
-    .na {
-      background: #6c757d;
-    }
-
-    .navigation {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
+    .navigation{
+      display:flex;
+      justify-content:space-between;
+      margin-top:15px;
     }
 
     .navigation button,
-    .action-btn {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background: #007bff;
-      color: white;
+    .action-btn{
+      background:#007bff;
+      color:white;
+      border:none;
+      padding:10px 16px;
+      border-radius:6px;
+      cursor:pointer;
     }
 
-    .report-section {
-      margin-top: 20px;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
+    .report-section{
+      background:white;
+      margin-top:20px;
+      padding:20px;
+      border-radius:12px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:15px;
     }
 
-    table th,
-    table td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
+    th,td{
+      border:1px solid #ddd;
+      padding:10px;
+      text-align:left;
     }
 
-    table th {
-      background: #f1f1f1;
+    th{
+      background:#f1f1f1;
     }
 
-    .page-info {
-      margin-top: 10px;
-      font-weight: bold;
+    .page-info{
+      margin-top:10px;
+      font-weight:bold;
     }
+
   </style>
+
 </head>
+
 <body>
 
-<div class="top-bar">
+  <div class="top-bar">
 
-  <div>
-    <label>Upload GFC PDF</label>
-    <input type="file" id="pdfUpload" accept="application/pdf">
-  </div>
-
-  <div>
-    <label>Upload BOQ PDF</label>
-    <input type="file" id="boqUpload" accept="application/pdf">
-  </div>
-
-  <button class="action-btn" onclick="generateFinalReport()">
-    Generate Report
-  </button>
-
-</div>
-
-<div class="container">
-
-  <div class="viewer">
-
-    <canvas id="pdfCanvas"></canvas>
-
-    <div class="page-info">
-      Page <span id="currentPage">0</span> of <span id="totalPages">0</span>
+    <div>
+      <label>Upload GFC PDF</label>
+      <input type="file" id="pdfUpload" accept="application/pdf">
     </div>
 
-    <div class="navigation">
-      <button onclick="prevPage()">Previous</button>
-      <button onclick="nextPage()">Next</button>
+    <div>
+      <label>Upload BOQ PDF</label>
+      <input type="file" id="boqUpload" accept="application/pdf">
     </div>
 
-  </div>
-
-  <div class="panel">
-
-    <h2>Validation Panel</h2>
-
-    <label>Room Name</label>
-    <select id="roomSelect">
-      <option value="">Select Room</option>
-    </select>
-
-    <label>Drawing Categories</label>
-    <select id="drawingType" multiple onchange="loadChecklist()" style="height:120px;">
-      <option value="false_ceiling">False Ceiling</option>
-      <option value="electrical">Electrical</option>
-      <option value="plumbing">Plumbing</option>
-      <option value="flooring">Flooring</option>
-      <option value="elevation">Elevation</option>
-    </select>
-
-    <label>SKU / Item Names</label>
-    <select id="skuSelect" multiple style="height:150px;">
-    </select>
-
-    <div id="checklistContainer"></div>
-
-    <label>Overall Remarks</label>
-    <textarea id="overallRemarks"></textarea>
-
-    <button class="action-btn" style="margin-top:20px; width:100%;" onclick="savePageValidation()">
-      Save Validation
+    <button class="action-btn" onclick="generateFinalReport()">
+      Generate Report
     </button>
 
   </div>
 
-</div>
+  <div class="container">
 
-<div class="report-section" id="reportSection"></div>
+    <div class="viewer">
+
+      <canvas id="pdfCanvas"></canvas>
+
+      <div class="page-info">
+        Page <span id="currentPage">0</span> of
+        <span id="totalPages">0</span>
+      </div>
+
+      <div class="navigation">
+
+        <button onclick="prevPage()">
+          Previous
+        </button>
+
+        <button onclick="nextPage()">
+          Next
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <h2>Validation Panel</h2>
+
+      <label>Room Name</label>
+
+      <select id="roomSelect">
+        <option value="">Select Room</option>
+      </select>
+
+      <label>Drawing Categories</label>
+
+      <select
+        id="drawingType"
+        multiple
+        onchange="loadChecklist()"
+        style="height:120px;"
+      >
+
+        <option value="false_ceiling">
+          False Ceiling
+        </option>
+
+        <option value="electrical">
+          Electrical
+        </option>
+
+        <option value="plumbing">
+          Plumbing
+        </option>
+
+        <option value="flooring">
+          Flooring
+        </option>
+
+        <option value="elevation">
+          Elevation
+        </option>
+
+      </select>
+
+      <label>SKU / Item Names</label>
+
+      <select
+        id="skuSelect"
+        multiple
+        style="height:150px;"
+      >
+      </select>
+
+      <div id="checklistContainer"></div>
+
+      <label>Overall Remarks</label>
+
+      <textarea id="overallRemarks"></textarea>
+
+      <button
+        class="action-btn"
+        style="margin-top:20px;width:100%;"
+        onclick="savePageValidation()"
+      >
+        Save Validation
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="report-section" id="reportSection"></div>
 
 <script>
 
@@ -297,114 +337,100 @@ const checklists = {
   ]
 };
 
-// PDF Upload
+// =======================
+// PDF VIEWER
+// =======================
 
-document.getElementById('pdfUpload').addEventListener('change', async function(e) {
+document
+  .getElementById('pdfUpload')
+  .addEventListener('change', async function(e){
 
-  const file = e.target.files[0];
+    const file = e.target.files[0];
 
-  if (!file) return;
+    if(!file) return;
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onload = async function() {
+    reader.onload = async function(){
 
-    const typedArray = new Uint8Array(this.result);
+      const typedArray = new Uint8Array(this.result);
 
-    pdfDoc = await pdfjsLib.getDocument(typedArray).promise;
+      pdfDoc = await pdfjsLib
+        .getDocument(typedArray)
+        .promise;
 
-    totalPages = pdfDoc.numPages;
+      totalPages = pdfDoc.numPages;
 
-    document.getElementById('totalPages').innerText = totalPages;
+      document.getElementById('totalPages')
+        .innerText = totalPages;
 
-    currentPageNum = 1;
+      currentPageNum = 1;
 
-    renderPage(currentPageNum);
-  };
+      renderPage(currentPageNum);
+    };
 
-  reader.readAsArrayBuffer(file);
+    reader.readAsArrayBuffer(file);
 });
 
-// BOQ Upload
+// =======================
+// RENDER PAGE
+// =======================
 
-document.getElementById('boqUpload').addEventListener('change', async function(e) {
+async function renderPage(num){
 
-  const file = e.target.files[0];
-
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = async function(event) {
-
-    const typedArray = new Uint8Array(event.target.result);
-
-    const pdf = await pdfjsLib.getDocument(typedArray).promise;
-
-    let extractedText = '';
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-
-      const page = await pdf.getPage(i);
-
-      const textContent = await page.getTextContent();
-
-      const pageText = textContent.items.map(item => item.str).join(' ');
-
-      extractedText += pageText + '\n';
-    }
-
-    extractBoqData(extractedText);
-
-    populateDropdowns();
-  };
-
-  reader.readAsArrayBuffer(file);
-});
-
-async function renderPage(num) {
-
-  if (!pdfDoc) return;
+  if(!pdfDoc) return;
 
   const page = await pdfDoc.getPage(num);
 
-  const canvas = document.getElementById('pdfCanvas');
+  const canvas =
+    document.getElementById('pdfCanvas');
+
   const ctx = canvas.getContext('2d');
 
-  const viewport = page.getViewport({ scale: 1.5 });
+  const viewport =
+    page.getViewport({scale:1.5});
 
   canvas.height = viewport.height;
   canvas.width = viewport.width;
 
   await page.render({
-    canvasContext: ctx,
-    viewport: viewport
+    canvasContext:ctx,
+    viewport:viewport
   }).promise;
 
-  document.getElementById('currentPage').innerText = num;
+  document.getElementById('currentPage')
+    .innerText = num;
 
   loadSavedValidation(num);
 }
 
-function prevPage() {
+// =======================
+// PAGE NAVIGATION
+// =======================
 
-  if (currentPageNum <= 1) return;
+function prevPage(){
+
+  if(currentPageNum <= 1) return;
 
   currentPageNum--;
 
   renderPage(currentPageNum);
 }
 
-function nextPage() {
+function nextPage(){
 
-  if (currentPageNum >= totalPages) return;
+  if(currentPageNum >= totalPages) return;
 
   currentPageNum++;
 
   renderPage(currentPageNum);
 }
 
-async function parseStructuredBOQ(pdf) {
+// =======================
+// BOQ PARSER
+// =======================
+
+async function parseStructuredBOQ(pdf){
 
   skuData = [];
   roomData = [];
@@ -429,86 +455,91 @@ async function parseStructuredBOQ(pdf) {
     'ADDITIONAL ROOM'
   ];
 
-  for (let p = 1; p <= pdf.numPages; p++) {
+  for(let p = 1; p <= pdf.numPages; p++){
 
     const page = await pdf.getPage(p);
 
-    const textContent = await page.getTextContent();
+    const textContent =
+      await page.getTextContent();
 
-    // SORT ITEMS TOP TO BOTTOM
-    const items = textContent.items.sort((a, b) => {
+    const items = textContent.items.sort((a,b)=>{
 
-      const yDiff = b.transform[5] - a.transform[5];
+      const yDiff =
+        b.transform[5] - a.transform[5];
 
-      if (Math.abs(yDiff) > 3) {
+      if(Math.abs(yDiff) > 3){
         return yDiff;
       }
 
       return a.transform[4] - b.transform[4];
     });
 
-    // GROUP INTO VISUAL ROWS
+    // CREATE ROWS
+
     const rows = [];
 
-    items.forEach(item => {
+    items.forEach(item=>{
 
       const y = item.transform[5];
 
-      let row = rows.find(r => Math.abs(r.y - y) < 3);
+      let row = rows.find(r=>
+        Math.abs(r.y - y) < 3
+      );
 
-      if (!row) {
+      if(!row){
 
         row = {
-          y: y,
-          items: []
+          y:y,
+          items:[]
         };
 
         rows.push(row);
       }
 
       row.items.push({
-        text: item.str,
-        x: item.transform[4]
+        text:item.str,
+        x:item.transform[4]
       });
     });
 
-    rows.forEach(row => {
+    // PROCESS ROWS
 
-      // SORT LEFT TO RIGHT
-      row.items.sort((a, b) => a.x - b.x);
+    rows.forEach(row=>{
+
+      row.items.sort((a,b)=>a.x-b.x);
 
       const rowText = row.items
-        .map(i => i.text)
+        .map(i=>i.text)
         .join(' ')
-        .replace(/\s+/g, ' ')
+        .replace(/\s+/g,' ')
         .trim();
 
-      if (rowText.length < 2) return;
+      if(rowText.length < 2) return;
 
       const upper = rowText.toUpperCase();
 
       // ROOM DETECTION
-      const detectedRoom = roomKeywords.find(room =>
-        upper.includes(room)
-      );
 
-      if (
+      const detectedRoom =
+        roomKeywords.find(room=>
+          upper.includes(room)
+        );
+
+      if(
         detectedRoom &&
-        rowText.length < 60
-      ) {
+        rowText.length < 80
+      ){
 
         currentRoom = detectedRoom;
 
-        if (!roomData.includes(currentRoom)) {
+        if(!roomData.includes(currentRoom)){
           roomData.push(currentRoom);
         }
       }
 
       // ITEM DETECTION
-      // Example:
-      // QI-12345 POP Ceiling with Electrical
 
-      if (rowText.match(/^QI-/i)) {
+      if(rowText.match(/^QI-/i)){
 
         const split = rowText.split(' ');
 
@@ -518,85 +549,137 @@ async function parseStructuredBOQ(pdf) {
           .slice(1)
           .join(' ');
 
-        // CLEANUP
         itemName = itemName
-          .replace(/Brand\s*:.*/i, '')
-          .replace(/Location\s*:.*/i, '')
-          .replace(/\[[^\]]+\]/g, '')
-          .replace(/\s+/g, ' ')
+          .replace(/Brand\s*:.*/i,'')
+          .replace(/Location\s*:.*/i,'')
+          .replace(/Description\s*:.*/i,'')
+          .replace(/\[[^\]]+\]/g,'')
+          .replace(/\s+/g,' ')
           .trim();
 
-        // REMOVE DUPLICATES
-        if (
-          itemName &&
-          !skuData.includes(itemName)
-        ) {
+        if(
+          itemName.length < 4 ||
+          itemName.includes('Qty') ||
+          itemName.includes('Price')
+        ){
+          return;
+        }
 
+        if(!skuData.includes(itemName)){
           skuData.push(itemName);
         }
 
         boqRows.push({
-          room: currentRoom,
-          itemCode: itemCode,
-          itemName: itemName,
-          fullRow: rowText
+          room:currentRoom,
+          itemCode:itemCode,
+          itemName:itemName,
+          fullRow:rowText
         });
       }
+
+      // SKU FIELD
+
+      if(rowText.includes('SKU :')){
+
+        let extractedSku = rowText
+          .split('SKU :')[1]
+          ?.split('Description')[0]
+          ?.trim();
+
+        if(
+          extractedSku &&
+          extractedSku.length > 3 &&
+          !skuData.includes(extractedSku)
+        ){
+
+          skuData.push(extractedSku);
+
+          boqRows.push({
+            room:currentRoom,
+            itemCode:'',
+            itemName:extractedSku,
+            fullRow:rowText
+          });
+        }
+      }
+
     });
   }
 
-  console.log('ROOMS:', roomData);
-  console.log('SKUS:', skuData);
-  console.log('BOQ ROWS:', boqRows);
+  skuData = [...new Set(skuData)];
+  roomData = [...new Set(roomData)];
+
+  console.log(roomData);
+  console.log(skuData);
 
   window.structuredBoqData = boqRows;
 
   populateDropdowns();
+
+  exportBoqToExcel(boqRows);
 }
 
+// =======================
+// BOQ UPLOAD
+// =======================
 
-function exportBoqToExcel(rows) {
+document
+  .getElementById('boqUpload')
+  .addEventListener('change', async function(e){
 
-  if (!rows || rows.length === 0) return;
+    const file = e.target.files[0];
 
-  let csvContent = 'Room,Item Code,Item Name
-';
+    if(!file) return;
 
-  rows.forEach(row => {
+    const reader = new FileReader();
 
-    csvContent += '"' + row.room + '","' + row.itemCode + '","' + row.itemName + '"
-';
-  });
+    reader.onload = async function(event){
 
-  const blob = new Blob([csvContent], {
-    type: 'text/csv;charset=utf-8;'
-  });
+      try{
 
-  const link = document.createElement('a');
+        const typedArray =
+          new Uint8Array(event.target.result);
 
-  const url = URL.createObjectURL(blob);
+        const pdf = await pdfjsLib
+          .getDocument(typedArray)
+          .promise;
 
-  link.setAttribute('href', url);
-  link.setAttribute('download', 'parsed_boq.csv');
+        await parseStructuredBOQ(pdf);
 
-  document.body.appendChild(link);
+        alert('BOQ Parsed Successfully');
 
-  link.click();
+      }catch(error){
 
-  document.body.removeChild(link);
-}
+        console.error(error);
 
-function populateDropdowns() {
+        alert('Error parsing BOQ');
+      }
+    };
 
-  const roomSelect = document.getElementById('roomSelect');
-  const skuSelect = document.getElementById('skuSelect');
+    reader.readAsArrayBuffer(file);
+});
 
-  roomSelect.innerHTML = '<option value="">Select Room</option>';
+// =======================
+// DROPDOWNS
+// =======================
+
+function populateDropdowns(){
+
+  const roomSelect =
+    document.getElementById('roomSelect');
+
+  const skuSelect =
+    document.getElementById('skuSelect');
+
+  roomSelect.innerHTML =
+    '<option value="">Select Room</option>';
+
   skuSelect.innerHTML = '';
 
-  [...new Set(roomData)].forEach(room => {
+  roomData.forEach(room=>{
 
-    const option = document.createElement('option');
+    const option =
+      document.createElement('option');
 
     option.value = room;
     option.textContent = room;
@@ -604,9 +687,10 @@ function populateDropdowns() {
     roomSelect.appendChild(option);
   });
 
-  [...new Set(skuData)].forEach(sku => {
+  skuData.forEach(sku=>{
 
-    const option = document.createElement('option');
+    const option =
+      document.createElement('option');
 
     option.value = sku;
     option.textContent = sku;
@@ -615,34 +699,45 @@ function populateDropdowns() {
   });
 }
 
-function loadChecklist() {
+// =======================
+// CHECKLIST
+// =======================
 
-  const drawingSelect = document.getElementById('drawingType');
+function loadChecklist(){
 
-  const selectedCategories = Array.from(drawingSelect.selectedOptions)
-    .map(option => option.value);
+  const selectedCategories =
+    Array.from(
+      document
+        .getElementById('drawingType')
+        .selectedOptions
+    ).map(option=>option.value);
 
-  const container = document.getElementById('checklistContainer');
+  const container =
+    document.getElementById(
+      'checklistContainer'
+    );
 
   container.innerHTML = '';
 
   let combinedChecklist = [];
 
-  selectedCategories.forEach(category => {
+  selectedCategories.forEach(category=>{
 
-    const categoryChecklist = checklists[category] || [];
+    const categoryChecklist =
+      checklists[category] || [];
 
-    categoryChecklist.forEach(item => {
+    categoryChecklist.forEach(item=>{
 
-      if (!combinedChecklist.includes(item)) {
+      if(!combinedChecklist.includes(item)){
         combinedChecklist.push(item);
       }
     });
   });
 
-  combinedChecklist.forEach((item, index) => {
+  combinedChecklist.forEach((item,index)=>{
 
-    const div = document.createElement('div');
+    const div =
+      document.createElement('div');
 
     div.className = 'checklist-item';
 
@@ -650,137 +745,255 @@ function loadChecklist() {
       <h4>${item}</h4>
 
       <div class="status-buttons">
-        <button type="button" class="present" onclick="setStatus(${index}, 'Present')">Present</button>
-        <button type="button" class="missing" onclick="setStatus(${index}, 'Missing')">Missing</button>
-        <button type="button" class="na" onclick="setStatus(${index}, 'N/A')">N/A</button>
+
+        <button
+          type="button"
+          class="present"
+          onclick="setStatus(${index},'Present')"
+        >
+          Present
+        </button>
+
+        <button
+          type="button"
+          class="missing"
+          onclick="setStatus(${index},'Missing')"
+        >
+          Missing
+        </button>
+
+        <button
+          type="button"
+          class="na"
+          onclick="setStatus(${index},'N/A')"
+        >
+          N/A
+        </button>
+
       </div>
 
-      <input type="hidden" id="status-${index}" value="">
+      <input
+        type="hidden"
+        id="status-${index}"
+        value=""
+      >
 
-      <textarea id="remark-${index}" placeholder="Remarks"></textarea>
+      <textarea
+        id="remark-${index}"
+        placeholder="Remarks"
+      ></textarea>
     `;
 
     container.appendChild(div);
   });
 }
 
-function setStatus(index, status) {
+// =======================
+// SET STATUS
+// =======================
 
-  const statusInput = document.getElementById(`status-${index}`);
+function setStatus(index,status){
 
-  if (statusInput) {
-    statusInput.value = status;
-  }
+  document.getElementById(
+    `status-${index}`
+  ).value = status;
 }
 
-function savePageValidation() {
+// =======================
+// SAVE VALIDATION
+// =======================
 
-  const selectedCategories = Array.from(document.getElementById('drawingType').selectedOptions)
-    .map(option => option.value);
+function savePageValidation(){
 
-  const selectedSkus = Array.from(document.getElementById('skuSelect').selectedOptions)
-    .map(option => option.value);
+  const roomName =
+    document.getElementById('roomSelect')
+    .value;
 
-  const roomName = document.getElementById('roomSelect').value;
+  const drawingTypes =
+    Array.from(
+      document
+        .getElementById('drawingType')
+        .selectedOptions
+    ).map(option=>option.value);
 
-  const overallRemarks = document.getElementById('overallRemarks').value;
+  const skus =
+    Array.from(
+      document
+        .getElementById('skuSelect')
+        .selectedOptions
+    ).map(option=>option.value);
 
-  if (!roomName || selectedCategories.length === 0 || selectedSkus.length === 0) {
-    alert('Please select room, categories and SKUs');
+  const overallRemarks =
+    document.getElementById(
+      'overallRemarks'
+    ).value;
+
+  if(
+    !roomName ||
+    drawingTypes.length === 0 ||
+    skus.length === 0
+  ){
+    alert(
+      'Please select room, category and SKU'
+    );
     return;
   }
 
   let checklist = [];
 
-  selectedCategories.forEach(category => {
+  drawingTypes.forEach(category=>{
 
-    const categoryChecklist = checklists[category] || [];
+    const categoryChecklist =
+      checklists[category] || [];
 
-    categoryChecklist.forEach(item => {
+    categoryChecklist.forEach(item=>{
 
-      if (!checklist.includes(item)) {
+      if(!checklist.includes(item)){
         checklist.push(item);
       }
     });
   });
 
-  let checklistResults = [];
+  const checklistResults = [];
 
-  checklist.forEach((item, index) => {
+  checklist.forEach((item,index)=>{
 
     checklistResults.push({
-      item,
-      status: document.getElementById(`status-${index}`)?.value || '',
-      remarks: document.getElementById(`remark-${index}`)?.value || ''
+
+      item:item,
+
+      status:
+        document.getElementById(
+          `status-${index}`
+        ).value,
+
+      remarks:
+        document.getElementById(
+          `remark-${index}`
+        ).value
     });
   });
 
   const pageData = {
-    page: currentPageNum,
-    roomName,
-    drawingTypes: selectedCategories,
-    skus: selectedSkus,
-    overallRemarks,
-    checklistResults
+
+    page:currentPageNum,
+
+    roomName:roomName,
+
+    drawingTypes:drawingTypes,
+
+    skus:skus,
+
+    overallRemarks:overallRemarks,
+
+    checklistResults:checklistResults
   };
 
-  const existingIndex = validationData.findIndex(v => v.page === currentPageNum);
+  const existingIndex =
+    validationData.findIndex(
+      v=>v.page === currentPageNum
+    );
 
-  if (existingIndex >= 0) {
-    validationData[existingIndex] = pageData;
-  } else {
+  if(existingIndex >= 0){
+
+    validationData[existingIndex] =
+      pageData;
+
+  }else{
+
     validationData.push(pageData);
   }
 
-  alert(`Validation saved for Page ${currentPageNum}`);
+  alert(
+    `Validation Saved for Page ${currentPageNum}`
+  );
 }
 
-function loadSavedValidation(pageNum) {
+// =======================
+// LOAD SAVED
+// =======================
 
-  const saved = validationData.find(v => v.page === pageNum);
+function loadSavedValidation(pageNum){
 
-  if (!saved) {
+  const saved =
+    validationData.find(
+      v=>v.page === pageNum
+    );
 
-    document.getElementById('roomSelect').value = '';
-    document.getElementById('overallRemarks').value = '';
-    document.getElementById('checklistContainer').innerHTML = '';
+  if(!saved){
+
+    document.getElementById(
+      'roomSelect'
+    ).value = '';
+
+    document.getElementById(
+      'overallRemarks'
+    ).value = '';
+
+    document.getElementById(
+      'checklistContainer'
+    ).innerHTML = '';
 
     return;
   }
 
-  document.getElementById('roomSelect').value = saved.roomName;
+  document.getElementById(
+    'roomSelect'
+  ).value = saved.roomName;
 
-  Array.from(document.getElementById('drawingType').options).forEach(option => {
-    option.selected = saved.drawingTypes.includes(option.value);
+  Array.from(
+    document.getElementById(
+      'drawingType'
+    ).options
+  ).forEach(option=>{
+
+    option.selected =
+      saved.drawingTypes.includes(
+        option.value
+      );
   });
 
-  Array.from(document.getElementById('skuSelect').options).forEach(option => {
-    option.selected = saved.skus.includes(option.value);
+  Array.from(
+    document.getElementById(
+      'skuSelect'
+    ).options
+  ).forEach(option=>{
+
+    option.selected =
+      saved.skus.includes(
+        option.value
+      );
   });
 
-  document.getElementById('overallRemarks').value = saved.overallRemarks;
+  document.getElementById(
+    'overallRemarks'
+  ).value = saved.overallRemarks;
 
   loadChecklist();
 
-  saved.checklistResults.forEach((item, index) => {
+  saved.checklistResults
+    .forEach((item,index)=>{
 
-    const statusInput = document.getElementById(`status-${index}`);
-    const remarkInput = document.getElementById(`remark-${index}`);
+      document.getElementById(
+        `status-${index}`
+      ).value = item.status;
 
-    if (statusInput) {
-      statusInput.value = item.status;
-    }
-
-    if (remarkInput) {
-      remarkInput.value = item.remarks;
-    }
-  });
+      document.getElementById(
+        `remark-${index}`
+      ).value = item.remarks;
+    });
 }
 
-function generateFinalReport() {
+// =======================
+// FINAL REPORT
+// =======================
 
-  if (validationData.length === 0) {
+function generateFinalReport(){
+
+  if(validationData.length === 0){
+
     alert('No validations saved');
+
     return;
   }
 
@@ -788,35 +1001,53 @@ function generateFinalReport() {
     <h2>Final Validation Report</h2>
 
     <table>
+
       <thead>
+
         <tr>
+
           <th>Page</th>
           <th>Room</th>
-          <th>Drawing Types</th>
+          <th>Categories</th>
           <th>SKUs</th>
           <th>Checklist Item</th>
           <th>Status</th>
           <th>Remarks</th>
+
         </tr>
+
       </thead>
+
       <tbody>
   `;
 
-  validationData.forEach(page => {
+  validationData.forEach(page=>{
 
-    page.checklistResults.forEach(item => {
+    page.checklistResults.forEach(item=>{
 
-      if (item.status === 'Missing') {
+      if(item.status === 'Missing'){
 
         html += `
           <tr>
+
             <td>${page.page}</td>
+
             <td>${page.roomName}</td>
-            <td>${page.drawingTypes.join(', ')}</td>
-            <td>${page.skus.join(', ')}</td>
+
+            <td>
+              ${page.drawingTypes.join(', ')}
+            </td>
+
+            <td>
+              ${page.skus.join(', ')}
+            </td>
+
             <td>${item.item}</td>
+
             <td>${item.status}</td>
+
             <td>${item.remarks}</td>
+
           </tr>
         `;
       }
@@ -828,7 +1059,53 @@ function generateFinalReport() {
     </table>
   `;
 
-  document.getElementById('reportSection').innerHTML = html;
+  document.getElementById(
+    'reportSection'
+  ).innerHTML = html;
+}
+
+// =======================
+// EXPORT CSV
+// =======================
+
+function exportBoqToExcel(rows){
+
+  if(!rows || rows.length === 0) return;
+
+  let csvContent =
+    'Room,Item Code,Item Name\n';
+
+  rows.forEach(row=>{
+
+    csvContent +=
+      `"${row.room}","${row.itemCode}","${row.itemName}"\n`;
+  });
+
+  const blob = new Blob(
+    [csvContent],
+    {
+      type:'text/csv;charset=utf-8;'
+    }
+  );
+
+  const link =
+    document.createElement('a');
+
+  const url =
+    URL.createObjectURL(blob);
+
+  link.setAttribute('href',url);
+
+  link.setAttribute(
+    'download',
+    'parsed_boq.csv'
+  );
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
 }
 
 </script>
