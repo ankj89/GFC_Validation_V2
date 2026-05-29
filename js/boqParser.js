@@ -287,27 +287,42 @@ async function parseBOQ(pdf) {
 // ROOM DETECTION
 // =========================================
 
-function isRoomHeader(text) {
+function isActualRoomHeader(
+    text
+) {
 
-    const roomPattern =
-        /^[A-Z0-9\s&()\-]+$/;
+    const excluded = [
+
+        "Item Name",
+        "SKU",
+        "Qty",
+        "Amount",
+        "Rate",
+        "Super Category",
+        "Sub Super Category",
+        "Description"
+
+    ];
+
+    if (
+        excluded.some(
+            e =>
+                text.includes(e)
+        )
+    ) {
+        return false;
+    }
+
+    const upper =
+        text.toUpperCase();
 
     return (
 
+        upper === text &&
+
         text.length > 2 &&
-        text.length < 60 &&
 
-        !text.includes(
-            "Item Name"
-        ) &&
-
-        !text.includes(
-            "Category"
-        ) &&
-
-        roomPattern.test(
-            text
-        )
+        text.length < 50
 
     );
 
