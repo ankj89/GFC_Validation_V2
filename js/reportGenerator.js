@@ -371,46 +371,40 @@ function generateMissingDrawingReport(
 
     const section =
         createReportSection(
-            "Missing Drawing Report"
+            "Missing Drawings Report"
         );
 
     const rows = [];
 
-    validationStore.forEach(
-        page => {
+    getBOQCoverage()
+    .forEach(item => {
 
-            if (
-                page.drawingNotAvailable
-            ) {
+        if(
+            !item.validated
+        ) {
 
-                rows.push([
+            rows.push([
 
-                    page.page,
+                item.room,
 
-                    page.room,
+                item.item,
 
-                    page.items.join(
-                        ", "
-                    ),
+                "Drawing Not Found"
 
-                    page.drawingMissingReason
-
-                ]);
-
-            }
+            ]);
 
         }
-    );
+
+    });
 
     section.appendChild(
 
         createTable(
 
             [
-                "Page",
                 "Room",
-                "Items",
-                "Reason"
+                "Item Name",
+                "Status"
             ],
 
             rows
