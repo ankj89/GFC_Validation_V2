@@ -1,38 +1,26 @@
 // =========================================
-// PDF VIEWER MODULE
-// =========================================
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-// =========================================
-// STATE
+// PDF VIEWER - VERSION 3
 // =========================================
 
 let pdfDocument = null;
 
-let currentPage = 1;
+let currentPageNumber = 1;
 
 let totalPages = 0;
-
-let currentScale = 1.3;
 
 // =========================================
 // DOM
 // =========================================
 
-const pdfInput =
-    document.getElementById(
-        "gfcPdfInput"
-    );
-
-const canvas =
+const pdfCanvas =
     document.getElementById(
         "pdfCanvas"
     );
 
-const ctx =
-    canvas.getContext("2d");
+const pdfContext =
+    pdfCanvas.getContext(
+        "2d"
+    );
 
 const currentPageElement =
     document.getElementById(
@@ -44,48 +32,50 @@ const totalPagesElement =
         "totalPages"
     );
 
+const prevPageBtn =
+    document.getElementById(
+        "prevPageBtn"
+    );
+
+const nextPageBtn =
+    document.getElementById(
+        "nextPageBtn"
+    );
+
 // =========================================
-// PDF UPLOAD
+// LOAD PDF
 // =========================================
 
-pdfInput?.addEventListener(
-    "change",
-    handlePdfUpload
-);
-
-async function handlePdfUpload(
-    event
+async function loadPDF(
+    file
 ) {
-
-    const file =
-        event.target.files[0];
-
-    if (!file) return;
 
     try {
 
-        const arrayBuffer =
+        const buffer =
             await file.arrayBuffer();
 
         const pdfData =
             new Uint8Array(
-                arrayBuffer
+                buffer
             );
 
         pdfDocument =
             await pdfjsLib
-                .getDocument(pdfData)
+                .getDocument(
+                    pdfData
+                )
                 .promise;
 
         totalPages =
             pdfDocument.numPages;
 
-        currentPage = 1;
+        currentPageNumber = 1;
 
-        updatePageDisplay();
+        updatePageIndicators();
 
         await renderPage(
-            currentPage
+            currentPageNumber
         );
 
         console.log(
@@ -93,15 +83,15 @@ async function handlePdfUpload(
             totalPages
         );
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
-            "PDF Load Error",
             error
         );
 
         alert(
-            "Unable to load PDF"
+            "Failed to load PDF"
         );
 
     }
@@ -116,50 +106,66 @@ async function renderPage(
     pageNumber
 ) {
 
-    if (!pdfDocument) return;
+    if (
+        !pdfDocument
+    ) {
+        return;
+    }
 
-    try {
-
-        const page =
-            await pdfDocument.getPage(
-                pageNumber
-            );
-
-        const viewport =
-            page.getViewport({
-                scale:
-                    currentScale
-            });
-
-        canvas.height =
-            viewport.height;
-
-        canvas.width =
-            viewport.width;
-
-        await page.render({
-
-            canvasContext:
-                ctx,
-
-            viewport:
-                viewport
-
-        }).promise;
-
-        updatePageDisplay();
-
-        // Load Validation
-        loadPageValidation(
+    const page =
+        await pdfDocument.getPage(
             pageNumber
         );
 
-    } catch (error) {
+    const viewport =
+        page.getViewport({
+            scale: 1.5
+        });
 
-        console.error(
-            "Page Render Error",
-            error
-        );
+    pdfCanvas.width =
+        viewport.width;
+
+    pdfCanvas.height =
+        viewport.height;
+
+    await page.render({
+
+        canvasContext:
+            pdfContext,
+
+        viewport
+
+    }).promise;
+
+    updatePageIndicators();
+
+    loadSavedValidation(
+        pageNumber
+    );
+
+}
+
+// =========================================
+// PAGE INDICATORS
+// =========================================
+
+function updatePageIndicators() {
+
+    if (
+        currentPageElement
+    ) {
+
+        currentPageElement.textContent =
+            currentPageNumber;
+
+    }
+
+    if (
+        totalPagesElement
+    ) {
+
+        totalPagesElement.textContent =
+            totalPages;
 
     }
 
@@ -169,161 +175,365 @@ async function renderPage(
 // PREVIOUS PAGE
 // =========================================
 
-async function previousPage() {
-
-    if (!pdfDocument) return;
-
-    if (currentPage <= 1)
-        return;
-
-    currentPage--;
-
-    await renderPage(
-        currentPage
-    );
-
-}
-
-// =========================================
-// NEXT PAGE
-// =========================================
-
-async function nextPage() {
-
-    if (!pdfDocument) return;
-
-    if (
-        currentPage >= totalPages
-    )
-        return;
-
-    currentPage++;
-
-    await renderPage(
-        currentPage
-    );
-
-}
-
-// =========================================
-// PAGE DISPLAY
-// =========================================
-
-function updatePageDisplay() {
-
-    currentPageElement.innerText =
-        currentPage;
-
-    totalPagesElement.innerText =
-        totalPages;
-
-}
-
-// =========================================
-// CURRENT PAGE
-// =========================================
-
-function getCurrentPageNumber() {
-
-    return currentPage;
-
-}
-
-// =========================================
-// PAGE NAVIGATION BUTTONS
-// =========================================
-
-document
-    .getElementById(
-        "prevPageBtn"
-    )
-    ?.addEventListener(
-        "click",
-        previousPage
-    );
-
-document
-    .getElementById(
-        "nextPageBtn"
-    )
-    ?.addEventListener(
-        "click",
-        nextPage
-    );
-
-// =========================================
-// ZOOM SUPPORT
-// =========================================
-
-async function zoomIn() {
-
-    currentScale += 0.2;
-
-    await renderPage(
-        currentPage
-    );
-
-}
-
-async function zoomOut() {
-
-    if (currentScale <= 0.6)
-        return;
-
-    currentScale -= 0.2;
-
-    await renderPage(
-        currentPage
-    );
-
-}
-
-// =========================================
-// KEYBOARD SHORTCUTS
-// =========================================
-
-document.addEventListener(
-    "keydown",
-    async function (event) {
+prevPageBtn
+?.addEventListener(
+    "click",
+    async () => {
 
         if (
-            event.key ===
-            "ArrowRight"
+            currentPageNumber <= 1
         ) {
-
-            await nextPage();
-
+            return;
         }
 
-        if (
-            event.key ===
-            "ArrowLeft"
-        ) {
+        currentPageNumber--;
 
-            await previousPage();
-
-        }
+        await renderPage(
+            currentPageNumber
+        );
 
     }
 );
 
 // =========================================
-// PDF INFO
+// NEXT PAGE
 // =========================================
 
-function getPdfInfo() {
+nextPageBtn
+?.addEventListener(
+    "click",
+    async () => {
 
-    return {
+        if (
+            currentPageNumber >=
+            totalPages
+        ) {
+            return;
+        }
 
-        totalPages:
-            totalPages,
+        currentPageNumber++;
 
-        currentPage:
-            currentPage,
+        await renderPage(
+            currentPageNumber
+        );
 
-        loaded:
-            pdfDocument !== null
+    }
+);
 
-    };
+// =========================================
+// LOAD SAVED VALIDATION
+// =========================================
+
+function loadSavedValidation(
+    pageNumber
+) {
+
+    if (
+        typeof getValidationByPage !==
+        "function"
+    ) {
+        return;
+    }
+
+    const pageData =
+        getValidationByPage(
+            pageNumber
+        );
+
+    if (
+        !pageData
+    ) {
+
+        clearValidationForm();
+
+        return;
+
+    }
+
+    restoreValidationForm(
+        pageData
+    );
 
 }
+
+// =========================================
+// CLEAR FORM
+// =========================================
+
+function clearValidationForm() {
+
+    const roomDropdown =
+        document.getElementById(
+            "roomDropdown"
+        );
+
+    const itemDropdown =
+        document.getElementById(
+            "itemDropdown"
+        );
+
+    const categoryDropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    const remarks =
+        document.getElementById(
+            "overallRemarks"
+        );
+
+    const dna =
+        document.getElementById(
+            "drawingNotAvailable"
+        );
+
+    const dnaReason =
+        document.getElementById(
+            "drawingMissingReason"
+        );
+
+    if (roomDropdown)
+        roomDropdown.value = "";
+
+    if (remarks)
+        remarks.value = "";
+
+    if (dna)
+        dna.checked = false;
+
+    if (dnaReason)
+        dnaReason.value = "";
+
+    if (itemDropdown) {
+
+        Array.from(
+            itemDropdown.options
+        ).forEach(
+            option =>
+                option.selected =
+                false
+        );
+
+    }
+
+    if (categoryDropdown) {
+
+        Array.from(
+            categoryDropdown.options
+        ).forEach(
+            option =>
+                option.selected =
+                false
+        );
+
+    }
+
+    const checklistContainer =
+        document.getElementById(
+            "checklistContainer"
+        );
+
+    if (
+        checklistContainer
+    ) {
+
+        checklistContainer.innerHTML =
+            "";
+
+    }
+
+}
+
+// =========================================
+// RESTORE FORM
+// =========================================
+
+function restoreValidationForm(
+    pageData
+) {
+
+    clearValidationForm();
+
+    const roomDropdown =
+        document.getElementById(
+            "roomDropdown"
+        );
+
+    const itemDropdown =
+        document.getElementById(
+            "itemDropdown"
+        );
+
+    const categoryDropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    const remarks =
+        document.getElementById(
+            "overallRemarks"
+        );
+
+    const dna =
+        document.getElementById(
+            "drawingNotAvailable"
+        );
+
+    const dnaReason =
+        document.getElementById(
+            "drawingMissingReason"
+        );
+
+    // Room
+
+    if (
+        roomDropdown
+    ) {
+
+        roomDropdown.value =
+            pageData.room;
+
+        roomDropdown.dispatchEvent(
+            new Event(
+                "change"
+            )
+        );
+
+    }
+
+    // Items
+
+    if (
+        itemDropdown
+        &&
+        pageData.items
+    ) {
+
+        Array.from(
+            itemDropdown.options
+        ).forEach(
+            option => {
+
+                option.selected =
+                    pageData.items.includes(
+                        option.value
+                    );
+
+            }
+        );
+
+    }
+
+    // Categories
+
+    if (
+        categoryDropdown
+        &&
+        pageData.categories
+    ) {
+
+        Array.from(
+            categoryDropdown.options
+        ).forEach(
+            option => {
+
+                option.selected =
+                    pageData.categories.includes(
+                        option.value
+                    );
+
+            }
+        );
+
+    }
+
+    // Checklist
+
+    if (
+        typeof generateChecklist ===
+        "function"
+    ) {
+
+        generateChecklist();
+
+    }
+
+    // Remarks
+
+    if (
+        remarks
+    ) {
+
+        remarks.value =
+            pageData.overallRemarks ||
+            "";
+
+    }
+
+    // DNA
+
+    if (
+        dna
+    ) {
+
+        dna.checked =
+            pageData.drawingNotAvailable ||
+            false;
+
+    }
+
+    if (
+        dnaReason
+    ) {
+
+        dnaReason.value =
+            pageData.drawingMissingReason ||
+            "";
+
+    }
+
+}
+
+// =========================================
+// HELPERS
+// =========================================
+
+function getCurrentPDFPage() {
+
+    return currentPageNumber;
+
+}
+
+function getTotalPDFPages() {
+
+    return totalPages;
+
+}
+
+function hasPDFLoaded() {
+
+    return (
+        pdfDocument !== null
+    );
+
+}
+
+// =========================================
+// DEBUG
+// =========================================
+
+window.showPDFState =
+    function () {
+
+        console.log({
+
+            currentPageNumber,
+
+            totalPages,
+
+            loaded:
+                pdfDocument !== null
+
+        });
+
+    };
