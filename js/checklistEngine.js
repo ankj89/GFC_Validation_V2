@@ -65,7 +65,54 @@ categoryDropdown
 // =========================================
 // GENERATE CHECKLIST
 // =========================================
+function collectChecklist() {
 
+    const rows = [];
+
+    document
+        .querySelectorAll(
+            ".checklist-item"
+        )
+        .forEach(
+            item => {
+
+                const title =
+                    item
+                    .querySelector(
+                        ".checklist-title"
+                    )
+                    ?.textContent || "";
+
+                const status =
+                    item
+                    .querySelector(
+                        'input[type="radio"]:checked'
+                    )
+                    ?.value || "";
+
+                const remark =
+                    item
+                    .querySelector(
+                        ".item-remark"
+                    )
+                    ?.value || "";
+
+                rows.push({
+
+                    title,
+
+                    status,
+
+                    remark
+
+                });
+
+            }
+        );
+
+    return rows;
+
+}
 function generateChecklist() {
 
     if (
