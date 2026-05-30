@@ -5,7 +5,43 @@
 // =========================================
 // DOM
 // =========================================
+function populateCategoryDropdown() {
 
+    const dropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    if (!dropdown) {
+        return;
+    }
+
+    dropdown.innerHTML = "";
+
+    Object.keys(
+        CHECKLIST_CONFIG
+    ).forEach(category => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            category;
+
+        option.textContent =
+            formatCategoryName(
+                category
+            );
+
+        dropdown.appendChild(
+            option
+        );
+
+    });
+
+}
 const checklistContainer =
     document.getElementById(
         "checklistContainer"
@@ -247,40 +283,18 @@ function formatCategoryName(
     category
 ) {
 
-    const mapping = {
+    return category
 
-        falseCeiling:
-            "False Ceiling",
+        .replace(
+            /([A-Z])/g,
+            " $1"
+        )
 
-        electrical:
-            "Electrical",
-
-        plumbing:
-            "Plumbing",
-
-        flooring:
-            "Flooring",
-
-        carpentry:
-            "Carpentry",
-
-        elevation:
-            "Elevation",
-
-        ac:
-            "Air Conditioning",
-
-        civil:
-            "Civil"
-
-    };
-
-    return (
-        mapping[
-            category
-        ] ||
-        category
-    );
+        .replace(
+            /^./,
+            match =>
+                match.toUpperCase()
+        );
 
 }
 
@@ -466,3 +480,11 @@ window.testCategorySuggestion =
         );
 
     };
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        populateCategoryDropdown();
+
+    }
+);
