@@ -8,6 +8,9 @@ function exportValidationExcel() {
 
         const workbook =
             XLSX.utils.book_new();
+        addProjectInfoSheet(
+    workbook
+);
 
         addCoverageSummarySheet(
             workbook
@@ -60,6 +63,60 @@ function exportValidationExcel() {
 
 }
 
+function addProjectInfoSheet(
+    workbook
+) {
+
+    if (
+        validationStore.length === 0
+    ) {
+        return;
+    }
+
+    const info =
+        validationStore[0]
+        ?.projectInfo;
+
+    const data = [
+
+        [
+            "Field",
+            "Value"
+        ],
+
+        [
+            "GFC ID",
+            info.gfcId
+        ],
+
+        [
+            "RFV ID",
+            info.rfvId
+        ],
+
+        [
+            "PID",
+            info.pid
+        ]
+
+    ];
+
+    const ws =
+        XLSX.utils.aoa_to_sheet(
+            data
+        );
+
+    XLSX.utils.book_append_sheet(
+
+        workbook,
+
+        ws,
+
+        "Project Info"
+
+    );
+
+}
 // =========================================
 // SHEET 1
 // COVERAGE SUMMARY
