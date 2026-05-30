@@ -66,42 +66,29 @@ const CHECKLIST_CONFIG = {
     falseCeiling: [
 
         "Ceiling Layout Available",
-        "Section X-X Available",
-        "Section Y-Y Available",
-        "Ceiling Height Mentioned",
+        "Section shown",
+        "Ceiling levels Mentioned",
         "Band Size Mentioned",
         "Cove Width Mentioned",
-        "Cove Drop Mentioned",
-        "Electrical Fixtures Shown",
-        "Fixture Dimensions Mentioned",
-        "Fan Span Mentioned",
+        "Cove levels Mentioned",
         "Beam Locations Shown",
-        "Beam Clearance Verified",
-        "Channel Specification Mentioned",
-        "Support Details Available",
-        "Paint Shade Mentioned",
-        "Paint Code Mentioned",
-        "Minimum Ceiling Height Verified",
-        "AC Clearance Verified",
-        "Wardrobe Clearance Verified",
-        "Curtain Pelmet Clearance Verified"
+        "Wardrobe clash checked",
+        "AC pelmet/pocket shown",
+        "Curtain Pelmet/pocket shown"
 
     ],
 
     electricalWall: [
 
         "Switchboard Layout Available",
-        "Existing Points Tagged",
-        "New Points Tagged",
+        "Existing Points Shown",
+        "New Points Shown",
         "Shifted Points Tagged",
-        "Looping Layout Available",
-        "Conduit Routing Available",
-        "Conduit Size Mentioned",
-        "Module Count Mentioned",
-        "Socket Ratings Mentioned",
+        "Looping Layout Shown",
+        "Conduit Routing Shown",
+        "Module name Mentioned with socket(5A/15A)",
         "Wire Specification Mentioned",
         "Switchboard Coordinates Mentioned",
-        "Floor Height Mentioned",
         "Legend Available",
         "Furniture Clash Checked",
         "Accessibility Checked"
@@ -110,15 +97,14 @@ const CHECKLIST_CONFIG = {
 
     electricalCeiling: [
 
-        "Fixture Layout Available",
+        "Fixture Layout Shown",
         "Primary Looping Shown",
         "Secondary Looping Shown",
-        "Fixture Locations Shown",
-        "Point Mapping Available",
-        "Wiring Sizes Identified",
+        "Fixture Location Shown",
+        "Fixtures Dimensions Shown",
         "Fixture Spacing Mentioned",
-        "Fixture Codes Mentioned",
-        "Fixture Wattages Mentioned"
+        "Fixture Legend Mentioned",
+        "Fan location Mentioned"
 
     ],
 
@@ -127,16 +113,14 @@ const CHECKLIST_CONFIG = {
         "Plan Layout Available",
         "Elevation Layout Available",
         "Legend Available",
-        "Existing Points Tagged",
-        "New Points Tagged",
-        "Relocated Points Tagged",
-        "Fixture Locations Mentioned",
-        "Inlet Points Shown",
+        "Existing Points shown with coordinates",
+        "New Points shown with co-ordinates",
+        "Relocated Points shown with co-ordinates",
+        "Fixture Locations shown with co-ordinates",
         "Drain Points Shown",
-        "Trap Type Mentioned",
         "Waterproofing Extent Shown",
         "Waterproofing Product Mentioned",
-        "Fixture Installation Details Available"
+        "Fixture heights as per interior standards"
 
     ],
 
@@ -145,13 +129,9 @@ const CHECKLIST_CONFIG = {
         "Paint Layout Available",
         "Elevation Layout Available",
         "Paint Area Identified",
-        "Paint Type Mentioned",
-        "Paint Code Mentioned",
-        "Paint Shade Mentioned",
-        "Primer Specification Mentioned",
-        "Putty Specification Mentioned",
-        "Number Of Coats Mentioned",
-        "Procurement Source Mentioned"
+        "Paint specification Mentioned",
+        "Geometric/play of paint elevation shown",
+        "Texture paint elevation shown"
 
     ],
 
@@ -178,14 +158,9 @@ const CHECKLIST_CONFIG = {
         "Plan Available",
         "Elevation Available",
         "Section Available",
-
-        "Procurement Source Mentioned",
-
         "Door Width Mentioned",
         "Door Height Mentioned",
-
         "Frame Size Mentioned",
-
         "Opening Side Shown",
 
         "Material Mentioned",
