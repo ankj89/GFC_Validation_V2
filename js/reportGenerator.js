@@ -14,6 +14,10 @@ function generateReports() {
 
     container.innerHTML = "";
 
+    generateProjectInfoReport(
+    container
+);
+    
     generateSummaryCard(
         container
     );
@@ -38,6 +42,96 @@ generateDrawingMismatchReport(
 );
 }
 
+
+function generateProjectInfoReport(
+    container
+) {
+
+    if (
+        validationStore.length === 0
+    ) {
+        return;
+    }
+
+    const info =
+        validationStore[0]
+        ?.projectInfo;
+
+    if (!info) {
+        return;
+    }
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.innerHTML = `
+
+        <h3>
+            Project Information
+        </h3>
+
+        <table
+            class="report-table">
+
+            <tr>
+
+                <th>
+                    Field
+                </th>
+
+                <th>
+                    Value
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    GFC ID
+                </td>
+
+                <td>
+                    ${info.gfcId}
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    RFV ID
+                </td>
+
+                <td>
+                    ${info.rfvId}
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    PID
+                </td>
+
+                <td>
+                    ${info.pid}
+                </td>
+
+            </tr>
+
+        </table>
+
+    `;
+
+    container.appendChild(
+        div
+    );
+
+}
 // =========================================
 // SUMMARY
 // =========================================
