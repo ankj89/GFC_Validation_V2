@@ -26,10 +26,6 @@ const exportExcelBtn =
         "exportExcelBtn"
     );
 
-const categoryDropdown =
-    document.getElementById(
-        "categoryDropdown"
-    );
 
 const drawingNotAvailable =
     document.getElementById(
@@ -146,23 +142,8 @@ async function handleGFCPdfUpload(
 // CATEGORY CHANGE
 // =========================================
 
-categoryDropdown?.addEventListener(
-    "change",
-    handleCategoryChange
-);
 
-function handleCategoryChange() {
 
-    if (
-        typeof generateChecklist ===
-        "function"
-    ) {
-
-        generateChecklist();
-
-    }
-
-}
 
 // =========================================
 // DRAWING NOT AVAILABLE
