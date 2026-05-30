@@ -4,113 +4,831 @@
 
 const CHECKLIST_CONFIG = {
 
-    falseCeiling: [
+    demolition: [
 
-        "Ceiling Layout Available",
-        "Ceiling Levels Mentioned",
-        "Dimensions Provided",
-        "Section Details Available",
-        "Cove Details Available",
-        "Light Coordination Done",
-        "AC Coordination Done",
-        "Legend Provided",
-        "Material Specification Available",
-        "Room Name Mentioned"
-
-    ],
-
-    electrical: [
-
-        "Switchboard Layout Available",
-        "Switchboard Tagging Done",
-        "Ceiling Point Layout Available",
-        "Circuit Routing Shown",
-        "DB Connection Shown",
-        "Load Details Available",
-        "Legend Provided",
-        "Room Name Mentioned",
-        "Dimensions Available",
-        "AC Electrical Points Coordinated"
+        "Demolition Area Clearly Demarcated",
+        "Structural Walls Identified",
+        "Wall Opening Locations Shown",
+        "Demolition Dimensions Mentioned",
+        "Legend Available",
+        "Demolition Method Mentioned",
+        "Post Demolition Finishing Mentioned",
+        "Adjacent Surface Protection Mentioned",
+        "Affected Services Identified"
 
     ],
 
-    plumbing: [
+    wall: [
 
-        "Water Inlet Point Shown",
-        "Drain Point Shown",
-        "Trap Details Provided",
-        "Slope Direction Mentioned",
-        "Isometric Provided",
-        "Fixture Tagging Done",
-        "Legend Provided",
-        "Dimensions Available"
+        "New Wall Locations Shown",
+        "Wall Thickness Mentioned",
+        "Wall Length Mentioned",
+        "Wall Height Mentioned",
+        "Opening Dimensions Mentioned",
+        "Lintel Details Mentioned",
+        "Material Specification Mentioned",
+        "Brick Size Mentioned",
+        "Plaster Thickness Mentioned",
+        "Core Cutting Coordinates Mentioned"
 
     ],
 
     flooring: [
 
         "Flooring Layout Available",
-        "Tile Pattern Shown",
+        "Tile Start Point Mentioned",
         "Tile Direction Mentioned",
-        "Skirting Details Available",
-        "Threshold Details Available",
-        "Dimensions Available",
+        "Slope Direction Mentioned",
+        "Level Difference Marked",
+        "Tile Size Mentioned",
+        "Tile Code Mentioned",
+        "Skirting Requirement Mentioned",
+        "Skirting Thickness Mentioned",
+        "Grouting Details Mentioned",
         "Material Specification Available"
 
     ],
 
-    carpentry: [
+    tiling: [
+
+        "Dado Layout Available",
+        "Wall Cladding Layout Available",
+        "Tile Start Point Mentioned",
+        "Tile Size Mentioned",
+        "Tile Code Mentioned",
+        "Cutouts Shown",
+        "Cutout Dimensions Mentioned",
+        "Tile Area Dimensions Mentioned",
+        "Grouting Details Mentioned"
+
+    ],
+
+    falseCeiling: [
+
+        "Ceiling Layout Available",
+        "Section X-X Available",
+        "Section Y-Y Available",
+        "Ceiling Height Mentioned",
+        "Band Size Mentioned",
+        "Cove Width Mentioned",
+        "Cove Drop Mentioned",
+        "Electrical Fixtures Shown",
+        "Fixture Dimensions Mentioned",
+        "Fan Span Mentioned",
+        "Beam Locations Shown",
+        "Beam Clearance Verified",
+        "Channel Specification Mentioned",
+        "Support Details Available",
+        "Paint Shade Mentioned",
+        "Paint Code Mentioned",
+        "Minimum Ceiling Height Verified",
+        "AC Clearance Verified",
+        "Wardrobe Clearance Verified",
+        "Curtain Pelmet Clearance Verified"
+
+    ],
+
+    electricalWall: [
+
+        "Switchboard Layout Available",
+        "Existing Points Tagged",
+        "New Points Tagged",
+        "Shifted Points Tagged",
+        "Looping Layout Available",
+        "Conduit Routing Available",
+        "Conduit Size Mentioned",
+        "Module Count Mentioned",
+        "Socket Ratings Mentioned",
+        "Wire Specification Mentioned",
+        "Switchboard Coordinates Mentioned",
+        "Floor Height Mentioned",
+        "Legend Available",
+        "Furniture Clash Checked",
+        "Accessibility Checked"
+
+    ],
+
+    electricalCeiling: [
+
+        "Fixture Layout Available",
+        "Primary Looping Shown",
+        "Secondary Looping Shown",
+        "Fixture Locations Shown",
+        "Point Mapping Available",
+        "Wiring Sizes Identified",
+        "Fixture Spacing Mentioned",
+        "Fixture Codes Mentioned",
+        "Fixture Wattages Mentioned"
+
+    ],
+
+    plumbing: [
+
+        "Plan Layout Available",
+        "Elevation Layout Available",
+        "Legend Available",
+        "Existing Points Tagged",
+        "New Points Tagged",
+        "Relocated Points Tagged",
+        "Fixture Locations Mentioned",
+        "Inlet Points Shown",
+        "Drain Points Shown",
+        "Trap Type Mentioned",
+        "Waterproofing Extent Shown",
+        "Waterproofing Product Mentioned",
+        "Fixture Installation Details Available"
+
+    ],
+
+    painting: [
+
+        "Paint Layout Available",
+        "Elevation Layout Available",
+        "Paint Area Identified",
+        "Paint Type Mentioned",
+        "Paint Code Mentioned",
+        "Paint Shade Mentioned",
+        "Primer Specification Mentioned",
+        "Putty Specification Mentioned",
+        "Number Of Coats Mentioned",
+        "Procurement Source Mentioned"
+
+    ],
+
+    cat3: [
+
+        "Product Layout Available",
+        "Elevation Available",
+        "Procurement Source Mentioned",
+        "Product Code Mentioned",
+        "Material Specification Mentioned",
+        "Dimensions Mentioned",
+        "Installation Details Available",
+        "Accessory Details Available"
+
+    ],
+
+
+    // =====================================
+    // NEW DOOR / DOOR REFURBISHMENT
+    // =====================================
+
+    newDoor: [
 
         "Plan Available",
         "Elevation Available",
         "Section Available",
-        "Internal Partition Details Available",
-        "Hardware Details Mentioned",
-        "Material Specification Available",
-        "Laminate Finish Mentioned",
-        "Dimensions Available",
-        "Handle Details Mentioned"
+
+        "Procurement Source Mentioned",
+
+        "Door Width Mentioned",
+        "Door Height Mentioned",
+
+        "Frame Size Mentioned",
+
+        "Opening Side Shown",
+
+        "Material Mentioned",
+        "Material Thickness Mentioned",
+
+        "Handle Size Mentioned",
+        "Handle Finish Mentioned",
+
+        "Accessories In Scope Mentioned",
+
+        "Finish Type Mentioned",
+        "Finish Code Mentioned",
+        "Finish Colour Mentioned",
+
+        "Lintel Height Mentioned",
+
+        "Door Design Dimensioned"
 
     ],
 
-    elevation: [
+    // =====================================
+    // SLIDING DOOR
+    // =====================================
+
+    slidingDoor: [
 
         "Elevation Available",
-        "Material Callouts Available",
-        "Dimensions Available",
-        "Section Reference Available",
-        "Hardware Details Available",
-        "Finish Details Available"
+        "Section Available",
+
+        "Track Quantity Mentioned",
+
+        "Door Width Mentioned",
+        "Door Height Mentioned",
+
+        "Opening Direction Mentioned",
+
+        "Panel Quantity Mentioned",
+
+        "Glass Type Mentioned",
+        "Glass Thickness Mentioned",
+        "Glass Colour Mentioned",
+
+        "Material Mentioned",
+        "Material Thickness Mentioned",
+
+        "Accessories Mentioned"
 
     ],
 
-    ac: [
+    // =====================================
+    // UPVC WINDOW
+    // =====================================
 
-        "AC Location Shown",
-        "Indoor Unit Location Shown",
-        "Outdoor Unit Location Shown",
-        "Drain Routing Shown",
-        "Copper Routing Shown",
-        "Electrical Point Coordinated",
-        "Dimensions Available"
+    upvcWindow: [
+
+        "Elevation Available",
+        "Section Available",
+
+        "Track Quantity Mentioned",
+
+        "Window Width Mentioned",
+        "Window Height Mentioned",
+
+        "Opening Direction Mentioned",
+
+        "Panel Quantity Mentioned",
+
+        "Glass Type Mentioned",
+        "Glass Thickness Mentioned",
+        "Glass Colour Mentioned",
+
+        "UPVC Profile Mentioned",
+
+        "Accessories Mentioned"
 
     ],
 
-    civil: [
+    // =====================================
+    // ALUMINIUM WINDOW
+    // =====================================
 
-        "Demolition Markings Available",
-        "Wall Construction Details Available",
-        "Dimensions Available",
-        "Door Opening Dimensions Available",
-        "Window Opening Dimensions Available",
-        "Level Information Available"
+    aluminiumWindow: [
+
+        "Elevation Available",
+        "Section Available",
+
+        "Track Quantity Mentioned",
+
+        "Window Width Mentioned",
+        "Window Height Mentioned",
+
+        "Opening Direction Mentioned",
+
+        "Panel Quantity Mentioned",
+
+        "Glass Type Mentioned",
+        "Glass Thickness Mentioned",
+        "Glass Colour Mentioned",
+
+        "Aluminium Profile Mentioned",
+
+        "Accessories Mentioned"
 
     ],
-    painting: [
 
-        "Panting area marked",
-        "Legend provided"
+    // =====================================
+    // SHOE STORAGE
+    // =====================================
+
+    shoeStorage: [
+
+        "Furniture Layout Available",
+        "Elevation Available",
+        "Section Available",
+
+        "Width Mentioned",
+        "Height Mentioned",
+        "Depth Mentioned",
+
+        "Material Mentioned",
+        "Material Thickness Mentioned",
+
+        "Finish Type Mentioned",
+        "Finish Code Mentioned",
+
+        "Internal Layout Available",
+
+        "Shelf Quantity Mentioned",
+        "Shelf Sizes Mentioned",
+
+        "Drawer Details Mentioned",
+
+        "Lock Details Mentioned",
+        "Handle Details Mentioned",
+
+        "Jali Details Mentioned",
+
+        "Seat Cushion Details Mentioned",
+        "Fabric Code Mentioned",
+        "Foam Density Mentioned"
+
+    ],
+
+    // =====================================
+    // WALL STORAGE
+    // =====================================
+
+    wallStorage: [
+
+        "Plan Available",
+        "Elevation Available",
+        "Section Available",
+
+        "Full Wall Representation Available",
+
+        "Material Mentioned",
+        "Material Thickness Mentioned",
+
+        "Finish Type Mentioned",
+        "Finish Code Mentioned",
+
+        "Laminate Code Mentioned",
+
+        "Lock Details Mentioned",
+        "Handle Details Mentioned",
+
+        "Drawer Channel Details Mentioned",
+
+        "Wall Fixing Details Mentioned"
+
+    ],
+
+    // =====================================
+    // TV UNIT
+    // =====================================
+
+    tvUnit: [
+
+        "Furniture Layout Available",
+        "Elevation Available",
+        "Section Available",
+
+        "Procurement Source Mentioned",
+
+        "Height Mentioned",
+        "Width Mentioned",
+        "Depth Mentioned",
+
+        "TV Size Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Laminate Code Mentioned",
+
+        "Lock Details Mentioned",
+        "Handle Details Mentioned",
+
+        "Channel Details Mentioned",
+
+        "Electrical Connections Shown"
+
+    ],
+
+    // =====================================
+    // MANDIR UNIT
+    // =====================================
+
+    mandirUnit: [
+
+        "Furniture Layout Available",
+        "Elevation Available",
+        "Section Available",
+
+        "Procurement Source Mentioned",
+
+        "Height Mentioned",
+        "Width Mentioned",
+        "Depth Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Finish Type Mentioned",
+        "Finish Code Mentioned",
+
+        "Lock Details Mentioned",
+        "Handle Details Mentioned",
+
+        "Channel Details Mentioned",
+
+        "Step Dimensions Mentioned",
+
+        "Bell Details Mentioned",
+
+        "Jali Details Mentioned",
+
+        "Lighting Details Mentioned",
+
+        "Furniture Location Shown"
+
+    ],
+
+    // =====================================
+    // WALL PANELLING
+    // =====================================
+
+    wallPanelling: [
+
+        "Elevation Available",
+        "Section Available",
+
+        "Panel Width Mentioned",
+        "Panel Height Mentioned",
+        "Panel Depth Mentioned",
+
+        "Material Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Laminate Code Mentioned",
+
+        "Both Side Elevations Available",
+
+        "Frame Details Mentioned",
+
+        "Skirting Interface Mentioned"
+
+    ],
+
+    // =====================================
+    // MIRROR PANELLING
+    // =====================================
+
+    mirrorPanelling: [
+
+        "Elevation Available",
+        "Section Available",
+
+        "Mirror Thickness Mentioned",
+
+        "Mirror Company Mentioned",
+
+        "Mirror Type Mentioned",
+
+        "Bevel Details Mentioned",
+
+        "Frame Details Mentioned",
+
+        "Backing Material Mentioned",
+
+        "Backing Thickness Mentioned",
+
+        "All Dimensions Mentioned",
+
+        "Pattern Dimensions Mentioned"
+
+    ],
+
+    // =====================================
+    // VANITY UNIT
+    // =====================================
+
+    vanityUnit: [
+
+        "Plan Available",
+        "Elevation Available",
+        "Section Available",
+
+        "BWR Ply Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Finish Code Mentioned",
+
+        "Handle Details Mentioned",
+
+        "Lock Details Mentioned",
+
+        "Drawer Channel Details Mentioned",
+
+        "Internal Layout Available",
+
+        "Shelf Details Mentioned",
+
+        "Sink Support Material Mentioned",
+
+        "Wall Mounted Or Floor Mounted Mentioned"
+
+    ],
+
+    // =====================================
+    // LEDGES
+    // =====================================
+
+    ledges: [
+
+        "Elevation Available",
+
+        "Plan Available",
+
+        "Ledge Thickness Mentioned",
+
+        "Material Mentioned",
+
+        "Finish Details Mentioned",
+
+        "Bracket Details Mentioned",
+
+        "Shelf Spacing Mentioned"
+
+    ],
+
+    // =====================================
+    // WOODEN PARTITION
+    // =====================================
+
+    woodenPartition: [
+
+        "Elevation Available",
+
+        "Rafter Size Mentioned",
+
+        "Rafter Material Mentioned",
+
+        "Finish Type Mentioned",
+
+        "Fixing Details Mentioned",
+
+        "Floor Fixing Mentioned",
+
+        "Ceiling Fixing Mentioned",
+
+        "Rafter Spacing Mentioned"
+
+    ],
+
+    // =====================================
+    // WOODEN PELMET
+    // =====================================
+
+    woodenPelmet: [
+
+        "Plan Available",
+
+        "Front Elevation Available",
+
+        "Side Elevation Available",
+
+        "Material Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Finish Type Mentioned",
+
+        "Finish Code Mentioned",
+
+        "Pelmet Width Mentioned",
+
+        "Pelmet Depth Mentioned",
+
+        "Pelmet Height Mentioned"
+
+    ],
+
+    // =====================================
+    // PLY BOXING
+    // =====================================
+
+    plyBoxing: [
+
+        "Plan Available",
+
+        "Front Elevation Available",
+
+        "Side Elevation Available",
+
+        "Material Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Finish Type Mentioned",
+
+        "Finish Code Mentioned",
+
+        "Boxing Width Mentioned",
+
+        "Boxing Depth Mentioned",
+
+        "Boxing Height Mentioned"
+
+    ],
+
+    // =====================================
+    // TRIMS
+    // =====================================
+
+    trims: [
+
+        "Elevation Available",
+
+        "Trim Profile Mentioned",
+
+        "Trim Size Mentioned",
+
+        "Trim Material Mentioned",
+
+        "Finish Type Mentioned",
+
+        "Paint Or Polish Mentioned",
+
+        "Paint Colour Mentioned",
+
+        "Trim Spacing Mentioned",
+
+        "Starting Point Mentioned",
+
+        "Wall Offset Mentioned"
+
+    ],
+
+    // =====================================
+    // SAFETY DOOR
+    // =====================================
+
+    safetyDoor: [
+
+        "Plan Available",
+
+        "Elevation Available",
+
+        "Section Available",
+
+        "Door Width Mentioned",
+
+        "Door Height Mentioned",
+
+        "Opening Side Shown",
+
+        "Material Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Jali Design Mentioned",
+
+        "Jali Dimensions Mentioned",
+
+        "Lock Details Mentioned",
+
+        "Handle Details Mentioned",
+
+        "Stopper Details Mentioned",
+
+        "Metal Finish Mentioned"
+
+    ],
+
+    // =====================================
+    // WINDOW GRILLS
+    // =====================================
+
+    windowGrills: [
+
+        "Elevation Available",
+
+        "Grill Layout Available",
+
+        "Width Mentioned",
+
+        "Height Mentioned",
+
+        "Rod Thickness Mentioned",
+
+        "Rod Spacing Mentioned",
+
+        "Grill Type Mentioned",
+
+        "Paint Type Mentioned",
+
+        "Paint Colour Mentioned",
+
+        "Paint Code Mentioned"
+
+    ],
+
+    // =====================================
+    // METAL DESIGN ELEMENTS
+    // =====================================
+
+    metalDesignElements: [
+
+        "Plan Available",
+
+        "Elevation Available",
+
+        "Section Available",
+
+        "Dimensions Mentioned",
+
+        "Material Mentioned",
+
+        "Material Thickness Mentioned",
+
+        "Fixing Details Mentioned",
+
+        "Finish Type Mentioned",
+
+        "Colour Mentioned",
+
+        "Installation Details Mentioned"
+
+    ],
+
+    // =====================================
+    // MS SHED
+    // =====================================
+
+    msShed: [
+
+        "Plan Available",
+
+        "Elevation Available",
+
+        "Section Available",
+
+        "Length Mentioned",
+
+        "Width Mentioned",
+
+        "Height Mentioned",
+
+        "MS Section Size Mentioned",
+
+        "Sheet Specification Mentioned",
+
+        "Slope Mentioned",
+
+        "Drainage Direction Mentioned",
+
+        "Paint System Mentioned",
+
+        "Fixing Details Mentioned"
+
+    ],
+
+    // =====================================
+    // PERGOLA
+    // =====================================
+
+    pergola: [
+
+        "Plan Available",
+
+        "Elevation Available",
+
+        "Section Available",
+
+        "Length Mentioned",
+
+        "Width Mentioned",
+
+        "Height Mentioned",
+
+        "Rafter Size Mentioned",
+
+        "Rafter Spacing Mentioned",
+
+        "Material Mentioned",
+
+        "Finish Mentioned",
+
+        "Fixing Details Mentioned"
+
+    ],
+
+    // =====================================
+    // FABRIC HEADBOARD
+    // =====================================
+
+    fabricHeadboard: [
+
+        "Plan Available",
+
+        "Elevation Available",
+
+        "Section Available",
+
+        "Length Mentioned",
+
+        "Height Mentioned",
+
+        "Depth Mentioned",
+
+        "Foam Density Mentioned",
+
+        "Fabric Code Mentioned",
+
+        "Fabric Colour Mentioned",
+
+        "Stitch Pattern Mentioned",
+
+        "Starting Height Mentioned"
 
     ]
+
+    
 
 };
