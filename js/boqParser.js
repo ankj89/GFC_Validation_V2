@@ -90,6 +90,71 @@ async function handleBOQUpload(
     }
 
 }
+/*extract item name from item code*/
+function tryExtractItemFromQIRow(row) {
+
+    if (!row.includes("QI-")) {
+        return null;
+    }
+
+    const cleanRow =
+        row.replace(/\s+/g, " ").trim();
+
+    // Remove QI code
+
+    const withoutCode =
+        cleanRow.replace(
+            /^QI-[A-Z0-9\-]+\s*/i,
+            ""
+        );
+
+    const stopWords = [
+
+        "Brand",
+        "Location",
+        "SqFt",
+        "Nos",
+        "RFt",
+        "RFT",
+        "Package",
+        "Description",
+        "₹"
+
+    ];
+
+    let itemName =
+        withoutCode;
+
+    let firstStopIndex =
+        itemName.length;
+
+    stopWords.forEach(word => {
+
+        const idx =
+            itemName.indexOf(word);
+
+        if (
+            idx > 0 &&
+            idx < firstStopIndex
+        ) {
+
+            firstStopIndex = idx;
+
+        }
+
+    });
+
+    itemName =
+        itemName
+            .substring(
+                0,
+                firstStopIndex
+            )
+            .trim();
+
+    return itemName;
+
+}
 
 // =========================================
 // PARSE BOQ
@@ -169,65 +234,44 @@ async function parseBOQ(pdf) {
             // ITEM NAME
             // =====================
 
-            if (
-                row.includes(
-                    "Item Name"
-                )
-            ) {
+            const itemName =
+    tryExtractItemFromQIRow(
+        row
+    );
 
-                let itemName =
-                    row
-                        .replace(
-                            "Item Name",
-                            ""
-                        )
-                        .replace(
-                            ":",
-                            ""
-                        )
-                        .trim();
+if (
+    itemName
+) {
 
-                if (
-                    !itemName &&
-                    rows[i + 1]
-                ) {
+    if (
+        !currentRoom
+    ) {
 
-                    itemName =
-                        rows[i + 1]
-                        .trim();
-                }
+        currentRoom =
+            lastDetectedRoom;
+    }
 
-                if (
-                    !currentRoom
-                ) {
+    if (
+        currentRoom
+    ) {
 
-                    currentRoom =
-                        lastDetectedRoom;
-                }
+        currentItem =
+            itemName;
 
-                if (
-                    currentRoom &&
-                    itemName
-                ) {
+        addItemToRoom(
+            currentRoom,
+            itemName
+        );
 
-                    currentItem =
-                        itemName;
+        console.log(
+            "ITEM ADDED",
+            currentRoom,
+            itemName
+        );
 
-                    addItemToRoom(
-                        currentRoom,
-                        itemName
-                    );
+    }
 
-                    console.log(
-                        "ITEM ADDED",
-                        currentRoom,
-                        itemName
-                    );
-                }
-
-                continue;
-            }
-
+}
             // =====================
             // SUPER CATEGORY
             // =====================
@@ -393,52 +437,72 @@ async function parseBOQ(pdf) {
 // ROOM DETECTION
 // =========================================
 
-function isActualRoomHeader(
-    text
-) {
+function isActualRoomHeader(text) {
+
+    const clean =
+        text.trim();
+
+    if (
+        clean.includes("QI-")
+    ) {
+        return false;
+    }
+
+    if (
+        clean.includes("₹")
+    ) {
+        return false;
+    }
+
+    if (
+        /\d/.test(clean)
+    ) {
+        return false;
+    }
 
     const ignore = [
 
-        "Item Code",
-        "Item Name",
-        "Specifications",
-        "Description",
-        "Qty",
-        "Rate",
-        "Amount",
-        "SP Unit Price",
-        "Total Price",
-        "Location",
-        "Service On",
-        "Super Category",
-        "Sub Super Category"
+        "ITEM CODE",
+        "ITEM NAME",
+        "SPECIFICATIONS",
+        "DESCRIPTION",
+        "UNIT",
+        "QTY",
+        "SP UNIT",
+        "TOTAL PRICE",
+        "SKU",
+        "CATEGORY",
+        "SUB CATEGORY",
+        "BRAND",
+        "LOCATION"
 
     ];
 
     if (
         ignore.some(
-            item =>
-                text.includes(
-                    item
-                )
+            x =>
+                clean
+                    .toUpperCase()
+                    .includes(x)
         )
     ) {
 
         return false;
+
     }
 
     return (
 
-        text ===
-        text.toUpperCase()
+        clean ===
+        clean.toUpperCase()
 
         &&
 
-        text.length > 2
+        clean.length > 2
 
         &&
 
-        text.length < 60
+        clean.length < 60
 
     );
 
@@ -588,24 +652,47 @@ function addItemToRoom(
 ) {
 
     if (
-        !projectMaster
+        !projectMaster.roomItemMap[
+            room
+        ]
+    ) {
+
+        projectMaster.roomItemMap[
+            room
+        ] = [];
+
+    }
+
+    const alreadyExists =
+        projectMaster
             .roomItemMap[
             room
         ]
-            .includes(item)
+            .some(
+                existing =>
+
+                    existing
+                        .trim()
+                        .toLowerCase() ===
+
+                    item
+                        .trim()
+                        .toLowerCase()
+            );
+
+    if (
+        !alreadyExists
     ) {
 
         projectMaster
             .roomItemMap[
             room
         ]
-            .push(item);
+            .push(
+                item
+            );
 
     }
-
-    ensureItemMap(
-        item
-    );
 
 }
 
@@ -723,15 +810,18 @@ function handleRoomChange() {
     itemDropdown.innerHTML =
         "";
 
-    if (!room) return;
+    if (
+        !room
+    ) return;
 
     const items =
-        projectMaster.roomItemMap[
+        projectMaster
+            .roomItemMap[
             room
         ] || [];
 
     console.log(
-        "ROOM SELECTED",
+        "ROOM",
         room
     );
 
