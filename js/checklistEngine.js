@@ -480,4 +480,9 @@ window.testCategorySuggestion =
         );
 
     };
+
+console.log(
+    "CHECKLIST CONFIG KEYS:",
+    Object.keys(CHECKLIST_CONFIG)
+);
 populateCategoryDropdown();
