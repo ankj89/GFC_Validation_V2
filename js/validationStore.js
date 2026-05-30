@@ -166,57 +166,59 @@ function getBOQCoverage() {
             return;
         }
 
-        const boqItems =
-            projectMaster.roomItemMap[
+        projectMaster
+            .roomItemMap[
                 room
-            ] || [];
+            ]
+            .forEach(item => {
 
-        boqItems.forEach(item => {
+                let covered =
+                    false;
 
-            let covered = false;
+                // Room specific
 
-            // Room specific
+                if (
+                    selectedItems[
+                        room
+                    ] &&
+                    selectedItems[
+                        room
+                    ].has(item)
+                ) {
 
-            if (
-                selectedItems[room] &&
-                selectedItems[
-                    room
-                ].has(item)
-            ) {
+                    covered = true;
 
-                covered = true;
+                }
 
-            }
+                // Full Home
 
-            // FULL HOME drawing
+                if (
+                    selectedItems[
+                        "FULL HOME"
+                    ] &&
+                    selectedItems[
+                        "FULL HOME"
+                    ].has(item)
+                ) {
 
-            if (
-                selectedItems[
-                    "FULL HOME"
-                ] &&
-                selectedItems[
-                    "FULL HOME"
-                ].has(item)
-            ) {
+                    covered = true;
 
-                covered = true;
+                }
 
-            }
+                coverage.push({
 
-            coverage.push({
+                    room:
+                        room,
 
-                room:
-                    room,
+                    item:
+                        item,
 
-                item:
-                    item,
+                    validated:
+                        covered
 
-                validated:
-                    covered
+                });
 
             });
-
-        });
 
     });
 
