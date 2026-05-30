@@ -257,8 +257,9 @@ function processBOQRows(rows) {
         Array.from(
             allItems
         );
-
+buildFullHomeItems();
     populateRoomDropdown();
+    
 
     console.log(
         projectMaster
@@ -931,26 +932,79 @@ function populateRoomDropdown() {
         </option>
     `;
 
-    projectMaster.rooms
-        .sort()
-        .forEach(room => {
+    const rooms = [
+        ...projectMaster.rooms
+    ];
 
-            const option =
-                document.createElement(
-                    "option"
-                );
+    if (
+        !rooms.includes(
+            "FULL HOME"
+        )
+    ) {
 
-            option.value =
-                room;
+        rooms.unshift(
+            "FULL HOME"
+        );
 
-            option.textContent =
-                room;
+    }
 
-            roomDropdown.appendChild(
-                option
+    rooms.forEach(room => {
+
+        const option =
+            document.createElement(
+                "option"
             );
 
-        });
+        option.value =
+            room;
+
+        option.textContent =
+            room;
+
+        roomDropdown.appendChild(
+            option
+        );
+
+    });
+
+}
+
+function buildFullHomeItems() {
+
+    const allItems =
+        new Set();
+
+    Object.keys(
+        projectMaster.roomItemMap
+    ).forEach(room => {
+
+        if (
+            room ===
+            "FULL HOME"
+        ) {
+            return;
+        }
+
+        projectMaster
+            .roomItemMap[
+                room
+            ]
+            .forEach(item => {
+
+                allItems.add(
+                    item
+                );
+
+            });
+
+    });
+
+    projectMaster.roomItemMap[
+        "FULL HOME"
+    ] =
+        Array.from(
+            allItems
+        );
 
 }
 
@@ -973,13 +1027,14 @@ function handleRoomChange() {
 
     if (
         !room
-    ) return;
+    ) {
+        return;
+    }
 
     const items =
-        projectMaster
-            .roomItemMap[
-                room
-            ] || [];
+        projectMaster.roomItemMap[
+            room
+        ] || [];
 
     items
         .sort()
@@ -1012,6 +1067,8 @@ itemDropdown?.addEventListener(
     "change",
     autoSuggestCategories
 );
+
+
 
 function autoSuggestCategories() {
 
@@ -1090,5 +1147,92 @@ function resetProjectMaster() {
     projectMaster.itemCategoryMap = {};
 
     projectMaster.boqRows = [];
+
+}
+
+document
+    .getElementById(
+        "addManualItemBtn"
+    )
+    ?.addEventListener(
+        "click",
+        addManualItem
+    );
+
+function addManualItem() {
+
+    const room =
+        roomDropdown.value;
+
+    const input =
+        document.getElementById(
+            "manualItemInput"
+        );
+
+    const item =
+        input.value.trim();
+
+    if (
+        !room ||
+        !item
+    ) {
+
+        alert(
+            "Select Room and enter Item"
+        );
+
+        return;
+
+    }
+
+    if (
+        !projectMaster.roomItemMap[
+            room
+        ]
+    ) {
+
+        projectMaster.roomItemMap[
+            room
+        ] = [];
+
+    }
+
+    if (
+        !projectMaster.roomItemMap[
+            room
+        ].includes(
+            item
+        )
+    ) {
+
+        projectMaster.roomItemMap[
+            room
+        ].push(
+            item
+        );
+
+    }
+
+    // Also update FULL HOME
+
+    if (
+        !projectMaster.roomItemMap[
+            "FULL HOME"
+        ].includes(
+            item
+        )
+    ) {
+
+        projectMaster.roomItemMap[
+            "FULL HOME"
+        ].push(
+            item
+        );
+
+    }
+
+    handleRoomChange();
+
+    input.value = "";
 
 }
