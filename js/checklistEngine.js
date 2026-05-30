@@ -1,18 +1,27 @@
 // =========================================
-// CHECKLIST ENGINE
+// CHECKLIST ENGINE - VERSION 3
+// =========================================
+
+// =========================================
+// DOM
 // =========================================
 
 const checklistContainer =
-    document.getElementById("checklistContainer");
+    document.getElementById(
+        "checklistContainer"
+    );
 
 const categoryDropdown =
-    document.getElementById("categoryDropdown");
+    document.getElementById(
+        "categoryDropdown"
+    );
 
 // =========================================
-// CATEGORY CHANGE EVENT
+// CATEGORY CHANGE
 // =========================================
 
-categoryDropdown?.addEventListener(
+categoryDropdown
+?.addEventListener(
     "change",
     generateChecklist
 );
@@ -23,347 +32,194 @@ categoryDropdown?.addEventListener(
 
 function generateChecklist() {
 
-    if (!checklistContainer) return;
-
-    checklistContainer.innerHTML = "";
-
-    const selectedCategories =
-        Array.from(
-            categoryDropdown.selectedOptions
-        ).map(option => option.value);
-
-    if (selectedCategories.length === 0) {
-        return;
-    }
-
-    selectedCategories.forEach(category => {
-
-        const checklistItems =
-            CHECKLIST_CONFIG[category];
-
-        if (!checklistItems) return;
-
-        const categoryBlock =
-            document.createElement("div");
-
-        categoryBlock.className =
-            "category-block";
-
-        const categoryHeader =
-            document.createElement("div");
-
-        categoryHeader.className =
-            "category-header";
-
-        categoryHeader.innerText =
-            formatCategoryName(category);
-
-        categoryBlock.appendChild(
-            categoryHeader
-        );
-
-        checklistItems.forEach(item => {
-
-            const uniqueId =
-                createSafeId(
-                    category,
-                    item
-                );
-
-            const itemDiv =
-                document.createElement("div");
-
-            itemDiv.className =
-                "checklist-item";
-
-            itemDiv.innerHTML = `
-
-                <div class="checklist-title">
-
-                    ${item}
-
-                </div>
-
-                <div class="status-group">
-
-                    <label>
-
-                        <input
-                            type="radio"
-                            name="${uniqueId}"
-                            value="Present">
-
-                        Present
-
-                    </label>
-
-                    <label>
-
-                        <input
-                            type="radio"
-                            name="${uniqueId}"
-                            value="Absent">
-
-                        Absent
-
-                    </label>
-
-                    <label>
-
-                        <input
-                            type="radio"
-                            name="${uniqueId}"
-                            value="NA">
-
-                        N/A
-
-                    </label>
-
-                </div>
-
-                <textarea
-                    class="item-remark"
-                    data-item="${item}"
-                    data-category="${category}"
-                    placeholder="Remarks">
-                </textarea>
-
-            `;
-
-            categoryBlock.appendChild(
-                itemDiv
-            );
-
-        });
-
-        checklistContainer.appendChild(
-            categoryBlock
-        );
-
-    });
-
-}
-
-// =========================================
-// GET VALIDATION DATA
-// =========================================
-
-function getChecklistValidationData() {
-
-    const selectedCategories =
-        Array.from(
-            categoryDropdown.selectedOptions
-        ).map(option => option.value);
-
-    const validationResults = [];
-
-    selectedCategories.forEach(category => {
-
-        const checklistItems =
-            CHECKLIST_CONFIG[category];
-
-        if (!checklistItems) return;
-
-        checklistItems.forEach(item => {
-
-            const uniqueId =
-                createSafeId(
-                    category,
-                    item
-                );
-
-            const selectedStatus =
-                document.querySelector(
-                    `input[name="${uniqueId}"]:checked`
-                );
-
-            const remarkField =
-                document.querySelector(
-                    `textarea[data-item="${item}"][data-category="${category}"]`
-                );
-
-            validationResults.push({
-
-                category: category,
-
-                checklistItem: item,
-
-                status:
-                    selectedStatus
-                        ? selectedStatus.value
-                        : "",
-
-                remarks:
-                    remarkField
-                        ? remarkField.value
-                        : ""
-
-            });
-
-        });
-
-    });
-
-    return validationResults;
-
-}
-
-// =========================================
-// LOAD SAVED CHECKLIST DATA
-// =========================================
-
-function loadChecklistData(
-    validationRows
-) {
-
-    if (!validationRows) return;
-
-    validationRows.forEach(row => {
-
-        const uniqueId =
-            createSafeId(
-                row.category,
-                row.checklistItem
-            );
-
-        const radio =
-            document.querySelector(
-                `input[name="${uniqueId}"][value="${row.status}"]`
-            );
-
-        if (radio) {
-            radio.checked = true;
-        }
-
-        const remarkField =
-            document.querySelector(
-                `textarea[data-item="${row.checklistItem}"][data-category="${row.category}"]`
-            );
-
-        if (remarkField) {
-            remarkField.value =
-                row.remarks || "";
-        }
-
-    });
-
-}
-
-// =========================================
-// CLEAR CHECKLIST
-// =========================================
-
-function clearChecklist() {
-
-    const radios =
-        document.querySelectorAll(
-            'input[type="radio"]'
-        );
-
-    radios.forEach(radio => {
-
-        radio.checked = false;
-
-    });
-
-    const remarks =
-        document.querySelectorAll(
-            ".item-remark"
-        );
-
-    remarks.forEach(field => {
-
-        field.value = "";
-
-    });
-
-}
-
-// =========================================
-// AUTO CATEGORY SUGGESTION
-// =========================================
-
-function autoSelectCategories(
-    itemNames
-) {
-
-    if (!itemNames ||
-        itemNames.length === 0
+    if (
+        !checklistContainer
     ) {
         return;
     }
 
-    const categoriesToSelect =
-        new Set();
+    checklistContainer.innerHTML =
+        "";
 
-    itemNames.forEach(item => {
-
-        const itemUpper =
-            item.toUpperCase();
-
-        if (
-            itemUpper.includes("CEILING")
-        ) {
-
-            categoriesToSelect.add(
-                "falseCeiling"
-            );
-
-        }
-
-        if (
-            itemUpper.includes("ELECTRICAL")
-        ) {
-
-            categoriesToSelect.add(
-                "electrical"
-            );
-
-        }
-
-        if (
-            itemUpper.includes("PLUMBING")
-        ) {
-
-            categoriesToSelect.add(
-                "plumbing"
-            );
-
-        }
-
-        if (
-            itemUpper.includes("WARDROBE")
-        ) {
-
-            categoriesToSelect.add(
-                "carpentry"
-            );
-
-            categoriesToSelect.add(
-                "elevation"
-            );
-
-        }
-
-    });
-
-    Array.from(
-        categoryDropdown.options
-    ).forEach(option => {
-
-        option.selected =
-            categoriesToSelect.has(
+    const selectedCategories =
+        Array.from(
+            categoryDropdown
+                .selectedOptions
+        ).map(
+            option =>
                 option.value
+        );
+
+    if (
+        selectedCategories.length === 0
+    ) {
+        return;
+    }
+
+    selectedCategories.forEach(
+        category => {
+
+            createCategoryBlock(
+                category
             );
 
-    });
-
-    generateChecklist();
+        }
+    );
 
 }
 
 // =========================================
-// HELPERS
+// CATEGORY BLOCK
+// =========================================
+
+function createCategoryBlock(
+    category
+) {
+
+    const checklist =
+        CHECKLIST_CONFIG[
+            category
+        ];
+
+    if (
+        !checklist
+    ) {
+        return;
+    }
+
+    const block =
+        document.createElement(
+            "div"
+        );
+
+    block.className =
+        "category-block";
+
+    const heading =
+        document.createElement(
+            "div"
+        );
+
+    heading.className =
+        "category-header";
+
+    heading.textContent =
+        formatCategoryName(
+            category
+        );
+
+    block.appendChild(
+        heading
+    );
+
+    checklist.forEach(
+        item => {
+
+            const row =
+                createChecklistItem(
+                    category,
+                    item
+                );
+
+            block.appendChild(
+                row
+            );
+
+        }
+    );
+
+    checklistContainer.appendChild(
+        block
+    );
+
+}
+
+// =========================================
+// CHECKLIST ITEM
+// =========================================
+
+function createChecklistItem(
+    category,
+    item
+) {
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "checklist-item";
+
+    const safeId =
+        createSafeId(
+            category,
+            item
+        );
+
+    wrapper.innerHTML = `
+
+        <div
+            class="checklist-title">
+
+            ${item}
+
+        </div>
+
+        <div
+            class="status-group">
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="${safeId}"
+                    value="Present">
+
+                Present
+
+            </label>
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="${safeId}"
+                    value="Absent">
+
+                Absent
+
+            </label>
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="${safeId}"
+                    value="NA">
+
+                N/A
+
+            </label>
+
+        </div>
+
+        <textarea
+
+            class="item-remark"
+
+            placeholder="Remarks">
+
+        </textarea>
+
+    `;
+
+    return wrapper;
+
+}
+
+// =========================================
+// SAFE ID
 // =========================================
 
 function createSafeId(
@@ -376,23 +232,237 @@ function createSafeId(
         "_" +
         item
     )
-        .replace(/\s+/g, "_")
-        .replace(/[^\w]/g, "_");
+    .replace(
+        /[^a-zA-Z0-9]/g,
+        "_"
+    );
 
 }
+
+// =========================================
+// FORMAT CATEGORY
+// =========================================
 
 function formatCategoryName(
-    value
+    category
 ) {
 
-    return value
-        .replace(
-            /([A-Z])/g,
-            " $1"
-        )
-        .replace(
-            /^./,
-            str => str.toUpperCase()
-        );
+    const mapping = {
+
+        falseCeiling:
+            "False Ceiling",
+
+        electrical:
+            "Electrical",
+
+        plumbing:
+            "Plumbing",
+
+        flooring:
+            "Flooring",
+
+        carpentry:
+            "Carpentry",
+
+        elevation:
+            "Elevation",
+
+        ac:
+            "Air Conditioning",
+
+        civil:
+            "Civil"
+
+    };
+
+    return (
+        mapping[
+            category
+        ] ||
+        category
+    );
 
 }
+
+// =========================================
+// AUTO CATEGORY MAPPING
+// =========================================
+
+function autoSuggestCategories(
+    itemName
+) {
+
+    const categories =
+        [];
+
+    Object.keys(
+        CATEGORY_MAPPING
+    ).forEach(
+        key => {
+
+            if (
+                itemName
+                    .toLowerCase()
+                    .includes(
+                        key.toLowerCase()
+                    )
+            ) {
+
+                CATEGORY_MAPPING[
+                    key
+                ]
+                .forEach(
+                    category => {
+
+                        if (
+                            !categories.includes(
+                                category
+                            )
+                        ) {
+
+                            categories.push(
+                                category
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+    return categories;
+
+}
+
+// =========================================
+// AUTO SELECT CATEGORY
+// =========================================
+
+function suggestCategoryForItems(
+    items
+) {
+
+    const allCategories =
+        [];
+
+    items.forEach(
+        item => {
+
+            const categories =
+                autoSuggestCategories(
+                    item
+                );
+
+            categories.forEach(
+                category => {
+
+                    if (
+                        !allCategories.includes(
+                            category
+                        )
+                    ) {
+
+                        allCategories.push(
+                            category
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+    const dropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    if (
+        !dropdown
+    ) {
+        return;
+    }
+
+    Array.from(
+        dropdown.options
+    ).forEach(
+        option => {
+
+            option.selected =
+                allCategories.includes(
+                    option.value
+                );
+
+        }
+    );
+
+    generateChecklist();
+
+}
+
+// =========================================
+// ITEM CHANGE EVENT
+// =========================================
+
+const itemDropdown =
+    document.getElementById(
+        "itemDropdown"
+    );
+
+itemDropdown
+?.addEventListener(
+    "change",
+    function () {
+
+        const items =
+            Array.from(
+                this.selectedOptions
+            ).map(
+                option =>
+                    option.value
+            );
+
+        suggestCategoryForItems(
+            items
+        );
+
+    }
+);
+
+// =========================================
+// DEBUG
+// =========================================
+
+window.testChecklist =
+    function () {
+
+        generateChecklist();
+
+    };
+
+window.testCategorySuggestion =
+    function () {
+
+        const items = [
+
+            "POP Ceiling",
+
+            "Kitchen",
+
+            "Wall Light",
+
+            "Plumbing Package"
+
+        ];
+
+        suggestCategoryForItems(
+            items
+        );
+
+    };
