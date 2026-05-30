@@ -155,11 +155,173 @@ function tryExtractItemFromQIRow(row) {
     return itemName;
 
 }
+/*process BOQ rows*/
+
+function processBOQRows(rows) {
+
+    resetProjectMaster();
+
+    const allItems =
+        new Set();
+
+    rows.forEach(row => {
+
+        const description =
+            row.Description ||
+            row.description ||
+            "";
+
+        const itemNameColumn =
+            row["Item Name"] ||
+            row.itemName ||
+            row.item_name ||
+            "";
+
+        const room =
+            extractLocation(
+                description
+            );
+
+        let item =
+            extractSKU(
+                description
+            );
+
+        // fallback
+
+        if (
+            !item ||
+            item.trim() === ""
+        ) {
+
+            item =
+                itemNameColumn
+                    .trim();
+
+        }
+
+        if (
+            !room ||
+            !item
+        ) {
+            return;
+        }
+
+        // ROOM
+
+        if (
+            !projectMaster.rooms.includes(
+                room
+            )
+        ) {
+
+            projectMaster.rooms.push(
+                room
+            );
+
+            projectMaster.roomItemMap[
+                room
+            ] = [];
+
+        }
+
+        // ROOM ITEM
+
+        if (
+            !projectMaster.roomItemMap[
+                room
+            ].includes(item)
+        ) {
+
+            projectMaster.roomItemMap[
+                room
+            ].push(item);
+
+        }
+
+        allItems.add(item);
+
+    });
+
+    // =================================
+    // FULL HOME
+    // =================================
+
+    projectMaster.rooms.push(
+        "FULL HOME"
+    );
+
+    projectMaster.roomItemMap[
+        "FULL HOME"
+    ] =
+        Array.from(
+            allItems
+        );
+
+    populateRoomDropdown();
+
+    console.log(
+        projectMaster
+    );
+
+}
+/*extract location*/
+function extractLocation(
+    text
+) {
+
+    if (!text)
+        return "";
+
+    const match =
+        text.match(
+            /Location\s*:\s*(.*?)\s*(Service On|Super Category|Sub Super Category|SKU|Description|$)/i
+        );
+
+    if (
+        match &&
+        match[1]
+    ) {
+
+        return match[1]
+            .trim();
+
+    }
+
+    return "";
+
+}
+
+/*extract SKUs*/
+function extractSKU(
+    text
+) {
+
+    if (!text)
+        return "";
+
+    const match =
+        text.match(
+            /SKU\s*:\s*(.*?)\s*(Description|$)/i
+        );
+
+    if (
+        match &&
+        match[1]
+    ) {
+
+        return match[1]
+            .trim();
+
+    }
+
+    return "";
+
+}
 
 // =========================================
 // PARSE BOQ
 // =========================================
-
 async function parseBOQ(pdf) {
 
     resetProjectMaster();
@@ -763,14 +925,14 @@ function getLastRoomItem(
 
 function populateRoomDropdown() {
 
-    roomDropdown.innerHTML =
-        `
+    roomDropdown.innerHTML = `
         <option value="">
-        Select Room
+            Select Room
         </option>
-        `;
+    `;
 
     projectMaster.rooms
+        .sort()
         .forEach(room => {
 
             const option =
@@ -784,10 +946,9 @@ function populateRoomDropdown() {
             option.textContent =
                 room;
 
-            roomDropdown
-                .appendChild(
-                    option
-                );
+            roomDropdown.appendChild(
+                option
+            );
 
         });
 
@@ -817,37 +978,29 @@ function handleRoomChange() {
     const items =
         projectMaster
             .roomItemMap[
-            room
-        ] || [];
+                room
+            ] || [];
 
-    console.log(
-        "ROOM",
-        room
-    );
+    items
+        .sort()
+        .forEach(item => {
 
-    console.log(
-        "ITEMS",
-        items
-    );
+            const option =
+                document.createElement(
+                    "option"
+                );
 
-    items.forEach(item => {
+            option.value =
+                item;
 
-        const option =
-            document.createElement(
-                "option"
+            option.textContent =
+                item;
+
+            itemDropdown.appendChild(
+                option
             );
 
-        option.value =
-            item;
-
-        option.textContent =
-            item;
-
-        itemDropdown.appendChild(
-            option
-        );
-
-    });
+        });
 
 }
 
