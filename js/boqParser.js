@@ -366,3 +366,90 @@ function showBOQReview() {
         "block";
 
 }
+
+function populateRoomDropdown() {
+
+    const dropdown =
+        document.getElementById(
+            "roomDropdown"
+        );
+
+    if (!dropdown)
+        return;
+
+    dropdown.innerHTML =
+        '<option value="">Select Room</option>';
+
+    projectMaster.rooms.forEach(
+        room => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                room;
+
+            option.textContent =
+                room;
+
+            dropdown.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+document
+    .getElementById(
+        "roomDropdown"
+    )
+    ?.addEventListener(
+        "change",
+        handleRoomChange
+    );
+
+function handleRoomChange() {
+
+    const room =
+        document.getElementById(
+            "roomDropdown"
+        ).value;
+
+    const itemDropdown =
+        document.getElementById(
+            "itemDropdown"
+        );
+
+    itemDropdown.innerHTML =
+        "";
+
+    const items =
+        projectMaster.roomItemMap[
+            room
+        ] || [];
+
+    items.forEach(
+        item => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                item;
+
+            option.textContent =
+                item;
+
+            itemDropdown.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
