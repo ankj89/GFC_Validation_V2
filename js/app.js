@@ -1,85 +1,237 @@
-// =========================================
-// APP CONTROLLER - VERSION 3
-// =========================================
-
-// =========================================
-// DOM
-// =========================================
-
-const gfcPdfInput =
-    document.getElementById(
-        "gfcPdfInput"
-    );
-
-const saveValidationBtn =
-    document.getElementById(
-        "saveValidationBtn"
-    );
-
-const generateReportBtn =
-    document.getElementById(
-        "generateReportBtn"
-    );
-
-const exportExcelBtn =
-    document.getElementById(
-        "exportExcelBtn"
-    );
-
-
-const drawingNotAvailable =
-    document.getElementById(
-        "drawingNotAvailable"
-    );
-
-// =========================================
-// INITIAL UI STATE
-// =========================================
+// =====================================
+// V4 APP CONTROLLER
+// =====================================
 
 document.addEventListener(
     "DOMContentLoaded",
     initializeApp
 );
 
+// =====================================
+// INIT
+// =====================================
+
 function initializeApp() {
 
-    // Validation hidden initially
+    populateCategoryDropdown();
 
-    const mainLayout =
-        document.querySelector(
-            ".main-layout"
-        );
+    bindEvents();
 
-    if (
-        mainLayout
-    ) {
+}
 
-        mainLayout.style.display =
-            "none";
+// =====================================
+// EVENTS
+// =====================================
 
-    }
+function bindEvents() {
 
-    // Review hidden initially
-
-    const reviewSection =
+    const roomDropdown =
         document.getElementById(
-            "boqReviewSection"
+            "roomDropdown"
         );
 
-    if (
-        reviewSection
-    ) {
+    const itemDropdown =
+        document.getElementById(
+            "itemDropdown"
+        );
 
-        reviewSection.style.display =
-            "none";
+    const categoryDropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
 
-    }
+    const addExtraItemBtn =
+        document.getElementById(
+            "addExtraItemBtn"
+        );
 
-    console.log(
-        "GFC Validation Tool V3 Loaded"
+    roomDropdown?.addEventListener(
+
+        "change",
+
+        () => {
+
+            populateItemDropdown();
+
+        }
+
+    );
+
+    itemDropdown?.addEventListener(
+
+        "change",
+
+        () => {
+
+            autoSuggestCategory();
+
+        }
+
+    );
+
+    categoryDropdown?.addEventListener(
+
+        "change",
+
+        () => {
+
+            generateChecklist();
+
+        }
+
+    );
+
+    addExtraItemBtn?.addEventListener(
+
+        "click",
+
+        () => {
+
+            addExtraItemRow();
+
+        }
+
     );
 
 }
+
+// =====================================
+// CATEGORY DROPDOWN
+// =====================================
+
+function populateCategoryDropdown() {
+
+    const dropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    if (!dropdown) {
+        return;
+    }
+
+    dropdown.innerHTML = "";
+
+    Object.keys(
+        CHECKLIST_CONFIG
+    ).forEach(category => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            category;
+
+        option.textContent =
+            formatCategoryName(
+                category
+            );
+
+        dropdown.appendChild(
+            option
+        );
+
+    });
+
+}
+
+// =====================================
+// FORMAT CATEGORY
+// =====================================
+
+function formatCategoryName(
+    value
+) {
+
+    return value
+
+        .replace(
+            /([A-Z])/g,
+            " $1"
+        )
+
+        .replace(
+            /^./,
+            s => s.toUpperCase()
+        );
+
+}
+
+// =====================================
+// AUTO CATEGORY
+// =====================================
+
+function autoSuggestCategory() {
+
+    const itemDropdown =
+        document.getElementById(
+            "itemDropdown"
+        );
+
+    const selectedItems =
+        Array.from(
+            itemDropdown.selectedOptions
+        );
+
+    if (
+        selectedItems.length !== 1
+    ) {
+        return;
+    }
+
+    const selectedItem =
+        JSON.parse(
+            selectedItems[0].value
+        );
+
+    const category =
+        selectedItem.category;
+
+    if (
+        !category
+    ) {
+        return;
+    }
+
+    const dropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    Array.from(
+        dropdown.options
+    ).forEach(option => {
+
+        option.selected = false;
+
+        if (
+
+            option.textContent
+                .toLowerCase()
+
+            ===
+
+            category
+                .toLowerCase()
+
+        ) {
+
+            option.selected = true;
+
+        }
+
+    });
+
+    generateChecklist();
+
+}
+
+// =====================================
+// EXTRA ITEMS
+// =====================================
+
 function addExtraItemRow() {
 
     const container =
@@ -92,28 +244,28 @@ function addExtraItemRow() {
             "div"
         );
 
+    row.className =
+        "extra-item-row";
+
     row.innerHTML = `
 
         <input
+            type="text"
             class="extra-item-name"
-            placeholder="Item Name">
-
-        <select
-            class="extra-item-action">
-
-            <option value="Remove">
-                Remove From Drawing
-            </option>
-
-            <option value="Verify">
-                Verify With QS
-            </option>
-
-        </select>
+            placeholder="Item Not In BOQ">
 
         <input
+            type="text"
             class="extra-item-reason"
             placeholder="Reason">
+
+        <button
+            type="button"
+            class="delete-extra-item">
+
+            X
+
+        </button>
 
     `;
 
@@ -121,251 +273,132 @@ function addExtraItemRow() {
         row
     );
 
-}
+    row
+    .querySelector(
+        ".delete-extra-item"
+    )
+    .addEventListener(
 
-document
-.getElementById(
-    "addExtraItemBtn"
-)
-.addEventListener(
-    "click",
-    addExtraItemRow
-);
-// =========================================
-// GFC PDF UPLOAD
-// =========================================
+        "click",
 
-gfcPdfInput?.addEventListener(
-    "change",
-    handleGFCPdfUpload
-);
+        () => {
 
-async function handleGFCPdfUpload(
-    event
-) {
-
-    const file =
-        event.target.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    try {
-
-        if (
-            typeof loadPDF !==
-            "function"
-        ) {
-
-            console.error(
-                "loadPDF() missing"
-            );
-
-            return;
+            row.remove();
 
         }
 
-        await loadPDF(
-            file
-        );
-
-        console.log(
-            "GFC PDF Loaded"
-        );
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-        alert(
-            "Failed to load GFC PDF"
-        );
-
-    }
+    );
 
 }
 
-// =========================================
-// CATEGORY CHANGE
-// =========================================
+// =====================================
+// COLLECT EXTRA ITEMS
+// =====================================
 
+function collectExtraItems() {
 
+    const items = [];
 
+    document
+    .querySelectorAll(
+        ".extra-item-row"
+    )
+    .forEach(row => {
 
-// =========================================
-// DRAWING NOT AVAILABLE
-// =========================================
+        const item =
 
-drawingNotAvailable
-?.addEventListener(
-    "change",
-    function () {
+            row.querySelector(
+                ".extra-item-name"
+            )?.value || "";
 
-        const reasonBox =
-            document.getElementById(
-                "drawingMissingReason"
-            );
+        const reason =
 
-        if (!reasonBox)
-            return;
-
-        reasonBox.disabled =
-            !this.checked;
-
-    }
-);
-
-// =========================================
-// SAVE VALIDATION
-// =========================================
-
-saveValidationBtn
-?.addEventListener(
-    "click",
-    function () {
+            row.querySelector(
+                ".extra-item-reason"
+            )?.value || "";
 
         if (
-            typeof saveCurrentPageValidation !==
-            "function"
+            item.trim()
         ) {
 
-            console.error(
-                "saveCurrentPageValidation missing"
-            );
+            items.push({
 
-            return;
+                item,
+
+                reason
+
+            });
 
         }
 
-        saveCurrentPageValidation();
+    });
 
-    }
-);
+    return items;
 
-// =========================================
-// REPORTS
-// =========================================
+}
 
-generateReportBtn
-?.addEventListener(
-    "click",
-    function () {
+// =====================================
+// SELECTED ITEMS
+// =====================================
 
-        if (
-            typeof generateReports !==
-            "function"
-        ) {
-
-            console.error(
-                "generateReports missing"
-            );
-
-            return;
-
-        }
-
-        generateReports();
-
-    }
-);
-
-// =========================================
-// EXCEL
-// =========================================
-
-exportExcelBtn
-?.addEventListener(
-    "click",
-    function () {
-
-        if (
-            typeof exportValidationExcel !==
-            "function"
-        ) {
-
-            console.error(
-                "exportValidationExcel missing"
-            );
-
-            return;
-
-        }
-
-        exportValidationExcel();
-
-    }
-);
-
-// =========================================
-// HELPERS
-// =========================================
-
-function getSelectedValues(
-    selectElement
-) {
+function getSelectedItems() {
 
     return Array.from(
-        selectElement.selectedOptions
-    ).map(
-        option =>
-            option.value
-    );
 
-}
-
-function getCurrentRoom() {
-
-    const roomDropdown =
-        document.getElementById(
-            "roomDropdown"
-        );
-
-    return roomDropdown
-        ? roomDropdown.value
-        : "";
-
-}
-
-function getCurrentItems() {
-
-    const itemDropdown =
-        document.getElementById(
+        document
+        .getElementById(
             "itemDropdown"
-        );
+        )
+        .selectedOptions
 
-    if (!itemDropdown) {
-        return [];
-    }
+    ).map(option =>
 
-    return getSelectedValues(
-        itemDropdown
+        JSON.parse(
+            option.value
+        )
+
     );
 
 }
 
+// =====================================
+// CLEAR FORM
+// =====================================
 
+function clearValidationForm() {
 
-// =========================================
-// DEBUG
-// =========================================
+    document
+    .getElementById(
+        "overallRemarks"
+    )
+    .value = "";
 
-window.debugProjectMaster =
-    function () {
+    document
+    .getElementById(
+        "drawingMissingReason"
+    )
+    .value = "";
 
-        console.log(
-            projectMaster
-        );
+    document
+    .getElementById(
+        "drawingNotAvailable"
+    )
+    .checked = false;
 
-    };
+    document
+    .getElementById(
+        "extraItemsContainer"
+    )
+    .innerHTML = "";
 
-window.debugValidationStore =
-    function () {
+}
 
-        console.log(
-            validationStore
-        );
+// =====================================
+// PROJECT MASTER ACCESS
+// =====================================
 
-    };
+function getProjectMaster() {
+
+    return projectMaster;
+
+}
