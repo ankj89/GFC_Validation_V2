@@ -346,17 +346,23 @@ function addReviewRow(
 
 function addManualReviewRow() {
 
-    addReviewRow({
+  addReviewRow({
 
-        room: "",
+    rfvId: "",
 
-        qty: "",
+    orderId: "",
 
-        item: "",
+    pid: "",
 
-        category: ""
+    room: "",
 
-    });
+    qty: "",
+
+    sku: "",
+
+    category: ""
+
+});
 
 }
 
@@ -428,7 +434,9 @@ async function handleRFVExcelUpload(
                 row["PID"],
 
             room:
-                row["Room"],
+    row["Room name"] ||
+    row["Room"] ||
+    "",
 
             qty:
                 row["Qty"],
