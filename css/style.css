@@ -1,6 +1,6 @@
-/* =========================================
+/* =====================================
    GLOBAL
-========================================= */
+===================================== */
 
 *{
     margin:0;
@@ -14,10 +14,14 @@ body{
     color:#333;
 }
 
+.hidden{
+    display:none;
+}
+
 header{
     background:#1f4e79;
     color:white;
-    padding:16px 24px;
+    padding:18px 24px;
     box-shadow:0 2px 6px rgba(0,0,0,0.15);
 }
 
@@ -25,390 +29,647 @@ header h1{
     font-size:24px;
 }
 
-.project-info-section{
+/* =====================================
+   COMMON CARD
+===================================== */
 
-    display:flex;
+.card{
 
-    gap:20px;
-
-    padding:0 20px 20px 20px;
-
-    flex-wrap:wrap;
-
-}
-/* =========================================
-   UPLOAD SECTION
-========================================= */
-
-.upload-section{
-    display:flex;
-    gap:20px;
-    padding:20px;
-    flex-wrap:wrap;
-}
-
-.upload-card{
     background:white;
-    padding:15px;
-    border-radius:10px;
-    min-width:320px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
 
-.upload-card label{
-    display:block;
-    font-weight:600;
-    margin-bottom:10px;
-}
-
-.upload-card input{
-    width:100%;
-}
-
-/* =========================================
-   BOQ REVIEW
-========================================= */
-
-#boqReviewSection{
-    background:white;
     margin:20px;
+
     padding:20px;
+
     border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
 }
 
-#boqReviewSection h2{
-    margin-bottom:10px;
-}
-
-#boqReviewSection p{
-    margin-bottom:20px;
-}
-
-#boqReviewSection input{
-    width:100%;
-    padding:8px;
-    border:1px solid #ccc;
-    border-radius:4px;
-}
-
-.delete-row-btn{
-    background:#c62828;
-    color:white;
-    border:none;
-    padding:8px 12px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.delete-row-btn:hover{
-    background:#8e0000;
-}
-
-#addBoqRowBtn,
-#continueValidationBtn{
-    background:#1f4e79;
-    color:white;
-    border:none;
-    padding:10px 16px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-#addBoqRowBtn:hover,
-#continueValidationBtn:hover{
-    background:#163a5c;
-}
-
-/* =========================================
-   MAIN LAYOUT
-========================================= */
-
-.main-layout{
-    display:flex;
-    gap:20px;
-    padding:20px;
-    min-height:750px;
-}
-
-/* =========================================
-   PDF VIEWER
-========================================= */
-
-.viewer-panel{
-    flex:2;
-    background:white;
-    border-radius:10px;
-    padding:15px;
-    display:flex;
-    flex-direction:column;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
-
-.viewer-toolbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-}
-
-.viewer-toolbar button{
-    background:#1f4e79;
-    color:white;
-    border:none;
-    padding:10px 16px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.viewer-toolbar button:hover{
-    background:#163a5c;
-}
-
-#pdfCanvas{
-    border:1px solid #ddd;
-    width:100%;
-    background:white;
-}
-
-/* =========================================
-   VALIDATION PANEL
-========================================= */
-
-.validation-panel{
-    flex:1;
-    background:white;
-    border-radius:10px;
-    padding:20px;
-    overflow-y:auto;
-    max-height:850px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
-
-.validation-panel h2{
+.card h2{
     margin-bottom:15px;
 }
 
-.validation-panel label{
+/* =====================================
+   PROJECT SETUP
+===================================== */
+
+.setup-section{
+
+    margin-top:10px;
+
+}
+
+.setup-section label{
+
     display:block;
-    font-weight:600;
-    margin-top:15px;
+
+    margin-top:12px;
+
     margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+.setup-section input{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+}
+
+#fetchProjectBtn{
+
+    margin-top:15px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+#fetchProjectBtn:hover{
+
+    background:#163a5c;
+
+}
+
+/* =====================================
+   BOQ REVIEW
+===================================== */
+
+.review-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+
+}
+
+.review-table th{
+
+    background:#1f4e79;
+
+    color:white;
+
+    padding:10px;
+
+    text-align:left;
+
+}
+
+.review-table td{
+
+    border:1px solid #ddd;
+
+    padding:8px;
+
+}
+
+.review-table input{
+
+    width:100%;
+
+    padding:8px;
+
+    border:1px solid #ccc;
+
+    border-radius:4px;
+
+}
+
+.review-table select{
+
+    width:100%;
+
+    padding:8px;
+
+}
+
+.button-row{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:15px;
+
+    flex-wrap:wrap;
+
+}
+
+.button-row button{
+
+    padding:12px 18px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.button-row button:hover{
+
+    background:#163a5c;
+
+}
+
+/* =====================================
+   MAIN LAYOUT
+===================================== */
+
+.main-layout{
+
+    display:flex;
+
+    gap:20px;
+
+    padding:20px;
+
+}
+
+/* =====================================
+   PDF PANEL
+===================================== */
+
+.viewer-panel{
+
+    flex:2;
+
+    background:white;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+.viewer-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
+
+}
+
+.viewer-toolbar button{
+
+    padding:10px 14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.viewer-toolbar button:hover{
+
+    background:#163a5c;
+
+}
+
+#pdfCanvas{
+
+    width:100%;
+
+    min-height:800px;
+
+    border:1px solid #ddd;
+
+}
+
+.upload-area{
+
+    margin-top:15px;
+
+}
+
+.upload-area label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+/* =====================================
+   VALIDATION PANEL
+===================================== */
+
+.validation-panel{
+
+    flex:1;
+
+    background:white;
+
+    border-radius:10px;
+
+    padding:20px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+.validation-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+.validation-panel label{
+
+    display:block;
+
+    margin-top:15px;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
 }
 
 .validation-panel select,
 .validation-panel textarea,
-.validation-panel input[type="text"]{
-    width:100%;
-    border:1px solid #ccc;
-    border-radius:6px;
-    padding:10px;
-}
+.validation-panel input{
 
-.validation-panel textarea{
-    resize:vertical;
-    min-height:80px;
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
 }
 
 #roomDropdown{
+
     height:40px;
+
 }
 
 #itemDropdown{
+
     height:180px;
+
 }
 
 #categoryDropdown{
-    height:140px;
+
+    height:150px;
+
 }
 
-/* =========================================
-   MANUAL ITEM
-========================================= */
+.validation-panel textarea{
 
-.manual-item-container{
+    min-height:80px;
+
+    resize:vertical;
+
+}
+
+/* =====================================
+   EXTRA ITEMS
+===================================== */
+
+#extraItemsContainer{
+
+    margin-top:10px;
+
+}
+
+.extra-item-row{
+
     display:flex;
+
     gap:10px;
-    margin-top:5px;
+
+    margin-bottom:10px;
+
 }
 
-.manual-item-container input{
+.extra-item-row input{
+
     flex:1;
+
 }
 
-.manual-item-container button{
-    background:#1f4e79;
-    color:white;
+.extra-item-row button{
+
+    width:40px;
+
+}
+
+#addExtraItemBtn{
+
+    margin-top:10px;
+
+    padding:10px;
+
     border:none;
-    padding:10px 16px;
+
     border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
     cursor:pointer;
+
 }
 
-.manual-item-container button:hover{
-    background:#163a5c;
-}
-
-/* =========================================
+/* =====================================
    DRAWING STATUS
-========================================= */
+===================================== */
 
 .drawing-status{
+
     margin-top:15px;
-    padding:10px;
-    background:#f7f9fc;
-    border:1px solid #dfe5eb;
+
+    padding:12px;
+
+    background:#f7f8fa;
+
+    border:1px solid #ddd;
+
     border-radius:6px;
+
 }
 
-#drawingMissingReason{
-    margin-top:10px;
-}
-
-/* =========================================
+/* =====================================
    CHECKLIST
-========================================= */
+===================================== */
 
 #checklistContainer{
+
     margin-top:20px;
+
 }
 
 .category-block{
-    border:1px solid #ddd;
-    border-radius:8px;
+
     margin-bottom:20px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
     overflow:hidden;
+
 }
 
 .category-header{
+
     background:#1f4e79;
+
     color:white;
+
     padding:10px;
+
     font-weight:bold;
+
 }
 
 .checklist-item{
+
     padding:12px;
+
     border-bottom:1px solid #eee;
+
 }
 
 .checklist-item:last-child{
+
     border-bottom:none;
+
 }
 
 .checklist-title{
+
     font-weight:600;
-    margin-bottom:10px;
+
+    margin-bottom:8px;
+
 }
 
 .status-group{
+
     display:flex;
-    gap:15px;
-    margin-bottom:10px;
+
+    gap:20px;
+
+    margin-bottom:8px;
+
 }
 
 .status-group label{
+
     margin:0;
+
     font-weight:normal;
+
 }
 
 .item-remark{
+
     width:100%;
+
     min-height:50px;
+
 }
 
-/* =========================================
-   BUTTONS
-========================================= */
-
-#saveValidationBtn,
-#generateReportBtn,
-#exportExcelBtn{
-    background:#1f4e79;
-    color:white;
-    border:none;
-    border-radius:6px;
-    padding:12px 18px;
-    cursor:pointer;
-    margin-top:15px;
-}
+/* =====================================
+   SAVE BUTTON
+===================================== */
 
 #saveValidationBtn{
+
     width:100%;
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
 }
 
-#saveValidationBtn:hover,
-#generateReportBtn:hover,
-#exportExcelBtn:hover{
+#saveValidationBtn:hover{
+
     background:#163a5c;
+
 }
 
-/* =========================================
+/* =====================================
    REPORTS
-========================================= */
+===================================== */
 
 .report-section{
+
     background:white;
+
     margin:20px;
+
     padding:20px;
+
     border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
 }
 
 .report-section h2{
+
     margin-bottom:15px;
+
+}
+
+#generateReportBtn,
+#exportExcelBtn{
+
+    padding:12px 18px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+    margin-right:10px;
+
+}
+
+#generateReportBtn:hover,
+#exportExcelBtn:hover{
+
+    background:#163a5c;
+
 }
 
 #reportContainer{
-    margin-top:20px;
-}
 
-#reportContainer h3{
-    margin-top:25px;
-    margin-bottom:10px;
+    margin-top:20px;
+
 }
 
 .report-table{
+
     width:100%;
+
     border-collapse:collapse;
-    margin-top:10px;
+
 }
 
 .report-table th{
+
     background:#1f4e79;
+
     color:white;
+
 }
 
 .report-table th,
 .report-table td{
+
     border:1px solid #ccc;
+
     padding:8px;
+
     text-align:left;
+
 }
 
-.report-table tr:nth-child(even){
-    background:#f7f7f7;
-}
-
-/* =========================================
+/* =====================================
    RESPONSIVE
-========================================= */
+===================================== */
 
 @media(max-width:1200px){
 
     .main-layout{
+
         flex-direction:column;
+
     }
 
     .viewer-panel{
-        min-height:600px;
+
+        width:100%;
+
     }
 
     .validation-panel{
+
+        width:100%;
+
         max-height:none;
+
     }
 
-    .manual-item-container{
+    .button-row{
+
         flex-direction:column;
+
     }
+
 }
