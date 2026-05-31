@@ -3,7 +3,7 @@
 // =====================================
 
 const APPS_SCRIPT_URL =
-    "https://script.google.com/macros/library/d/12tfXQ3-vN7AoCZhuj_r_z3P90GqmMrtSsjJ5OQ9gVKJsALKgUpxIdJzs/1";
+    "https://script.google.com/a/macros/livspace.com/s/AKfycbx4amRLzfEjqEQPU2inR9ZxDv_XyoZsod5lFnYcEdy-vY4cePrHw0w30N4drHrrvo9I/exec";
 
 // =====================================
 // GLOBAL
