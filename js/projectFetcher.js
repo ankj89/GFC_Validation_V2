@@ -17,6 +17,45 @@ let sourceRows = [];
 
 async function fetchProject() {
 
+    const rows = [
+
+        {
+            pid: "PID001",
+            sku: "TV Unit",
+            qty: 1,
+            category: "Carpentry"
+        },
+
+        {
+            pid: "PID001",
+            sku: "Wallpaper",
+            qty: 120,
+            category: "Painting"
+        },
+
+        {
+            pid: "PID001",
+            sku: "False Ceiling",
+            qty: 1,
+            category: "False Ceiling"
+        }
+
+    ];
+
+    sourceRows = rows;
+
+    populateReviewGrid(
+        rows,
+        "RFV"
+    );
+
+}
+
+
+
+/*
+async function fetchProject() {
+
     const rfvId =
         document
         .getElementById(
@@ -109,7 +148,7 @@ async function fetchProject() {
     }
 
 }
-
+*/
 // =====================================
 // POPULATE REVIEW GRID
 // =====================================
