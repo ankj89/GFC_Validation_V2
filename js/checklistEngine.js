@@ -56,7 +56,7 @@ function populateCategoryDropdown() {
             );
 
         dropdown.appendChild(
-            option;
+            option
 );
     });
 
