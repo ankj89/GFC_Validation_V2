@@ -227,20 +227,30 @@ function populateReviewGrid(
 
     rows.forEach(row => {
 
-        addReviewRow({
+    addReviewRow({
 
-            room: "",
+    rfvId:
+        row.rfvId,
 
-            qty:
-                row.qty || "",
+    orderId:
+        row.orderId,
 
-            item:
-                row.sku || "",
+    pid:
+        row.pid,
 
-            category:
-                row.category || ""
+    room:
+        row.room,
 
-        });
+    qty:
+        row.qty,
+
+    sku:
+        row.sku,
+
+    category:
+        row.category
+
+});
 
     });
 
@@ -273,46 +283,54 @@ function addReviewRow(
 
     tr.innerHTML = `
 
-        <td>
+    <td>
+        <input
+            class="rfv-input"
+            value="${data.rfvId || ""}">
+    </td>
 
-            <input
-                class="room-input"
-                value="${data.room || ""}">
+    <td>
+        <input
+            class="order-input"
+            value="${data.orderId || ""}">
+    </td>
 
-        </td>
+    <td>
+        <input
+            class="pid-input"
+            value="${data.pid || ""}">
+    </td>
 
-        <td>
+    <td>
+        <input
+            class="room-input"
+            value="${data.room || ""}">
+    </td>
 
-            <input
-                class="qty-input"
-                type="number"
-                value="${data.qty || ""}">
+    <td>
+        <input
+            class="qty-input"
+            type="number"
+            value="${data.qty || ""}">
+    </td>
 
-        </td>
+    <td>
+        <input
+            class="item-input"
+            value="${data.sku || ""}">
+    </td>
 
-        <td>
+    <td>
+        <input
+            class="category-input"
+            value="${data.category || ""}">
+    </td>
 
-            <input
-                class="item-input"
-                value="${data.item || ""}">
-
-        </td>
-
-        <td>
-
-            <input
-                class="category-input"
-                value="${data.category || ""}">
-
-        </td>
-
-        <td>
-
-            <input
-                type="checkbox"
-                class="row-selector">
-
-        </td>
+    <td>
+        <input
+            type="checkbox"
+            class="row-selector">
+    </td>
 
     `;
 
@@ -366,41 +384,69 @@ function deleteSelectedRows() {
 // BOQ UPLOAD
 // =====================================
 
-async function handleBOQUpload(
+async function handleRFVExcelUpload(
     file
 ) {
 
-    /*
-    V4 Fallback
+    const data =
+        await file.arrayBuffer();
 
-    Reuse existing V3
-    BOQ parser logic here.
-
-    Expected Output:
-
-    [
-
-      {
-        room:"Living Room",
-        qty:1,
-        item:"TV Unit",
-        category:"Carpentry"
-      }
-
-    ]
-
-    */
-
-    const rows =
-        await parseBOQFile(
-            file
+    const workbook =
+        XLSX.read(
+            data,
+            {
+                type: "array"
+            }
         );
 
-    sourceRows = rows;
+    const sheetName =
+        workbook.SheetNames[0];
+
+    const sheet =
+        workbook.Sheets[
+            sheetName
+        ];
+
+    const rows =
+        XLSX.utils.sheet_to_json(
+            sheet,
+            {
+                defval: ""
+            }
+        );
+
+    const formattedRows =
+        rows.map(row => ({
+
+            rfvId:
+                row["RFV ID"],
+
+            orderId:
+                row["Order ID"],
+
+            pid:
+                row["PID"],
+
+            room:
+                row["Room"],
+
+            qty:
+                row["Qty"],
+
+            sku:
+                row["SKU Name"],
+
+            category:
+                row["Category"]
+
+        }));
+
+    sourceRows =
+        formattedRows;
 
     populateReviewGrid(
-        rows,
-        "BOQ"
+        formattedRows,
+        "RFV"
     );
 
 }
