@@ -1,6 +1,6 @@
-// =========================================
-// REPORT GENERATOR - VERSION 3
-// =========================================
+// =====================================
+// GENERATE REPORTS
+// =====================================
 
 function generateReports() {
 
@@ -9,304 +9,406 @@ function generateReports() {
             "reportContainer"
         );
 
-    if (!container)
-        return;
-
     container.innerHTML = "";
 
-    generateProjectInfoReport(
-    container
-);
-    
-    generateSummaryCard(
-        container
-    );
-
-    generateDetailedValidationReport(
-        container
-    );
-
-    generateMissingBOQReport(
-        container
-    );
-
-    generateDrawingNotAvailableReport(
+    generateValidationFindingsReport(
         container
     );
 
     generateRoomCoverageReport(
         container
     );
-generateDrawingMismatchReport(
-    container
-);
-}
 
-
-function generateProjectInfoReport(
-    container
-) {
-
-    if (
-        validationStore.length === 0
-    ) {
-        return;
-    }
-
-    const info =
-        validationStore[0]
-        ?.projectInfo;
-
-    if (!info) {
-        return;
-    }
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.innerHTML = `
-
-        <h3>
-            Project Information
-        </h3>
-
-        <table
-            class="report-table">
-
-            <tr>
-
-                <th>
-                    Field
-                </th>
-
-                <th>
-                    Value
-                </th>
-
-            </tr>
-
-            <tr>
-
-                <td>
-                    GFC ID
-                </td>
-
-                <td>
-                    ${info.gfcId}
-                </td>
-
-            </tr>
-
-            <tr>
-
-                <td>
-                    RFV ID
-                </td>
-
-                <td>
-                    ${info.rfvId}
-                </td>
-
-            </tr>
-
-            <tr>
-
-                <td>
-                    PID
-                </td>
-
-                <td>
-                    ${info.pid}
-                </td>
-
-            </tr>
-
-        </table>
-
-    `;
-
-    container.appendChild(
-        div
+    generateMissingCoverageReport(
+        container
     );
 
-}
-// =========================================
-// SUMMARY
-// =========================================
+    generateExtraScopeReport(
+        container
+    );
 
-function generateSummaryCard(
-    container
-) {
-
-    const summary =
-        getCoverageSummary();
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.innerHTML = `
-
-        <h3>
-            Coverage Summary
-        </h3>
-
-        <table class="report-table">
-
-            <tr>
-                <th>
-                    Metric
-                </th>
-                <th>
-                    Value
-                </th>
-            </tr>
-
-            <tr>
-                <td>
-                    Total BOQ Items
-                </td>
-                <td>
-                    ${summary.total}
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    Covered Items
-                </td>
-                <td>
-                    ${summary.covered}
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    Missing Items
-                </td>
-                <td>
-                    ${summary.missing}
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    Coverage %
-                </td>
-                <td>
-                    ${summary.percentage}%
-                </td>
-            </tr>
-
-        </table>
-
-    `;
-
-    container.appendChild(
-        div
+    generateMissingDrawingsReport(
+        container
     );
 
 }
 
-// =========================================
-// DETAILED VALIDATION
-// =========================================
+// =====================================
+// VALIDATION FINDINGS
+// =====================================
 
-function generateDetailedValidationReport(
+function generateValidationFindingsReport(
     container
 ) {
 
-    const div =
+    const section =
         document.createElement(
             "div"
         );
 
-    let html = `
+    section.innerHTML =
 
-        <h3>
-            Detailed Validation Report
-        </h3>
+        `<h3>
+            Validation Findings
+        </h3>`;
 
-        <table class="report-table">
+    const table =
+        document.createElement(
+            "table"
+        );
+
+    table.className =
+        "report-table";
+
+    table.innerHTML = `
 
         <tr>
 
             <th>Page</th>
+
             <th>Room</th>
+
             <th>Items</th>
-            <th>Categories</th>
-            <th>Remarks</th>
+
+            <th>Findings</th>
 
         </tr>
 
     `;
 
-    validationStore.forEach(
-        page => {
+    validationStore.forEach(row => {
 
-            html += `
+        const tr =
+            document.createElement(
+                "tr"
+            );
 
-                <tr>
+        tr.innerHTML = `
 
-                    <td>
-                        ${page.pageNo}
-                    </td>
+            <td>
+                ${row.pageNo}
+            </td>
 
-                    <td>
-                        ${page.room}
-                    </td>
+            <td>
+                ${row.room}
+            </td>
 
-                    <td>
-                        ${page.items.join(
-                            ", "
-                        )}
-                    </td>
+            <td>
+                ${formatItems(
+                    row.items
+                )}
+            </td>
 
-                    <td>
-                        ${page.categories.join(
-                            ", "
-                        )}
-                    </td>
+            <td>
+                ${buildChecklistSummary(
+                    row
+                )}
+            </td>
 
-                    <td>
-                        ${buildChecklistSummary(page)}
-                    </td>
+        `;
 
-                </tr>
+        table.appendChild(
+            tr
+        );
 
-            `;
+    });
 
-        }
+    section.appendChild(
+        table
     );
 
-    html += `
-        </table>
-    `;
-
-    div.innerHTML =
-        html;
-
     container.appendChild(
-        div
+        section
     );
 
 }
-function buildChecklistSummary(page) {
+
+// =====================================
+// ROOM COVERAGE
+// =====================================
+
+function generateRoomCoverageReport(
+    container
+) {
+
+    const coverage =
+        buildRoomCoverage();
+
+    const section =
+        document.createElement(
+            "div"
+        );
+
+    section.innerHTML =
+
+        `<h3>
+            Room Coverage Report
+        </h3>`;
+
+    let html = "";
+
+    Object.keys(
+        coverage
+    ).forEach(room => {
+
+        html +=
+
+            `<h4>
+                ${room}
+            </h4>`;
+
+        html += "<ul>";
+
+        coverage[
+            room
+        ].forEach(item => {
+
+            html +=
+
+                `<li>
+
+                    ${item.qty}
+                    x
+                    ${item.item}
+
+                </li>`;
+
+        });
+
+        html += "</ul>";
+
+    });
+
+    section.innerHTML +=
+        html;
+
+    container.appendChild(
+        section
+    );
+
+}
+
+// =====================================
+// MISSING COVERAGE
+// =====================================
+
+function generateMissingCoverageReport(
+    container
+) {
+
+    const missing =
+        getMissingSKUs();
+
+    const section =
+        document.createElement(
+            "div"
+        );
+
+    section.innerHTML =
+
+        `<h3>
+            Missing Coverage Report
+        </h3>`;
+
+    if (
+        missing.length === 0
+    ) {
+
+        section.innerHTML +=
+
+            `<p>
+
+                No Missing SKUs
+
+            </p>`;
+
+        container.appendChild(
+            section
+        );
+
+        return;
+
+    }
+
+    let html =
+        "<ul>";
+
+    missing.forEach(item => {
+
+        html +=
+
+            `<li>
+
+                ${item.qty}
+                x
+                ${item.item}
+
+                (${item.category})
+
+            </li>`;
+
+    });
+
+    html += "</ul>";
+
+    section.innerHTML +=
+        html;
+
+    container.appendChild(
+        section
+    );
+
+}
+
+// =====================================
+// EXTRA SCOPE REPORT
+// =====================================
+
+function generateExtraScopeReport(
+    container
+) {
+
+    const section =
+        document.createElement(
+            "div"
+        );
+
+    section.innerHTML =
+
+        `<h3>
+            Drawing vs BOQ Mismatch Report
+        </h3>`;
+
+    let html = "";
+
+    validationStore.forEach(page => {
+
+        if (
+            !page.extraDrawingItems ||
+            page.extraDrawingItems.length === 0
+        ) {
+            return;
+        }
+
+        html +=
+
+            `<h4>
+
+                Page
+                ${page.pageNo}
+
+            </h4>`;
+
+        html += "<ul>";
+
+        page.extraDrawingItems.forEach(item => {
+
+            html +=
+
+                `<li>
+
+                    ${item.item}
+
+                    -
+                    ${item.reason}
+
+                </li>`;
+
+        });
+
+        html += "</ul>";
+
+    });
+
+    section.innerHTML +=
+        html;
+
+    container.appendChild(
+        section
+    );
+
+}
+
+// =====================================
+// MISSING DRAWINGS
+// =====================================
+
+function generateMissingDrawingsReport(
+    container
+) {
+
+    const section =
+        document.createElement(
+            "div"
+        );
+
+    section.innerHTML =
+
+        `<h3>
+            Missing Drawings Report
+        </h3>`;
+
+    let html = "";
+
+    validationStore.forEach(page => {
+
+        if (
+            !page.drawingNotAvailable
+        ) {
+            return;
+        }
+
+        html +=
+
+            `<p>
+
+                Page
+                ${page.pageNo}
+
+                :
+
+                ${page.room}
+
+                :
+
+                ${page.drawingMissingReason}
+
+            </p>`;
+
+    });
+
+    section.innerHTML +=
+        html;
+
+    container.appendChild(
+        section
+    );
+
+}
+
+// =====================================
+// CHECKLIST SUMMARY
+// =====================================
+
+function buildChecklistSummary(
+    page
+) {
 
     const absentItems = [];
 
     const remarks = [];
 
-    (page.checklist || []).forEach(item => {
+    (
+        page.checklist || []
+    ).forEach(item => {
 
         const status =
             item.status || "";
 
         const remark =
-            (item.remark || "").trim();
+            (
+                item.remark || ""
+            ).trim();
 
         if (
             status === "Absent"
@@ -323,7 +425,11 @@ function buildChecklistSummary(page) {
         ) {
 
             remarks.push(
-                `${item.title} : ${remark}`
+
+                `${item.title}
+                :
+                ${remark}`
+
             );
 
         }
@@ -337,18 +443,18 @@ function buildChecklistSummary(page) {
     ) {
 
         text +=
-            "Absent Items:\n";
+            "<b>Absent Items:</b><br>";
 
         absentItems.forEach(item => {
 
             text +=
                 "• " +
                 item +
-                "\n";
+                "<br>";
 
         });
 
-        text += "\n";
+        text += "<br>";
 
     }
 
@@ -357,18 +463,18 @@ function buildChecklistSummary(page) {
     ) {
 
         text +=
-            "Remarks:\n";
+            "<b>Remarks:</b><br>";
 
         remarks.forEach(item => {
 
             text +=
                 "• " +
                 item +
-                "\n";
+                "<br>";
 
         });
 
-        text += "\n";
+        text += "<br>";
 
     }
 
@@ -378,405 +484,47 @@ function buildChecklistSummary(page) {
     ) {
 
         text +=
-            "Overall:\n" +
 
-            page.overallRemarks.trim();
+            "<b>Overall:</b><br>" +
+
+            page.overallRemarks;
 
     }
 
-    return text.trim();
+    return text;
 
 }
-// =========================================
-// MISSING BOQ
-// =========================================
 
-function generateMissingBOQReport(
-    container
+// =====================================
+// ITEM FORMAT
+// =====================================
+
+function formatItems(
+    items
 ) {
 
-    const missing =
-        getMissingBOQItems();
+    return items
+        .map(item =>
 
-    const div =
-        document.createElement(
-            "div"
-        );
+            `${item.qty}_${item.item}`
 
-    let html = `
-
-        <h3>
-            Missing BOQ Coverage Report
-        </h3>
-
-        <table class="report-table">
-
-            <tr>
-
-                <th>
-                    Room
-                </th>
-
-                <th>
-                    Item
-                </th>
-
-                <th>
-                    Status
-                </th>
-
-            </tr>
-
-    `;
-
-    missing.forEach(
-        row => {
-
-            html += `
-
-                <tr>
-
-                    <td>
-                        ${row.room}
-                    </td>
-
-                    <td>
-                        ${row.item}
-                    </td>
-
-                    <td>
-                        Missing
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-    html += `
-        </table>
-    `;
-
-    div.innerHTML =
-        html;
-
-    container.appendChild(
-        div
-    );
+        )
+        .join("<br>");
 
 }
 
-// =========================================
-// DNA REPORT
-// =========================================
+// =====================================
+// EVENT
+// =====================================
 
-function generateDrawingNotAvailableReport(
-    container
-) {
+document
+.getElementById(
+    "generateReportBtn"
+)
+?.addEventListener(
 
-    const pages =
-        getDrawingNotAvailablePages();
+    "click",
 
-    const div =
-        document.createElement(
-            "div"
-        );
+    generateReports
 
-    let html = `
-
-        <h3>
-            Drawing Not Available Report
-        </h3>
-
-        <table class="report-table">
-
-            <tr>
-
-                <th>
-                    Page
-                </th>
-
-                <th>
-                    Room
-                </th>
-
-                <th>
-                    Reason
-                </th>
-
-            </tr>
-
-    `;
-
-    pages.forEach(
-        page => {
-
-            html += `
-
-                <tr>
-
-                    <td>
-                        ${page.pageNo}
-                    </td>
-
-                    <td>
-                        ${page.room}
-                    </td>
-
-                    <td>
-                        ${page.drawingMissingReason || ""}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-    html += `
-        </table>
-    `;
-
-    div.innerHTML =
-        html;
-
-    container.appendChild(
-        div
-    );
-
-}
-
-// =========================================
-// ROOM COVERAGE
-// =========================================
-
-function generateRoomCoverageReport(
-    container
-) {
-
-    const coverage =
-        getBOQCoverage();
-
-    const roomMap = {};
-
-    coverage.forEach(
-        row => {
-
-            if (
-                !roomMap[
-                    row.room
-                ]
-            ) {
-
-                roomMap[
-                    row.room
-                ] = {
-
-                    total: 0,
-
-                    covered: 0
-
-                };
-
-            }
-
-            roomMap[
-                row.room
-            ].total++;
-
-            if (
-                row.validated
-            ) {
-
-                roomMap[
-                    row.room
-                ].covered++;
-
-            }
-
-        }
-    );
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    let html = `
-
-        <h3>
-            Room Wise Coverage
-        </h3>
-
-        <table class="report-table">
-
-            <tr>
-
-                <th>
-                    Room
-                </th>
-
-                <th>
-                    Total Items
-                </th>
-
-                <th>
-                    Covered
-                </th>
-
-                <th>
-                    Coverage %
-                </th>
-
-            </tr>
-
-    `;
-
-    Object.keys(
-        roomMap
-    ).forEach(
-        room => {
-
-            const data =
-                roomMap[
-                    room
-                ];
-
-            const percentage =
-                data.total === 0
-                ? 0
-                : Math.round(
-                    (
-                        data.covered /
-                        data.total
-                    ) * 100
-                );
-
-            html += `
-
-                <tr>
-
-                    <td>
-                        ${room}
-                    </td>
-
-                    <td>
-                        ${data.total}
-                    </td>
-
-                    <td>
-                        ${data.covered}
-                    </td>
-
-                    <td>
-                        ${percentage}%
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-    html += `
-        </table>
-    `;
-
-    div.innerHTML =
-        html;
-
-    container.appendChild(
-        div
-    );
-
-}
-function generateDrawingMismatchReport(
-    container
-) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    let html = `
-
-        <h3>
-            Drawing vs BOQ Mismatch
-        </h3>
-
-        <table class="report-table">
-
-        <tr>
-
-            <th>Page</th>
-
-            <th>Room</th>
-
-            <th>Item</th>
-
-            <th>Action</th>
-
-            <th>Reason</th>
-
-        </tr>
-
-    `;
-
-    validationStore.forEach(
-        page => {
-
-            (
-                page.extraDrawingItems || []
-            )
-            .forEach(item => {
-
-                html += `
-
-                    <tr>
-
-                        <td>
-                            ${page.pageNo}
-                        </td>
-
-                        <td>
-                            ${page.room}
-                        </td>
-
-                        <td>
-                            ${item.item}
-                        </td>
-
-                        <td>
-                            ${item.action}
-                        </td>
-
-                        <td>
-                            ${item.reason}
-                        </td>
-
-                    </tr>
-
-                `;
-
-            });
-
-        }
-    );
-
-    html += `
-        </table>
-    `;
-
-    div.innerHTML =
-        html;
-
-    container.appendChild(
-        div
-    );
-
-}
+);
