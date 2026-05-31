@@ -1,107 +1,81 @@
-// =========================================
-// EXCEL EXPORT - VERSION 3
-// =========================================
+// =====================================
+// EXPORT EXCEL
+// =====================================
 
-function exportValidationExcel() {
+function exportExcel() {
 
-    try {
+    const workbook =
+        XLSX.utils.book_new();
 
-        const workbook =
-            XLSX.utils.book_new();
-        addProjectInfoSheet(
-    workbook
-);
+    addProjectInfoSheet(
+        workbook
+    );
 
-        addCoverageSummarySheet(
-            workbook
-        );
+    addValidationSheet(
+        workbook
+    );
 
-        addDetailedValidationSheet(
-            workbook
-        );
+    addCoverageSheet(
+        workbook
+    );
 
-        addMissingBOQSheet(
-            workbook
-        );
+    addMissingCoverageSheet(
+        workbook
+    );
 
-        addDrawingNotAvailableSheet(
-            workbook
-        );
+    addMismatchSheet(
+        workbook
+    );
 
-        addRoomCoverageSheet(
-            workbook
-        );
+    addMissingDrawingSheet(
+        workbook
+    );
 
-        const timestamp =
-            new Date()
-                .toISOString()
-                .replace(
-                    /[:.]/g,
-                    "-"
-                );
+    const projectInfo =
+        getProjectInfo();
 
-        XLSX.writeFile(
+    const fileName =
 
-            workbook,
+        `GFC_Validation_${
+            projectInfo.gfcId || "Project"
+        }.xlsx`;
 
-            `GFC_Validation_Report_${timestamp}.xlsx`
-
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            error
-        );
-
-        alert(
-            "Failed to export Excel"
-        );
-
-    }
+    XLSX.writeFile(
+        workbook,
+        fileName
+    );
 
 }
+
+// =====================================
+// PROJECT INFO
+// =====================================
 
 function addProjectInfoSheet(
     workbook
 ) {
 
-    if (
-        validationStore.length === 0
-    ) {
-        return;
-    }
-
     const info =
-        validationStore[0]
-        ?.projectInfo;
+        getProjectInfo();
 
     const data = [
 
-        [
-            "Field",
-            "Value"
-        ],
+        ["Field", "Value"],
 
-        [
-            "GFC ID",
-            info.gfcId
-        ],
+        ["GFC ID", info.gfcId],
 
-        [
-            "RFV ID",
-            info.rfvId
-        ],
+        ["RFV ID", info.rfvId],
 
-        [
-            "PID",
-            info.pid
-        ]
+        ["Order ID", info.orderId],
+
+        ["PID", info.pid],
+
+        ["Source", info.sourceType]
 
     ];
 
-    const ws =
+    const sheet =
+
         XLSX.utils.aoa_to_sheet(
             data
         );
@@ -110,55 +84,63 @@ function addProjectInfoSheet(
 
         workbook,
 
-        ws,
+        sheet,
 
         "Project Info"
 
     );
 
 }
-// =========================================
-// SHEET 1
-// COVERAGE SUMMARY
-// =========================================
 
-function addCoverageSummarySheet(
+// =====================================
+// VALIDATION FINDINGS
+// =====================================
+
+function addValidationSheet(
     workbook
 ) {
-
-    const summary =
-        getCoverageSummary();
 
     const data = [
 
         [
-            "Metric",
-            "Value"
-        ],
-
-        [
-            "Total BOQ Items",
-            summary.total
-        ],
-
-        [
-            "Covered Items",
-            summary.covered
-        ],
-
-        [
-            "Missing Items",
-            summary.missing
-        ],
-
-        [
-            "Coverage %",
-            summary.percentage
+            "Page",
+            "Room",
+            "Items",
+            "Findings"
         ]
 
     ];
 
-    const worksheet =
+    validationStore.forEach(row => {
+
+        data.push([
+
+            row.pageNo,
+
+            row.room,
+
+            row.items
+                .map(item =>
+
+                    `${item.qty}_${item.item}`
+
+                )
+                .join(", "),
+
+            stripHTML(
+
+                buildChecklistSummary(
+                    row
+                )
+
+            )
+
+        ]);
+
+    });
+
+    const sheet =
+
         XLSX.utils.aoa_to_sheet(
             data
         );
@@ -167,282 +149,275 @@ function addCoverageSummarySheet(
 
         workbook,
 
-        worksheet,
+        sheet,
 
-        "Coverage Summary"
-
-    );
-
-}
-
-// =========================================
-// SHEET 2
-// DETAILED VALIDATION
-// =========================================
-
-function addDetailedValidationSheet(
-    workbook
-) {
-
-    const rows = [];
-
-    validationStore.forEach(
-        page => {
-
-            rows.push({
-
-                Page:
-                    page.pageNo,
-
-                Room:
-                    page.room,
-
-                Items:
-                    page.items.join(
-                        ", "
-                    ),
-
-                Categories:
-                    page.categories.join(
-                        ", "
-                    ),
-
-                DrawingNotAvailable:
-                    page.drawingNotAvailable
-                        ? "Yes"
-                        : "No",
-
-                MissingReason:
-                    page.drawingMissingReason,
-
-                Remarks:
-                    page.overallRemarks
-
-            });
-
-        }
-    );
-
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            rows
-        );
-
-    XLSX.utils.book_append_sheet(
-
-        workbook,
-
-        worksheet,
-
-        "Detailed Validation"
+        "Validation"
 
     );
 
 }
 
-// =========================================
-// SHEET 3
-// MISSING BOQ
-// =========================================
-
-function addMissingBOQSheet(
-    workbook
-) {
-
-    const rows =
-        getMissingBOQItems()
-            .map(
-                row => ({
-
-                    Room:
-                        row.room,
-
-                    Item:
-                        row.item,
-
-                    Status:
-                        "Missing"
-
-                })
-            );
-
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            rows
-        );
-
-    XLSX.utils.book_append_sheet(
-
-        workbook,
-
-        worksheet,
-
-        "Missing BOQ"
-
-    );
-
-}
-
-// =========================================
-// SHEET 4
-// DRAWING NOT AVAILABLE
-// =========================================
-
-function addDrawingNotAvailableSheet(
-    workbook
-) {
-
-    const rows =
-        getDrawingNotAvailablePages()
-            .map(
-                page => ({
-
-                    Page:
-                        page.pageNo,
-
-                    Room:
-                        page.room,
-
-                    Reason:
-                        page.drawingMissingReason
-
-                })
-            );
-
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            rows
-        );
-
-    XLSX.utils.book_append_sheet(
-
-        workbook,
-
-        worksheet,
-
-        "Drawing NA"
-
-    );
-
-}
-
-// =========================================
-// SHEET 5
+// =====================================
 // ROOM COVERAGE
-// =========================================
+// =====================================
 
-function addRoomCoverageSheet(
+function addCoverageSheet(
     workbook
 ) {
 
     const coverage =
-        getBOQCoverage();
+        buildRoomCoverage();
 
-    const roomMap = {};
+    const data = [
 
-    coverage.forEach(
-        row => {
+        [
+            "Room",
+            "Qty",
+            "Item",
+            "Category"
+        ]
 
-            if (
-                !roomMap[
-                    row.room
-                ]
-            ) {
-
-                roomMap[
-                    row.room
-                ] = {
-
-                    total: 0,
-
-                    covered: 0
-
-                };
-
-            }
-
-            roomMap[
-                row.room
-            ].total++;
-
-            if (
-                row.validated
-            ) {
-
-                roomMap[
-                    row.room
-                ].covered++;
-
-            }
-
-        }
-    );
-
-    const rows = [];
+    ];
 
     Object.keys(
-        roomMap
-    ).forEach(
-        room => {
+        coverage
+    ).forEach(room => {
 
-            const data =
-                roomMap[
-                    room
-                ];
+        coverage[
+            room
+        ].forEach(item => {
 
-            const percentage =
-                data.total === 0
-                    ? 0
-                    : Math.round(
-                        (
-                            data.covered /
-                            data.total
-                        ) * 100
-                    );
+            data.push([
 
-            rows.push({
+                room,
 
-                Room:
-                    room,
+                item.qty,
 
-                TotalItems:
-                    data.total,
+                item.item,
 
-                CoveredItems:
-                    data.covered,
+                item.category
 
-                CoveragePercent:
-                    percentage
+            ]);
 
-            });
+        });
 
-        }
-    );
+    });
 
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            rows
+    const sheet =
+
+        XLSX.utils.aoa_to_sheet(
+            data
         );
 
     XLSX.utils.book_append_sheet(
 
         workbook,
 
-        worksheet,
+        sheet,
 
-        "Room Coverage"
+        "Coverage"
 
     );
 
 }
 
-// =========================================
-// DEBUG
-// =========================================
+// =====================================
+// MISSING COVERAGE
+// =====================================
 
-window.testExcelExport =
-    function () {
+function addMissingCoverageSheet(
+    workbook
+) {
 
-        exportValidationExcel();
+    const missing =
+        getMissingSKUs();
 
-    };
+    const data = [
+
+        [
+            "Qty",
+            "Item",
+            "Category"
+        ]
+
+    ];
+
+    missing.forEach(item => {
+
+        data.push([
+
+            item.qty,
+
+            item.item,
+
+            item.category
+
+        ]);
+
+    });
+
+    const sheet =
+
+        XLSX.utils.aoa_to_sheet(
+            data
+        );
+
+    XLSX.utils.book_append_sheet(
+
+        workbook,
+
+        sheet,
+
+        "Missing Coverage"
+
+    );
+
+}
+
+// =====================================
+// BOQ MISMATCH
+// =====================================
+
+function addMismatchSheet(
+    workbook
+) {
+
+    const data = [
+
+        [
+            "Page",
+            "Item",
+            "Reason"
+        ]
+
+    ];
+
+    validationStore.forEach(page => {
+
+        (
+            page.extraDrawingItems || []
+        ).forEach(item => {
+
+            data.push([
+
+                page.pageNo,
+
+                item.item,
+
+                item.reason
+
+            ]);
+
+        });
+
+    });
+
+    const sheet =
+
+        XLSX.utils.aoa_to_sheet(
+            data
+        );
+
+    XLSX.utils.book_append_sheet(
+
+        workbook,
+
+        sheet,
+
+        "BOQ Mismatch"
+
+    );
+
+}
+
+// =====================================
+// MISSING DRAWINGS
+// =====================================
+
+function addMissingDrawingSheet(
+    workbook
+) {
+
+    const data = [
+
+        [
+            "Page",
+            "Room",
+            "Reason"
+        ]
+
+    ];
+
+    validationStore.forEach(page => {
+
+        if (
+            !page.drawingNotAvailable
+        ) {
+            return;
+        }
+
+        data.push([
+
+            page.pageNo,
+
+            page.room,
+
+            page.drawingMissingReason
+
+        ]);
+
+    });
+
+    const sheet =
+
+        XLSX.utils.aoa_to_sheet(
+            data
+        );
+
+    XLSX.utils.book_append_sheet(
+
+        workbook,
+
+        sheet,
+
+        "Missing Drawings"
+
+    );
+
+}
+
+// =====================================
+// HTML CLEANER
+// =====================================
+
+function stripHTML(
+    html
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.innerHTML =
+        html;
+
+    return div.innerText;
+
+}
+
+// =====================================
+// EVENT
+// =====================================
+
+document
+.getElementById(
+    "exportExcelBtn"
+)
+?.addEventListener(
+
+    "click",
+
+    exportExcel
+
+);
