@@ -537,3 +537,32 @@ window.showPDFState =
         });
 
     };
+
+// =========================================
+// PDF UPLOAD EVENT
+// =========================================
+
+document
+.getElementById(
+    "gfcPdfInput"
+)
+?.addEventListener(
+
+    "change",
+
+    async event => {
+
+        const file =
+            event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        await loadPDF(
+            file
+        );
+
+    }
+
+);
