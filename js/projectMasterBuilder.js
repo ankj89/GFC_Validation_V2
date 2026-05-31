@@ -10,157 +10,235 @@ let projectMaster = null;
 
 function saveProjectMaster() {
 
-    const rows =
-        document.querySelectorAll(
-            "#boqReviewBody tr"
+const rows =
+    document.querySelectorAll(
+        "#boqReviewBody tr"
+    );
+
+if (
+    rows.length === 0
+) {
+
+    alert(
+        "No review rows found"
+    );
+
+    return;
+
+}
+
+const rooms = {};
+
+const errors = [];
+
+let masterRFV = "";
+let masterOrder = "";
+let masterPID = "";
+
+rows.forEach(row => {
+
+    const rfvId =
+        row.querySelector(
+            ".rfv-input"
+        )?.value.trim() || "";
+
+    const orderId =
+        row.querySelector(
+            ".order-input"
+        )?.value.trim() || "";
+
+    const pid =
+        row.querySelector(
+            ".pid-input"
+        )?.value.trim() || "";
+
+    const room =
+        row.querySelector(
+            ".room-input"
+        )?.value.trim() || "";
+
+    const qty =
+        Number(
+            row.querySelector(
+                ".qty-input"
+            )?.value || 0
         );
+
+    const item =
+        row.querySelector(
+            ".item-input"
+        )?.value.trim() || "";
+
+    const category =
+        row.querySelector(
+            ".category-input"
+        )?.value.trim() || "";
 
     if (
-        rows.length === 0
+        !masterRFV &&
+        rfvId
     ) {
 
-        alert(
-            "No review rows found"
+        masterRFV = rfvId;
+
+    }
+
+    if (
+        !masterOrder &&
+        orderId
+    ) {
+
+        masterOrder = orderId;
+
+    }
+
+    if (
+        !masterPID &&
+        pid
+    ) {
+
+        masterPID = pid;
+
+    }
+
+    if (!room) {
+
+        errors.push(
+            `${item || "Unknown SKU"} : Room Missing`
         );
+
+    }
+
+    if (!item) {
+
+        errors.push(
+            "SKU Missing"
+        );
+
+    }
+
+    if (!qty) {
+
+        errors.push(
+            `${item || "Unknown SKU"} : Qty Missing`
+        );
+
+    }
+
+    if (
+        !room ||
+        !item ||
+        !qty
+    ) {
 
         return;
 
     }
 
-    const rooms = {};
+    if (
+        !rooms[room]
+    ) {
 
-    rows.forEach(row => {
+        rooms[room] = [];
 
-        const room =
-            row.querySelector(
-                ".room-input"
-            )?.value
-             .trim();
+    }
 
-        const qty =
-            Number(
-                row.querySelector(
-                    ".qty-input"
-                )?.value || 0
-            );
+    rooms[room].push({
 
-        const item =
-            row.querySelector(
-                ".item-input"
-            )?.value
-             .trim();
+        item,
 
-        const category =
-            row.querySelector(
-                ".category-input"
-            )?.value
-             .trim();
+        qty,
 
-        if (
-            !room ||
-            !item
-        ) {
-            return;
-        }
-
-        if (
-            !rooms[room]
-        ) {
-
-            rooms[room] = [];
-
-        }
-
-        rooms[room].push({
-
-            item,
-
-            qty,
-
-            category
-
-        });
+        category
 
     });
 
-    // =====================================
-    // BUILD FULL HOME
-    // =====================================
+});
 
-    const fullHomeItems = [];
-
-    Object.values(
-        rooms
-    ).forEach(items => {
-
-        items.forEach(item => {
-
-            fullHomeItems.push(
-                item
-            );
-
-        });
-
-    });
-
-    rooms[
-        "FULL HOME"
-    ] =
-        fullHomeItems;
-
-    projectMaster = {
-
-        sourceType:
-            window.sourceType || "",
-
-        gfcId:
-            document
-            .getElementById(
-                "gfcIdInput"
-            )
-            ?.value || "",
-
-        rfvId:
-            document
-            .getElementById(
-                "rfvIdInput"
-            )
-            ?.value || "",
-
-        orderId:
-            document
-            .getElementById(
-                "orderIdInput"
-            )
-            ?.value || "",
-
-        pid:
-            sourceRows?.[0]?.pid || "",
-
-        rooms
-
-    };
-
-    console.log(
-        projectMaster
-    );
-
-    populateRoomDropdown();
-
-    document
-    .getElementById(
-        "validationSection"
-    )
-    .classList
-    .remove(
-        "hidden"
-    );
+if (
+    errors.length > 0
+) {
 
     alert(
-        "Project Master Saved"
+
+        "Cannot Save Project Master\n\n" +
+
+        errors.join("\n")
+
     );
 
+    return;
+
 }
+
+const fullHomeItems = [];
+
+Object.values(
+    rooms
+).forEach(items => {
+
+    items.forEach(item => {
+
+        fullHomeItems.push(
+            item
+        );
+
+    });
+
+});
+
+rooms[
+    "FULL HOME"
+] =
+    fullHomeItems;
+
+projectMaster = {
+
+    sourceType:
+        window.sourceType || "",
+
+    gfcId:
+        document
+        .getElementById(
+            "gfcIdInput"
+        )
+        ?.value || "",
+
+    rfvId:
+        masterRFV,
+
+    orderId:
+        masterOrder,
+
+    pid:
+        masterPID,
+
+    rooms
+
+};
+
+console.log(
+    projectMaster
+);
+
+populateRoomDropdown();
+
+document
+.getElementById(
+    "validationSection"
+)
+.classList
+.remove(
+    "hidden"
+);
+
+alert(
+    "Project Master Saved"
+);
+
+
+}
+
 
 // =====================================
 // ROOM DROPDOWN
