@@ -82,7 +82,63 @@ async function fetchProject() {
         );
 
         return;
+
     }
+
+    const callbackName =
+        "projectCallback_" +
+        Date.now();
+
+    let script;
+
+    window[callbackName] =
+        function(rows) {
+
+            try {
+
+                sourceRows =
+                    rows;
+
+                if (
+                    !rows ||
+                    rows.length === 0
+                ) {
+
+                    alert(
+                        "Project not found"
+                    );
+
+                    return;
+
+                }
+
+                populateReviewGrid(
+                    rows,
+                    "RFV"
+                );
+
+            }
+            finally {
+
+                delete window[
+                    callbackName
+                ];
+
+                if (
+                    script &&
+                    script.parentNode
+                ) {
+
+                    script.parentNode
+                    .removeChild(
+                        script
+                    );
+
+                }
+
+            }
+
+        };
 
     let url =
         APPS_SCRIPT_URL;
@@ -106,46 +162,21 @@ async function fetchProject() {
 
     }
 
-    try {
+    url +=
+        "&callback=" +
+        callbackName;
 
-        const response =
-            await fetch(url);
-
-        const rows =
-            await response.json();
-
-        if (
-            !rows ||
-            rows.length === 0
-        ) {
-
-            alert(
-                "Project not found"
-            );
-
-            return;
-
-        }
-
-        sourceRows = rows;
-
-        populateReviewGrid(
-            rows,
-            "RFV"
+    script =
+        document.createElement(
+            "script"
         );
 
-    }
-    catch (error) {
+    script.src =
+        url;
 
-        console.error(
-            error
-        );
-
-        alert(
-            "Unable to fetch project"
-        );
-
-    }
+    document.body.appendChild(
+        script
+    );
 
 }
 
