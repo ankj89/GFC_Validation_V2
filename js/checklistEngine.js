@@ -57,7 +57,7 @@ function populateCategoryDropdown() {
 
         dropdown.appendChild(
             option;
-
+);
     });
 
 }
