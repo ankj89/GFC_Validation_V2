@@ -1,0 +1,365 @@
+// =====================================
+// CONFIG
+// =====================================
+
+const APPS_SCRIPT_URL =
+    "YOUR_APPS_SCRIPT_URL";
+
+// =====================================
+// GLOBAL
+// =====================================
+
+let sourceRows = [];
+
+// =====================================
+// FETCH PROJECT
+// =====================================
+
+async function fetchProject() {
+
+    const rfvId =
+        document
+        .getElementById(
+            "rfvIdInput"
+        )
+        .value
+        .trim();
+
+    const orderId =
+        document
+        .getElementById(
+            "orderIdInput"
+        )
+        .value
+        .trim();
+
+    if (
+        !rfvId &&
+        !orderId
+    ) {
+
+        alert(
+            "Enter RFV ID or Order ID"
+        );
+
+        return;
+    }
+
+    let url =
+        APPS_SCRIPT_URL;
+
+    if (rfvId) {
+
+        url +=
+            "?rfv=" +
+            encodeURIComponent(
+                rfvId
+            );
+
+    }
+    else {
+
+        url +=
+            "?order=" +
+            encodeURIComponent(
+                orderId
+            );
+
+    }
+
+    try {
+
+        const response =
+            await fetch(url);
+
+        const rows =
+            await response.json();
+
+        if (
+            !rows ||
+            rows.length === 0
+        ) {
+
+            alert(
+                "Project not found"
+            );
+
+            return;
+
+        }
+
+        sourceRows = rows;
+
+        populateReviewGrid(
+            rows,
+            "RFV"
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Unable to fetch project"
+        );
+
+    }
+
+}
+
+// =====================================
+// POPULATE REVIEW GRID
+// =====================================
+
+function populateReviewGrid(
+    rows,
+    sourceType
+) {
+
+    const section =
+        document.getElementById(
+            "boqReviewSection"
+        );
+
+    const body =
+        document.getElementById(
+            "boqReviewBody"
+        );
+
+    body.innerHTML = "";
+
+    rows.forEach(row => {
+
+        addReviewRow({
+
+            room: "",
+
+            qty:
+                row.qty || "",
+
+            item:
+                row.sku || "",
+
+            category:
+                row.category || ""
+
+        });
+
+    });
+
+    section.classList.remove(
+        "hidden"
+    );
+
+    window.sourceType =
+        sourceType;
+
+}
+
+// =====================================
+// ADD REVIEW ROW
+// =====================================
+
+function addReviewRow(
+    data = {}
+) {
+
+    const body =
+        document.getElementById(
+            "boqReviewBody"
+        );
+
+    const tr =
+        document.createElement(
+            "tr"
+        );
+
+    tr.innerHTML = `
+
+        <td>
+
+            <input
+                class="room-input"
+                value="${data.room || ""}">
+
+        </td>
+
+        <td>
+
+            <input
+                class="qty-input"
+                type="number"
+                value="${data.qty || ""}">
+
+        </td>
+
+        <td>
+
+            <input
+                class="item-input"
+                value="${data.item || ""}">
+
+        </td>
+
+        <td>
+
+            <input
+                class="category-input"
+                value="${data.category || ""}">
+
+        </td>
+
+        <td>
+
+            <input
+                type="checkbox"
+                class="row-selector">
+
+        </td>
+
+    `;
+
+    body.appendChild(
+        tr
+    );
+
+}
+
+// =====================================
+// ADD ROW BUTTON
+// =====================================
+
+function addManualReviewRow() {
+
+    addReviewRow({
+
+        room: "",
+
+        qty: "",
+
+        item: "",
+
+        category: ""
+
+    });
+
+}
+
+// =====================================
+// DELETE ROWS
+// =====================================
+
+function deleteSelectedRows() {
+
+    document
+    .querySelectorAll(
+        ".row-selector:checked"
+    )
+    .forEach(cb => {
+
+        cb.closest(
+            "tr"
+        ).remove();
+
+    });
+
+}
+
+// =====================================
+// BOQ UPLOAD
+// =====================================
+
+async function handleBOQUpload(
+    file
+) {
+
+    /*
+    V4 Fallback
+
+    Reuse existing V3
+    BOQ parser logic here.
+
+    Expected Output:
+
+    [
+
+      {
+        room:"Living Room",
+        qty:1,
+        item:"TV Unit",
+        category:"Carpentry"
+      }
+
+    ]
+
+    */
+
+    const rows =
+        await parseBOQFile(
+            file
+        );
+
+    sourceRows = rows;
+
+    populateReviewGrid(
+        rows,
+        "BOQ"
+    );
+
+}
+
+// =====================================
+// EVENTS
+// =====================================
+
+document
+.getElementById(
+    "fetchProjectBtn"
+)
+.addEventListener(
+    "click",
+    fetchProject
+);
+
+document
+.getElementById(
+    "addRowBtn"
+)
+.addEventListener(
+    "click",
+    addManualReviewRow
+);
+
+document
+.getElementById(
+    "deleteRowBtn"
+)
+.addEventListener(
+    "click",
+    deleteSelectedRows
+);
+
+document
+.getElementById(
+    "boqPdfInput"
+)
+.addEventListener(
+    "change",
+    async e => {
+
+        const file =
+            e.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        await handleBOQUpload(
+            file
+        );
+
+    }
+);
