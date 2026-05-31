@@ -174,6 +174,30 @@ async function fetchProject() {
     script.src =
         url;
 
+console.log("JSONP URL:", url);
+
+script.onerror = function(err){
+
+    console.error(
+        "SCRIPT LOAD FAILED",
+        err
+    );
+
+    alert(
+        "Script load failed"
+    );
+
+};
+
+script.onload = function(){
+
+    console.log(
+        "SCRIPT LOADED"
+    );
+
+};
+
+    
     document.body.appendChild(
         script
     );
