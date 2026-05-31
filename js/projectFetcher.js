@@ -14,7 +14,7 @@ let sourceRows = [];
 // =====================================
 // FETCH PROJECT
 // =====================================
-
+/*
 async function fetchProject() {
 
     const rows = [
@@ -50,10 +50,10 @@ async function fetchProject() {
     );
 
 }
+*/
 
 
 
-/*
 async function fetchProject() {
 
     const rfvId =
@@ -148,7 +148,7 @@ async function fetchProject() {
     }
 
 }
-*/
+
 // =====================================
 // POPULATE REVIEW GRID
 // =====================================
