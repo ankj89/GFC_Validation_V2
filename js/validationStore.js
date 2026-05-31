@@ -1,111 +1,110 @@
-// =========================================
-// VALIDATION STORE - VERSION 3
-// =========================================
+// =====================================
+// GLOBAL STORE
+// =====================================
 
-window.validationStore = [];
+let validationStore = [];
 
-function getProjectInfo() {
-
-    return {
-
-        gfcId:
-            document
-            .getElementById(
-                "gfcIdInput"
-            )?.value || "",
-
-        rfvId:
-            document
-            .getElementById(
-                "rfvIdInput"
-            )?.value || "",
-
-        pid:
-            document
-            .getElementById(
-                "pidInput"
-            )?.value || ""
-
-    };
-
-}
-
-
-// =========================================
-// SAVE CURRENT PAGE
-// =========================================
+// =====================================
+// SAVE PAGE VALIDATION
+// =====================================
 
 function saveCurrentPageValidation() {
 
     const room =
-        document.getElementById(
+
+        document
+        .getElementById(
             "roomDropdown"
-        )?.value || "";
-    
-const extraDrawingItems =
-    collectExtraItems();
-    
-    const items =
-        Array.from(
-            document.getElementById(
-                "itemDropdown"
-            )?.selectedOptions || []
-        ).map(
-            option => option.value
-        );
+        )
+        ?.value || "";
+
+    const selectedItems =
+
+        getSelectedItems();
 
     const categories =
+
         Array.from(
-            document.getElementById(
+
+            document
+            .getElementById(
                 "categoryDropdown"
-            )?.selectedOptions || []
+            )
+            .selectedOptions
+
         ).map(
+
             option => option.value
+
         );
 
     const drawingNotAvailable =
-        document.getElementById(
+
+        document
+        .getElementById(
             "drawingNotAvailable"
-        )?.checked || false;
+        )
+        ?.checked || false;
 
     const drawingMissingReason =
-        document.getElementById(
+
+        document
+        .getElementById(
             "drawingMissingReason"
-        )?.value || "";
+        )
+        ?.value || "";
 
     const overallRemarks =
-        document.getElementById(
+
+        document
+        .getElementById(
             "overallRemarks"
-        )?.value || "";
+        )
+        ?.value || "";
 
     const checklist =
+
         collectChecklist();
 
+    const extraDrawingItems =
+
+        collectExtraItems();
+
+    const projectInfo =
+
+        getProjectInfo();
+
     const pageNo =
+
         getCurrentPageNumber();
 
     const existingIndex =
+
         validationStore.findIndex(
+
             row =>
+
                 row.pageNo ===
                 pageNo
+
         );
 
-const projectInfo =
-    getProjectInfo();
-    
     const record = {
 
         pageNo,
 
         room,
 
-        items,
+        items:
+            selectedItems,
 
         categories,
-        projectInfo,
 
         checklist,
+
+        extraDrawingItems,
+
+        projectInfo,
 
         drawingNotAvailable,
 
@@ -113,7 +112,9 @@ const projectInfo =
 
         overallRemarks,
 
-        extraDrawingItems
+        savedOn:
+            new Date()
+            .toISOString()
 
     };
 
@@ -145,199 +146,125 @@ const projectInfo =
 
 }
 
-function collectExtraItems() {
+// =====================================
+// CHECKLIST COLLECTION
+// =====================================
 
-    const items = [];
+function collectChecklist() {
+
+    const results = [];
 
     document
     .querySelectorAll(
-        "#extraItemsContainer > div"
+        ".checklist-item"
     )
     .forEach(row => {
 
-        items.push({
+        const title =
 
-            item:
-                row.querySelector(
-                    ".extra-item-name"
-                )?.value || "",
+            row.querySelector(
+                ".checklist-title"
+            )
+            ?.innerText || "";
 
-            action:
-                row.querySelector(
-                    ".extra-item-action"
-                )?.value || "",
+        const selected =
 
-            reason:
-                row.querySelector(
-                    ".extra-item-reason"
-                )?.value || ""
+            row.querySelector(
+                'input[type="radio"]:checked'
+            );
+
+        const status =
+
+            selected
+            ? selected.value
+            : "";
+
+        const remark =
+
+            row.querySelector(
+                ".item-remark"
+            )
+            ?.value || "";
+
+        results.push({
+
+            title,
+
+            status,
+
+            remark
 
         });
 
     });
 
-    return items;
+    return results;
 
 }
 
-
-// =========================================
-// CHECKLIST COLLECTION
-// =========================================
-
-
-
-// =========================================
-// PAGE NUMBER
-// =========================================
-
-function getCurrentPageNumber() {
-
-    const pageElement =
-        document.getElementById(
-            "currentPage"
-        );
-
-    if (!pageElement)
-        return 1;
-
-    return Number(
-        pageElement.textContent
-    );
-
-}
-
-// =========================================
+// =====================================
 // PAGE LOOKUP
-// =========================================
+// =====================================
 
 function getValidationByPage(
     pageNo
 ) {
 
     return validationStore.find(
+
         row =>
+
             row.pageNo ===
             pageNo
+
     );
 
 }
 
-// =========================================
+// =====================================
 // ROOM COVERAGE
-// =========================================
+// =====================================
 
-function getRoomSelectedItems() {
+function buildRoomCoverage() {
 
-    const roomMap = {};
+    const coverage = {};
 
-    validationStore.forEach(
-        page => {
+    validationStore.forEach(record => {
 
-            if (
-                !roomMap[
-                    page.room
-                ]
-            ) {
-
-                roomMap[
-                    page.room
-                ] = new Set();
-
-            }
-
-            page.items.forEach(
-                item => {
-
-                    roomMap[
-                        page.room
-                    ]
-                    .add(item);
-
-                }
-            );
-
-        }
-    );
-
-    return roomMap;
-
-}
-
-// =========================================
-// BOQ COVERAGE
-// =========================================
-
-function getBOQCoverage() {
-
-    const selectedItems =
-        getRoomSelectedItems();
-
-    const coverage = [];
-
-    Object.keys(
-        projectMaster.roomItemMap
-    ).forEach(room => {
+        const room =
+            record.room;
 
         if (
-            room ===
-            "FULL HOME"
+            !coverage[room]
         ) {
-            return;
+
+            coverage[room] =
+                [];
+
         }
 
-        const boqItems =
-            projectMaster.roomItemMap[
-                room
-            ] || [];
+        record.items.forEach(item => {
 
-        boqItems.forEach(item => {
+            const exists =
 
-            let covered =
-                false;
+                coverage[room]
+                .some(
 
-            // Room specific
+                    existing =>
 
-            if (
-                selectedItems[
-                    room
-                ] &&
-                selectedItems[
-                    room
-                ].has(item)
-            ) {
+                        existing.item ===
+                        item.item
 
-                covered =
-                    true;
-
-            }
-
-            // FULL HOME
+                );
 
             if (
-                selectedItems[
-                    "FULL HOME"
-                ] &&
-                selectedItems[
-                    "FULL HOME"
-                ].has(item)
+                !exists
             ) {
 
-                covered =
-                    true;
+                coverage[room]
+                .push(item);
 
             }
-
-            coverage.push({
-
-                room,
-
-                item,
-
-                validated:
-                    covered
-
-            });
 
         });
 
@@ -347,129 +274,103 @@ function getBOQCoverage() {
 
 }
 
-// =========================================
-// MISSING ITEMS
-// =========================================
+// =====================================
+// COVERED SKU LIST
+// =====================================
 
-function getMissingBOQItems() {
+function getCoveredSKUs() {
 
-    return getBOQCoverage()
-        .filter(
-            row =>
-                !row.validated
-        );
+    const covered =
+        new Set();
 
-}
+    validationStore.forEach(record => {
 
-// =========================================
-// DRAWING NOT AVAILABLE
-// =========================================
+        record.items.forEach(item => {
 
-function getDrawingNotAvailablePages() {
+            covered.add(
+                item.item
+            );
 
-    return validationStore.filter(
-        page =>
-            page.drawingNotAvailable
+        });
+
+    });
+
+    return Array.from(
+        covered
     );
 
 }
 
-// =========================================
-// COVERED ITEMS
-// =========================================
+// =====================================
+// MISSING SKU REPORT
+// =====================================
 
-function getCoveredBOQItems() {
-
-    return getBOQCoverage()
-        .filter(
-            row =>
-                row.validated
-        );
-
-}
-
-// =========================================
-// SUMMARY
-// =========================================
-
-function getCoverageSummary() {
-
-    const coverage =
-        getBOQCoverage();
-
-    const total =
-        coverage.length;
+function getMissingSKUs() {
 
     const covered =
-        coverage.filter(
-            row =>
-                row.validated
-        ).length;
 
-    const missing =
-        total -
-        covered;
+        getCoveredSKUs();
 
-    return {
+    const missing = [];
 
-        total,
+    if (
+        !projectMaster
+    ) {
 
-        covered,
+        return missing;
 
-        missing,
+    }
 
-        percentage:
+    const fullHomeItems =
 
-            total === 0
-                ? 0
-                : Math.round(
-                    (
-                        covered /
-                        total
-                    ) * 100
-                )
+        projectMaster.rooms[
+            "FULL HOME"
+        ] || [];
 
-    };
+    fullHomeItems.forEach(item => {
+
+        if (
+
+            !covered.includes(
+                item.item
+            )
+
+        ) {
+
+            missing.push(
+                item
+            );
+
+        }
+
+    });
+
+    return missing;
 
 }
 
-// =========================================
-// RESET
-// =========================================
+// =====================================
+// EXPORT ACCESS
+// =====================================
 
-function resetValidationStore() {
+function getValidationStore() {
 
-    validationStore.length = 0;
+    return validationStore;
 
 }
 
-// =========================================
-// DEBUG
-// =========================================
+// =====================================
+// SAVE BUTTON
+// =====================================
 
-window.showCoverage =
-    function () {
+document
+.getElementById(
+    "saveValidationBtn"
+)
+?.addEventListener(
 
-        console.table(
-            getBOQCoverage()
-        );
+    "click",
 
-    };
+    saveCurrentPageValidation
 
-window.showMissingItems =
-    function () {
-
-        console.table(
-            getMissingBOQItems()
-        );
-
-    };
-
-window.showValidationStore =
-    function () {
-
-        console.table(
-            validationStore
-        );
-
-    };
+);
