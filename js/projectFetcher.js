@@ -455,51 +455,84 @@ async function handleRFVExcelUpload(
 // EVENTS
 // =====================================
 
-document
-.getElementById(
-    "fetchProjectBtn"
-)
-.addEventListener(
-    "click",
-    fetchProject
-);
+const addRowBtn =
+    document.getElementById(
+        "addRowBtn"
+    );
 
-document
-.getElementById(
-    "addRowBtn"
-)
-.addEventListener(
-    "click",
-    addManualReviewRow
-);
+if (addRowBtn) {
 
-document
-.getElementById(
-    "deleteRowBtn"
-)
-.addEventListener(
-    "click",
-    deleteSelectedRows
-);
+    addRowBtn.addEventListener(
+        "click",
+        addManualReviewRow
+    );
 
-document
-.getElementById(
-    "boqPdfInput"
-)
-.addEventListener(
-    "change",
-    async e => {
+}
 
-        const file =
-            e.target.files[0];
+const deleteRowBtn =
+    document.getElementById(
+        "deleteRowBtn"
+    );
 
-        if (!file) {
-            return;
+if (deleteRowBtn) {
+
+    deleteRowBtn.addEventListener(
+        "click",
+        deleteSelectedRows
+    );
+
+}
+
+const boqPdfInput =
+    document.getElementById(
+        "boqPdfInput"
+    );
+
+if (boqPdfInput) {
+
+    boqPdfInput.addEventListener(
+        "change",
+        async e => {
+
+            const file =
+                e.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await handleBOQUpload(
+                file
+            );
+
         }
+    );
 
-        await handleBOQUpload(
-            file
-        );
+}
 
-    }
-);
+const rfvExcelInput =
+    document.getElementById(
+        "rfvExcelInput"
+    );
+
+if (rfvExcelInput) {
+
+    rfvExcelInput.addEventListener(
+        "change",
+        async e => {
+
+            const file =
+                e.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await handleRFVExcelUpload(
+                file
+            );
+
+        }
+    );
+
+}
