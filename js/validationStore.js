@@ -75,8 +75,7 @@ function saveCurrentPageValidation() {
         getProjectInfo();
 
     const pageNo =
-
-        getCurrentPageNumber();
+getCurrentPDFPage();
 
     const existingIndex =
 
