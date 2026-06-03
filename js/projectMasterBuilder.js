@@ -145,6 +145,8 @@ rows.forEach(row => {
 
     rooms[room].push({
 
+        room,
+
         item,
 
         qty,
@@ -315,13 +317,17 @@ function populateItemDropdown() {
                 "option"
             );
 
-        option.textContent =
+    option.textContent =
 
-            item.qty +
+    item.qty +
 
-            "_" +
+    "|" +
 
-            item.item;
+    item.room +
+
+    "|" +
+
+    item.item;
 
         option.value =
             JSON.stringify(
