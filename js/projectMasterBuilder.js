@@ -3,7 +3,7 @@
 // =====================================
 
 let projectMaster = null;
-
+let currentVisibleItems = [];
 // =====================================
 // SAVE PROJECT MASTER
 // =====================================
@@ -305,10 +305,13 @@ function populateItemDropdown() {
         return;
     }
 
-    const items =
-        projectMaster.rooms[
-            room
-        ] || [];
+    currentVisibleItems =
+    projectMaster.rooms[
+        room
+    ] || [];
+
+const items =
+    currentVisibleItems;
 
     items.forEach(item => {
 
@@ -345,7 +348,63 @@ function populateItemDropdown() {
 // =====================================
 // PROJECT INFO
 // =====================================
+function filterVisibleItems() {
 
+    const searchText =
+        document
+        .getElementById(
+            "itemSearch"
+        )
+        .value
+        .toLowerCase();
+
+    const dropdown =
+        document
+        .getElementById(
+            "itemDropdown"
+        );
+
+    dropdown.innerHTML = "";
+
+    currentVisibleItems
+
+    .filter(item => {
+
+        const text =
+
+            `${item.qty} ${item.room} ${item.item}`
+
+            .toLowerCase();
+
+        return text.includes(
+            searchText
+        );
+
+    })
+
+    .forEach(item => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.textContent =
+
+            `${item.qty}|${item.room}|${item.item}`;
+
+        option.value =
+            JSON.stringify(
+                item
+            );
+
+        dropdown.appendChild(
+            option
+        );
+
+    });
+
+}
 function getProjectInfo() {
 
     return {
@@ -389,4 +448,12 @@ document
 .addEventListener(
     "change",
     populateItemDropdown
+);
+document
+.getElementById(
+    "itemSearch"
+)
+.addEventListener(
+    "input",
+    filterVisibleItems
 );
