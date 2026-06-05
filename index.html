@@ -44,14 +44,14 @@
         </h2>
 
         <label>
-            GFC ID
+          Enter GFC request ID to be validated
         </label>
 
         <input
             type="text"
             id="gfcIdInput">
 
-  <h3>Upload RFV Excel</h3>
+  <h3>Upload converted RFV Excel file</h3>
 
 <input
     type="file"
@@ -60,25 +60,14 @@
 
 <hr>
 
-<h3>OR Upload BOQ PDF</h3>
+<h3>OR Upload converted BOQ PDF file</h3>
 
 <input
     type="file"
     id="boqPdfInput"
     accept=".pdf">
 
-        <hr>
-
-        <label>
-            OR Upload BOQ PDF
-        </label>
-
-        <input
-            type="file"
-            id="boqPdfInput"
-            accept=".pdf">
-
-    </div>
+       
 
 </section>
 
@@ -91,7 +80,7 @@
     class="card hidden">
 
     <h2>
-        BOQ Review
+        BOQ Review (All items to be present)
     </h2>
 
    <table>
@@ -211,7 +200,7 @@
             <div class="upload-area">
 
                 <label>
-                    Upload GFC PDF
+                    Upload GFC PDF file (as per the GFC request ID)
                 </label>
 
                 <input
@@ -234,7 +223,7 @@
             <!-- ROOM -->
 
             <label>
-                Room
+                 Select Room from dropdown(Select FULL HOME in case the GFC page is full home)
             </label>
 
             <select
@@ -264,7 +253,7 @@
             <!-- CATEGORY -->
 
             <label>
-                Drawing Category
+                Drawing Category (Select all categories that are visible in the page)
             </label>
 
             <select
@@ -276,7 +265,7 @@
             <!-- EXTRA ITEMS -->
 
             <label>
-                Drawing Shows Item Not In BOQ
+                Mention items visible in GFC page but not in converted RFV
             </label>
 
             <div
