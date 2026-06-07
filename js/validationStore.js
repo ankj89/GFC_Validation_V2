@@ -88,34 +88,54 @@ getCurrentPDFPage();
 
         );
 
-    const record = {
+   const record = {
 
-        pageNo,
+    pageNo,
 
-        room,
+    room,
 
-        items:
-            selectedItems,
+    items:
+        JSON.parse(
+            JSON.stringify(
+                selectedItems
+            )
+        ),
 
-        categories,
+    categories:
+        [...categories],
 
-        checklist,
+    checklist:
+        JSON.parse(
+            JSON.stringify(
+                checklist
+            )
+        ),
 
-        extraDrawingItems,
+    extraDrawingItems:
+        JSON.parse(
+            JSON.stringify(
+                extraDrawingItems
+            )
+        ),
 
-        projectInfo,
+    projectInfo:
+        JSON.parse(
+            JSON.stringify(
+                projectInfo
+            )
+        ),
 
-        drawingNotAvailable,
+    drawingNotAvailable,
 
-        drawingMissingReason,
+    drawingMissingReason,
 
-        overallRemarks,
+    overallRemarks,
 
-        savedOn:
-            new Date()
-            .toISOString()
+    savedOn:
+        new Date()
+        .toISOString()
 
-    };
+};
 
     if (
         existingIndex >= 0
@@ -142,7 +162,7 @@ getCurrentPDFPage();
     alert(
         `Page ${pageNo} saved`
     );
-clearValidationUI();
+
 }
 
 function clearValidationUI() {
