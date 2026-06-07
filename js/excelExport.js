@@ -116,13 +116,9 @@ function addValidationSheet(
 (row.categories || [])
     .join(", "),
 
-            stripHTML(
-
-                buildChecklistSummary(
-                    row
-                )
-
-            )
+            buildChecklistSummaryExcel(
+    row
+)
 
         ]);
 
@@ -404,6 +400,78 @@ function stripHTML(
     return div.innerText;
 
 }
+function buildChecklistSummaryExcel(
+    row
+) {
+
+    const lines = [];
+
+    const absentItems =
+
+        (row.checklist || [])
+        .filter(
+            item =>
+                item.status ===
+                "Absent"
+        );
+
+    if (
+        absentItems.length
+    ) {
+
+        lines.push(
+            "Absent Items:"
+        );
+
+        absentItems.forEach(
+            item => {
+
+                let text =
+                    "• " +
+                    item.title;
+
+                if (
+                    item.remark
+                ) {
+
+                    text +=
+                        " - " +
+                        item.remark;
+
+                }
+
+                lines.push(
+                    text
+                );
+
+            }
+        );
+
+    }
+
+    if (
+        row.overallRemarks
+    ) {
+
+        lines.push("");
+
+        lines.push(
+            "Overall Remarks:"
+        );
+
+        lines.push(
+            row.overallRemarks
+        );
+
+    }
+
+    return lines.join(
+        "\n"
+    );
+
+}
+
+
 function formatSheet(sheet) {
 
     const range =
@@ -463,7 +531,25 @@ function formatSheet(sheet) {
 
     sheet["!cols"] =
         cols;
+if (!sheet["!rows"]) {
 
+    sheet["!rows"] = [];
+
+}
+
+for (
+    let i = 0;
+    i < 1000;
+    i++
+) {
+
+    sheet["!rows"][i] = {
+
+        hpt: 30
+
+    };
+
+}
 }
 // =====================================
 // EVENT
