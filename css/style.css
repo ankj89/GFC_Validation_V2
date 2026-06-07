@@ -211,6 +211,8 @@ header h1{
 
     padding:20px;
 
+    align-items:stretch;
+
 }
 
 /* =====================================
@@ -307,16 +309,11 @@ header h1{
 
     padding:20px;
 
-    max-height:90vh;
-
-    overflow-y:auto;
-
     box-shadow:
         0 2px 8px
         rgba(0,0,0,0.08);
 
 }
-
 .validation-panel h2{
 
     margin-bottom:15px;
