@@ -15,10 +15,7 @@ function exportExcel() {
         workbook
     );
 
-    addCoverageSheet(
-        workbook
-    );
-
+ 
     addMissingCoverageSheet(
         workbook
     );
@@ -27,9 +24,6 @@ function exportExcel() {
         workbook
     );
 
-    addMissingDrawingSheet(
-        workbook
-    );
 
     const projectInfo =
         getProjectInfo();
@@ -79,7 +73,9 @@ function addProjectInfoSheet(
         XLSX.utils.aoa_to_sheet(
             data
         );
-
+formatSheet(
+    sheet
+);
     XLSX.utils.book_append_sheet(
 
         workbook,
@@ -101,14 +97,12 @@ function addValidationSheet(
 ) {
 
     const data = [
-
-        [
-            "Page",
-            "Room",
-            "Items",
-            "Findings"
-        ]
-
+[
+    "Page",
+    "Room",
+    "Drawing Category",
+    "Findings"
+]
     ];
 
     validationStore.forEach(row => {
@@ -119,13 +113,8 @@ function addValidationSheet(
 
             row.room,
 
-            row.items
-                .map(item =>
-
-                    `${item.qty}_${item.item}`
-
-                )
-                .join(", "),
+(row.categories || [])
+    .join(", "),
 
             stripHTML(
 
@@ -144,7 +133,9 @@ function addValidationSheet(
         XLSX.utils.aoa_to_sheet(
             data
         );
-
+formatSheet(
+    sheet
+);
     XLSX.utils.book_append_sheet(
 
         workbook,
@@ -208,7 +199,9 @@ function addCoverageSheet(
         XLSX.utils.aoa_to_sheet(
             data
         );
-
+formatSheet(
+    sheet
+);
     XLSX.utils.book_append_sheet(
 
         workbook,
@@ -234,11 +227,11 @@ function addMissingCoverageSheet(
 
     const data = [
 
-        [
-            "Qty",
-            "Item",
-            "Category"
-        ]
+      [
+    "Qty",
+    "Item",
+    "Room"
+]
 
     ];
 
@@ -250,7 +243,7 @@ function addMissingCoverageSheet(
 
             item.item,
 
-            item.category
+        item.room || ""
 
         ]);
 
@@ -261,7 +254,9 @@ function addMissingCoverageSheet(
         XLSX.utils.aoa_to_sheet(
             data
         );
-
+formatSheet(
+    sheet
+);
     XLSX.utils.book_append_sheet(
 
         workbook,
@@ -317,7 +312,9 @@ function addMismatchSheet(
         XLSX.utils.aoa_to_sheet(
             data
         );
-
+formatSheet(
+    sheet
+);
     XLSX.utils.book_append_sheet(
 
         workbook,
@@ -373,7 +370,9 @@ function addMissingDrawingSheet(
         XLSX.utils.aoa_to_sheet(
             data
         );
-
+formatSheet(
+    sheet
+);
     XLSX.utils.book_append_sheet(
 
         workbook,
@@ -405,7 +404,67 @@ function stripHTML(
     return div.innerText;
 
 }
+function formatSheet(sheet) {
 
+    const range =
+        XLSX.utils.decode_range(
+            sheet["!ref"]
+        );
+
+    const cols = [];
+
+    for (
+        let C = range.s.c;
+        C <= range.e.c;
+        ++C
+    ) {
+
+        let maxLen = 15;
+
+        for (
+            let R = range.s.r;
+            R <= range.e.r;
+            ++R
+        ) {
+
+            const cell =
+                sheet[
+                    XLSX.utils.encode_cell({
+                        r: R,
+                        c: C
+                    })
+                ];
+
+            if (!cell) continue;
+
+            const len =
+                String(
+                    cell.v || ""
+                ).length;
+
+            maxLen =
+                Math.max(
+                    maxLen,
+                    len
+                );
+
+        }
+
+        cols.push({
+
+            wch: Math.min(
+                maxLen + 5,
+                60
+            )
+
+        });
+
+    }
+
+    sheet["!cols"] =
+        cols;
+
+}
 // =====================================
 // EVENT
 // =====================================
