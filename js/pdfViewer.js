@@ -260,38 +260,49 @@ function loadSavedValidation(
 
 function clearValidationForm() {
 
+    const overallRemarks =
+        document.getElementById(
+            "overallRemarks"
+        );
+
+    if (overallRemarks) {
+
+        overallRemarks.value = "";
+
+    }
+
     const roomDropdown =
         document.getElementById(
             "roomDropdown"
         );
+
+    if (roomDropdown) {
+
+        roomDropdown.value = "";
+
+    }
 
     const itemDropdown =
         document.getElementById(
             "itemDropdown"
         );
 
+    if (itemDropdown) {
+
+        Array.from(
+            itemDropdown.options
+        ).forEach(option => {
+
+            option.selected = false;
+
+        });
+
+    }
+
     const categoryDropdown =
         document.getElementById(
             "categoryDropdown"
         );
-
-    const remarks =
-        document.getElementById(
-            "overallRemarks"
-        );
-
-    if (roomDropdown) {
-
-        roomDropdown.value = "";
-    populateItemDropdown();
-
-    }
-
-    if (itemDropdown) {
-
-        itemDropdown.innerHTML = "";
-
-    }
 
     if (categoryDropdown) {
 
@@ -305,23 +316,6 @@ function clearValidationForm() {
 
     }
 
-    if (remarks) {
-
-        remarks.value = "";
-
-    }
-
-    const extraContainer =
-        document.getElementById(
-            "extraItemsContainer"
-        );
-
-    if (extraContainer) {
-
-        extraContainer.innerHTML = "";
-
-    }
-
     const checklistContainer =
         document.getElementById(
             "checklistContainer"
@@ -330,6 +324,17 @@ function clearValidationForm() {
     if (checklistContainer) {
 
         checklistContainer.innerHTML = "";
+
+    }
+
+    const extraItemsContainer =
+        document.getElementById(
+            "extraItemsContainer"
+        );
+
+    if (extraItemsContainer) {
+
+        extraItemsContainer.innerHTML = "";
 
     }
 
