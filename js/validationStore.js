@@ -167,53 +167,7 @@ getCurrentPDFPage();
 
 
 
-    // Checklist radios
-    document
-        .querySelectorAll(
-            '.checklist-item input[type="radio"]'
-        )
-        .forEach(radio => {
-
-            radio.checked = false;
-
-        });
-
-    // Checklist remarks
-    document
-        .querySelectorAll(
-            ".item-remark"
-        )
-        .forEach(input => {
-
-            input.value = "";
-
-        });
-
-    // Overall remarks
-    const remarks =
-        document.getElementById(
-            "overallRemarks"
-        );
-
-    if (remarks) {
-
-        remarks.value = "";
-
-    }
-
-    // Extra items
-    const extraContainer =
-        document.getElementById(
-            "extraItemsContainer"
-        );
-
-    if (extraContainer) {
-
-        extraContainer.innerHTML = "";
-
-    }
-
-}
+   
 
 
 
