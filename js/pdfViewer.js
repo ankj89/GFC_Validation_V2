@@ -288,8 +288,15 @@ function clearValidationForm() {
             "overallRemarks"
         );
 
-    if (roomDropdown)
-        roomDropdown.value = "";
+   if (roomDropdown) {
+
+    roomDropdown.value = "";
+
+    roomDropdown.dispatchEvent(
+        new Event("change")
+    );
+
+}
 
     if (remarks)
         remarks.value = "";
