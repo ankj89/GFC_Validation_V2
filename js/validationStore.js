@@ -401,6 +401,6 @@ document
 
     "click",
 
-    saveCurrentPageValidation
+    saveCurrentPageValidation(true);
 
 );
