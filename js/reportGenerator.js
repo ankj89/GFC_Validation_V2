@@ -195,63 +195,21 @@ function generateMissingCoverageReport(
             "div"
         );
 
-    const table =
-    document.createElement(
-        "table"
-    );
-
-table.className =
-    "report-table";
-
-table.innerHTML =
-
-`
-<tr>
-    <th>Qty</th>
-    <th>Item</th>
-    <th>Room</th>
-</tr>
-`;
-
-missing.forEach(item => {
-
-    table.innerHTML +=
-
-    `
-    <tr>
-
-        <td>${item.qty}</td>
-
-        <td>${item.item}</td>
-
-        <td>${item.room || ""}</td>
-
-    </tr>
+    section.innerHTML = `
+        <h3>
+            Missing Coverage Report
+        </h3>
     `;
-
-});
-
-section.appendChild(
-    table
-);
-
-container.appendChild(
-    section
-);
-
-return;
 
     if (
         missing.length === 0
     ) {
 
-        section.innerHTML +=
-
-            `<p>
-
+        section.innerHTML += `
+            <p>
                 No Missing SKUs
-
-            </p>`;
+            </p>
+        `;
 
         container.appendChild(
             section
@@ -261,29 +219,37 @@ return;
 
     }
 
-    let html =
-        "<ul>";
+    const table =
+        document.createElement(
+            "table"
+        );
+
+    table.className =
+        "report-table";
+
+    table.innerHTML = `
+        <tr>
+            <th>Qty</th>
+            <th>Item</th>
+            <th>Room</th>
+        </tr>
+    `;
 
     missing.forEach(item => {
 
-        html +=
-
-            `<li>
-
-                ${item.qty}
-                x
-                ${item.item}
-
-                (${item.category})
-
-            </li>`;
+        table.innerHTML += `
+            <tr>
+                <td>${item.qty}</td>
+                <td>${item.item}</td>
+                <td>${item.room || ""}</td>
+            </tr>
+        `;
 
     });
 
-    html += "</ul>";
-
-    section.innerHTML +=
-        html;
+    section.appendChild(
+        table
+    );
 
     container.appendChild(
         section
