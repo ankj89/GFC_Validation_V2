@@ -64,13 +64,10 @@ function generateValidationFindingsReport(
 
         <tr>
 
-            <th>Page</th>
-
-            <th>Room</th>
-
-            <th>Items</th>
-
-            <th>Findings</th>
+           <th>Page</th>
+<th>Room</th>
+<th>Drawing Category</th>
+<th>Findings</th>
 
         </tr>
 
@@ -92,12 +89,12 @@ function generateValidationFindingsReport(
             <td>
                 ${row.room}
             </td>
-
-            <td>
-                ${formatItems(
-                    row.items
-                )}
-            </td>
+<td>
+    ${
+        (row.categories || [])
+        .join(", ")
+    }
+</td>
 
             <td>
                 ${buildChecklistSummary(
