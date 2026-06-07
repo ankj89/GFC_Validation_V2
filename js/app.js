@@ -377,29 +377,83 @@ function getSelectedItems() {
 
 function clearValidationForm() {
 
-    document
-    .getElementById(
-        "overallRemarks"
-    )
-    .value = "";
+    const remarks =
+        document.getElementById(
+            "overallRemarks"
+        );
 
-    document
-    .getElementById(
-        "drawingMissingReason"
-    )
-    .value = "";
+    if (remarks) {
 
-    document
-    .getElementById(
-        "drawingNotAvailable"
-    )
-    .checked = false;
+        remarks.value = "";
 
-    document
-    .getElementById(
-        "extraItemsContainer"
-    )
-    .innerHTML = "";
+    }
+
+    const roomDropdown =
+        document.getElementById(
+            "roomDropdown"
+        );
+
+    if (roomDropdown) {
+
+        roomDropdown.value = "";
+
+    }
+
+    const itemDropdown =
+        document.getElementById(
+            "itemDropdown"
+        );
+
+    if (itemDropdown) {
+
+        Array.from(
+            itemDropdown.options
+        ).forEach(option => {
+
+            option.selected = false;
+
+        });
+
+    }
+
+    const categoryDropdown =
+        document.getElementById(
+            "categoryDropdown"
+        );
+
+    if (categoryDropdown) {
+
+        Array.from(
+            categoryDropdown.options
+        ).forEach(option => {
+
+            option.selected = false;
+
+        });
+
+    }
+
+    const checklistContainer =
+        document.getElementById(
+            "checklistContainer"
+        );
+
+    if (checklistContainer) {
+
+        checklistContainer.innerHTML = "";
+
+    }
+
+    const extraItemsContainer =
+        document.getElementById(
+            "extraItemsContainer"
+        );
+
+    if (extraItemsContainer) {
+
+        extraItemsContainer.innerHTML = "";
+
+    }
 
 }
 
