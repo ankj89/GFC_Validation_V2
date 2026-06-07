@@ -165,37 +165,7 @@ getCurrentPDFPage();
 
 }
 
-function clearValidationUI() {
 
-    // Room
-    const room =
-        document.getElementById(
-            "roomDropdown"
-        );
-
-    if (room) {
-
-        room.selectedIndex = 0;
-
-    }
-
-    // Categories
-    const category =
-        document.getElementById(
-            "categoryDropdown"
-        );
-
-    if (category) {
-
-        Array.from(
-            category.options
-        ).forEach(option => {
-
-            option.selected = false;
-
-        });
-
-    }
 
     // Checklist radios
     document
