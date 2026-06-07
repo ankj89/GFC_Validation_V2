@@ -520,7 +520,7 @@ function formatSheet(sheet) {
 
             wch: Math.min(
                 maxLen + 5,
-                60
+                120
             )
 
         });
