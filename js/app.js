@@ -336,6 +336,16 @@ function collectExtraItems() {
     return items;
 
 }
+window.addEventListener(
+    "load",
+    () => {
+
+        addExtraItemRow();
+
+        addExtraItemRow();
+
+    }
+);
 
 // =====================================
 // SELECTED ITEMS
