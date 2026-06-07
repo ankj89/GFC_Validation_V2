@@ -426,23 +426,21 @@ function buildChecklistSummaryExcel(
         absentItems.forEach(
             item => {
 
-                let text =
-                    "• " +
-                    item.title;
+               lines.push(
+    `• ${item.title}`
+);
 
-                if (
-                    item.remark
-                ) {
+if (
+    item.remark
+) {
 
-                    text +=
-                        " - " +
-                        item.remark;
+    lines.push(
+        `    Comment: ${item.remark}`
+    );
 
-                }
+}
 
-                lines.push(
-                    text
-                );
+lines.push("");
 
             }
         );
@@ -466,8 +464,8 @@ function buildChecklistSummaryExcel(
     }
 
     return lines.join(
-        "\n"
-    );
+    "\r\n"
+);
 
 }
 
@@ -531,25 +529,8 @@ function formatSheet(sheet) {
 
     sheet["!cols"] =
         cols;
-if (!sheet["!rows"]) {
 
-    sheet["!rows"] = [];
-
-}
-
-for (
-    let i = 0;
-    i < 1000;
-    i++
-) {
-
-    sheet["!rows"][i] = {
-
-        hpt: 30
-
-    };
-
-}
+ 
 }
 // =====================================
 // EVENT
