@@ -232,13 +232,17 @@ function loadSavedValidation(
         typeof getValidationByPage !==
         "function"
     ) {
+
         return;
+
     }
 
     const pageData =
         getValidationByPage(
             pageNumber
         );
+
+    // No saved data
 
     if (
         !pageData
@@ -249,6 +253,8 @@ function loadSavedValidation(
         return;
 
     }
+
+    // Restore saved data
 
     restoreValidationForm(
         pageData
@@ -282,63 +288,87 @@ function clearValidationForm() {
             "overallRemarks"
         );
 
-    const dna =
-        document.getElementById(
-            "drawingNotAvailable"
-        );
-
-    const dnaReason =
-        document.getElementById(
-            "drawingMissingReason"
-        );
-
     if (roomDropdown)
         roomDropdown.value = "";
 
     if (remarks)
         remarks.value = "";
 
-    if (dna)
-        dna.checked = false;
-
-    if (dnaReason)
-        dnaReason.value = "";
+    // Clear item selections
 
     if (itemDropdown) {
 
         Array.from(
             itemDropdown.options
-        ).forEach(
-            option =>
-                option.selected =
-                false
-        );
+        ).forEach(option => {
+
+            option.selected = false;
+
+        });
 
     }
+
+    // Clear category selections
 
     if (categoryDropdown) {
 
         Array.from(
             categoryDropdown.options
-        ).forEach(
-            option =>
-                option.selected =
-                false
-        );
+        ).forEach(option => {
+
+            option.selected = false;
+
+        });
 
     }
 
-    const checklistContainer =
+    // Clear checklist selections
+
+    document
+        .querySelectorAll(
+            '.checklist-item input[type="radio"]'
+        )
+        .forEach(radio => {
+
+            radio.checked = false;
+
+        });
+
+    // Clear checklist remarks
+
+    document
+        .querySelectorAll(
+            ".item-remark"
+        )
+        .forEach(input => {
+
+            input.value = "";
+
+        });
+
+    // Clear overall remarks
+
+    const overallRemarks =
         document.getElementById(
-            "checklistContainer"
+            "overallRemarks"
         );
 
-    if (
-        checklistContainer
-    ) {
+    if (overallRemarks) {
 
-        checklistContainer.innerHTML =
-            "";
+        overallRemarks.value = "";
+
+    }
+
+    // Clear extra items
+
+    const extraContainer =
+        document.getElementById(
+            "extraItemsContainer"
+        );
+
+    if (extraContainer) {
+
+        extraContainer.innerHTML = "";
 
     }
 
