@@ -401,25 +401,30 @@ function restoreValidationForm(
     // Items
 
     if (
-        itemDropdown
-        &&
-        pageData.items
-    ) {
+    itemDropdown &&
+    pageData.items
+) {
 
-        Array.from(
-            itemDropdown.options
-        ).forEach(
-            option => {
+    const savedItems =
 
-                option.selected =
-                    pageData.items.includes(
-                        option.value
-                    );
-
-            }
+        pageData.items.map(
+            x => JSON.stringify(x)
         );
 
-    }
+    Array.from(
+        itemDropdown.options
+    ).forEach(
+        option => {
+
+            option.selected =
+                savedItems.includes(
+                    option.value
+                );
+
+        }
+    );
+
+}
 
     // Categories
 
@@ -446,14 +451,65 @@ function restoreValidationForm(
 
     // Checklist
 
+    // Checklist
+
+if (
+    typeof generateChecklist ===
+    "function"
+) {
+
+    generateChecklist();
+
     if (
-        typeof generateChecklist ===
-        "function"
+        pageData.checklist
     ) {
 
-        generateChecklist();
+        document
+        .querySelectorAll(
+            ".checklist-item"
+        )
+        .forEach(
+            (row,index) => {
+
+                const saved =
+                    pageData.checklist[
+                        index
+                    ];
+
+                if (!saved) {
+                    return;
+                }
+
+                const radio =
+                    row.querySelector(
+                        `input[value="${saved.status}"]`
+                    );
+
+                if (radio) {
+
+                    radio.checked =
+                        true;
+
+                }
+
+                const remark =
+                    row.querySelector(
+                        ".item-remark"
+                    );
+
+                if (remark) {
+
+                    remark.value =
+                        saved.remark || "";
+
+                }
+
+            }
+        );
 
     }
+
+}
 
     // Remarks
 
