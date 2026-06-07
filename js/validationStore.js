@@ -158,7 +158,10 @@ getCurrentPDFPage();
         "Validation Saved",
         record
     );
-
+console.log(
+    "STORE",
+    validationStore
+);
     alert(
         `Page ${pageNo} saved`
     );
