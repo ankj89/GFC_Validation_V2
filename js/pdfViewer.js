@@ -175,10 +175,11 @@ function updatePageIndicators() {
 // PREVIOUS PAGE
 // =========================================
 
-prevPageBtn
-?.addEventListener(
+prevPageBtn?.addEventListener(
     "click",
     async () => {
+
+        saveCurrentPageValidation();
 
         if (
             currentPageNumber <= 1
@@ -199,14 +200,14 @@ prevPageBtn
 // NEXT PAGE
 // =========================================
 
-nextPageBtn
-?.addEventListener(
+nextPageBtn?.addEventListener(
     "click",
     async () => {
 
+        saveCurrentPageValidation();
+
         if (
-            currentPageNumber >=
-            totalPages
+            currentPageNumber >= totalPages
         ) {
             return;
         }
@@ -228,33 +229,24 @@ function loadSavedValidation(
     pageNumber
 ) {
 
-    if (
-        typeof getValidationByPage !==
-        "function"
-    ) {
-
-        return;
-
-    }
+    clearValidationForm();
 
     const pageData =
         getValidationByPage(
             pageNumber
         );
+ console.log(
+        "Loading Page",
+        pageNumber,
+        pageData
+    );
 
-    // No saved data
-
-    if (
-        !pageData
-    ) {
-
-        clearValidationForm();
+    
+    if (!pageData) {
 
         return;
 
     }
-
-    // Restore saved data
 
     restoreValidationForm(
         pageData
