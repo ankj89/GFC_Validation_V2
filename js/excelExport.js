@@ -435,8 +435,12 @@ if (
 ) {
 
     lines.push(
-        `    Comment: ${item.remark}`
-    );
+    `    Comment: ${
+        String(item.remark || "")
+            .replace(/\r/g, "")
+            .replace(/_x000D_/g, "")
+    }`
+);
 
 }
 
@@ -457,16 +461,20 @@ lines.push("");
             "Overall Remarks:"
         );
 
-        lines.push(
-            row.overallRemarks
-        );
+lines.push(
+    String(row.overallRemarks || "")
+        .replace(/\r/g, "")
+        .replace(/_x000D_/g, "")
+);
 
     }
 
-    return lines.join(
-    "\r\n"
-);
+   const text =
+    lines.join("\n");
 
+return text
+    .replace(/\r/g, "")
+    .replace(/_x000D_/g, "");
 }
 
 
