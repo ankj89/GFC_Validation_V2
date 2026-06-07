@@ -15,9 +15,6 @@ function generateReports() {
         container
     );
 
-    generateRoomCoverageReport(
-        container
-    );
 
     generateMissingCoverageReport(
         container
@@ -27,9 +24,6 @@ function generateReports() {
         container
     );
 
-    generateMissingDrawingsReport(
-        container
-    );
 
 }
 
@@ -201,11 +195,51 @@ function generateMissingCoverageReport(
             "div"
         );
 
-    section.innerHTML =
+    const table =
+    document.createElement(
+        "table"
+    );
 
-        `<h3>
-            Missing Coverage Report
-        </h3>`;
+table.className =
+    "report-table";
+
+table.innerHTML =
+
+`
+<tr>
+    <th>Qty</th>
+    <th>Item</th>
+    <th>Room</th>
+</tr>
+`;
+
+missing.forEach(item => {
+
+    table.innerHTML +=
+
+    `
+    <tr>
+
+        <td>${item.qty}</td>
+
+        <td>${item.item}</td>
+
+        <td>${item.room || ""}</td>
+
+    </tr>
+    `;
+
+});
+
+section.appendChild(
+    table
+);
+
+container.appendChild(
+    section
+);
+
+return;
 
     if (
         missing.length === 0
@@ -496,14 +530,12 @@ function buildChecklistSummary(
 // ITEM FORMAT
 // =====================================
 
-function formatItems(
-    items
-) {
+function formatItems(items) {
 
     return items
         .map(item =>
 
-            `${item.qty}_${item.item}`
+            `${item.qty} | ${item.room} | ${item.item}`
 
         )
         .join("<br>");
