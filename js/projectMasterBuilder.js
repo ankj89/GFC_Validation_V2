@@ -255,6 +255,20 @@ function populateRoomDropdown() {
 
     dropdown.innerHTML = "";
 
+    const blankOption =
+        document.createElement(
+            "option"
+        );
+
+    blankOption.value = "";
+
+    blankOption.textContent =
+        "-- Select Room --";
+
+    dropdown.appendChild(
+        blankOption
+    );
+
     Object.keys(
         projectMaster.rooms
     ).forEach(room => {
@@ -275,8 +289,6 @@ function populateRoomDropdown() {
         );
 
     });
-
-    populateItemDropdown();
 
 }
 
