@@ -345,7 +345,7 @@ function clearValidationForm() {
 // RESTORE FORM
 // =========================================
 
-function restoreValidationForm(
+async function restoreValidationForm(
     pageData
 ) {
 
@@ -371,94 +371,72 @@ function restoreValidationForm(
             "overallRemarks"
         );
 
-    const dna =
-        document.getElementById(
-            "drawingNotAvailable"
-        );
-
-    const dnaReason =
-        document.getElementById(
-            "drawingMissingReason"
-        );
-
-    // Room
+    // ROOM
 
     if (
         roomDropdown
     ) {
 
         roomDropdown.value =
-            pageData.room;
+            pageData.room || "";
 
-        roomDropdown.dispatchEvent(
-            new Event(
-                "change"
-            )
-        );
+        populateItemDropdown();
 
     }
 
-    // Items
+    // ITEMS
 
     if (
-    itemDropdown &&
-    pageData.items
-) {
+        itemDropdown &&
+        pageData.items
+    ) {
 
-    const savedItems =
+        const savedItems =
+            pageData.items.map(
+                item =>
+                    JSON.stringify(
+                        item
+                    )
+            );
 
-        pageData.items.map(
-            x => JSON.stringify(x)
-        );
-
-    Array.from(
-        itemDropdown.options
-    ).forEach(
-        option => {
+        Array.from(
+            itemDropdown.options
+        ).forEach(option => {
 
             option.selected =
                 savedItems.includes(
                     option.value
                 );
 
-        }
-    );
+        });
 
-}
+    }
 
-    // Categories
+    // CATEGORIES
 
     if (
-        categoryDropdown
-        &&
+        categoryDropdown &&
         pageData.categories
     ) {
 
         Array.from(
             categoryDropdown.options
-        ).forEach(
-            option => {
+        ).forEach(option => {
 
-                option.selected =
-                    pageData.categories.includes(
-                        option.value
-                    );
+            option.selected =
+                pageData.categories.includes(
+                    option.value
+                );
 
-            }
-        );
+        });
 
     }
 
-    // Checklist
-
-    // Checklist
-
-if (
-    typeof generateChecklist ===
-    "function"
-) {
+    // GENERATE CHECKLIST
 
     generateChecklist();
+
+    // RESTORE CHECKLIST
 
     if (
         pageData.checklist
@@ -509,44 +487,18 @@ if (
 
     }
 
-}
-
-    // Remarks
+    // OVERALL REMARKS
 
     if (
         remarks
     ) {
 
         remarks.value =
-            pageData.overallRemarks ||
-            "";
-
-    }
-
-    // DNA
-
-    if (
-        dna
-    ) {
-
-        dna.checked =
-            pageData.drawingNotAvailable ||
-            false;
-
-    }
-
-    if (
-        dnaReason
-    ) {
-
-        dnaReason.value =
-            pageData.drawingMissingReason ||
-            "";
+            pageData.overallRemarks || "";
 
     }
 
 }
-
 // =========================================
 // HELPERS
 // =========================================
