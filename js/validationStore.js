@@ -8,7 +8,9 @@ let validationStore = [];
 // SAVE PAGE VALIDATION
 // =====================================
 
-function saveCurrentPageValidation() {
+function saveCurrentPageValidation(
+    showPopup = false
+) {
 
     const room =
 
@@ -158,7 +160,13 @@ getCurrentPDFPage();
         "Validation Saved",
         record
     );
+if (showPopup) {
 
+    alert(
+        `Page ${pageNo} saved`
+    );
+
+}
 
 }
 
