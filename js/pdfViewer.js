@@ -291,6 +291,7 @@ function clearValidationForm() {
     if (roomDropdown) {
 
         roomDropdown.value = "";
+    populateItemDropdown();
 
     }
 
