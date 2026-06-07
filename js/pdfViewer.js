@@ -288,34 +288,17 @@ function clearValidationForm() {
             "overallRemarks"
         );
 
-   if (roomDropdown) {
+    if (roomDropdown) {
 
-    roomDropdown.value = "";
-
-    roomDropdown.dispatchEvent(
-        new Event("change")
-    );
-
-}
-
-    if (remarks)
-        remarks.value = "";
-
-    // Clear item selections
-
-    if (itemDropdown) {
-
-        Array.from(
-            itemDropdown.options
-        ).forEach(option => {
-
-            option.selected = false;
-
-        });
+        roomDropdown.value = "";
 
     }
 
-    // Clear category selections
+    if (itemDropdown) {
+
+        itemDropdown.innerHTML = "";
+
+    }
 
     if (categoryDropdown) {
 
@@ -329,44 +312,11 @@ function clearValidationForm() {
 
     }
 
-    // Clear checklist selections
+    if (remarks) {
 
-    document
-        .querySelectorAll(
-            '.checklist-item input[type="radio"]'
-        )
-        .forEach(radio => {
-
-            radio.checked = false;
-
-        });
-
-    // Clear checklist remarks
-
-    document
-        .querySelectorAll(
-            ".item-remark"
-        )
-        .forEach(input => {
-
-            input.value = "";
-
-        });
-
-    // Clear overall remarks
-
-    const overallRemarks =
-        document.getElementById(
-            "overallRemarks"
-        );
-
-    if (overallRemarks) {
-
-        overallRemarks.value = "";
+        remarks.value = "";
 
     }
-
-    // Clear extra items
 
     const extraContainer =
         document.getElementById(
@@ -379,8 +329,18 @@ function clearValidationForm() {
 
     }
 
-}
+    const checklistContainer =
+        document.getElementById(
+            "checklistContainer"
+        );
 
+    if (checklistContainer) {
+
+        checklistContainer.innerHTML = "";
+
+    }
+
+}
 // =========================================
 // RESTORE FORM
 // =========================================
