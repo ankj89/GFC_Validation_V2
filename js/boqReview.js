@@ -116,9 +116,12 @@ function addBOQRowManual() {
 
     projectMaster.boqRows.push({
 
-        room: "",
-
-        item: ""
+       {
+    room:"",
+    item:"",
+    qty:"",
+    category:""
+}
 
     });
 
@@ -190,12 +193,13 @@ function rebuildProjectMaster() {
 
             const room =
                 row.room?.trim();
-
+const roomName =
+    room || "UNASSIGNED";
             const item =
                 row.item?.trim();
 
             if (
-                !room ||
+                
                 !item
             ) {
                 return;
@@ -203,30 +207,30 @@ function rebuildProjectMaster() {
 
             if (
                 !projectMaster.roomItemMap[
-                    room
+                    roomName
                 ]
             ) {
 
                 projectMaster.roomItemMap[
-                    room
+                    roomName
                 ] = [];
 
                 projectMaster.rooms.push(
-                    room
+                    roomName
                 );
 
             }
 
             if (
                 !projectMaster.roomItemMap[
-                    room
+                    roomName
                 ].includes(
                     item
                 )
             ) {
 
                 projectMaster.roomItemMap[
-                    room
+                    roomName
                 ].push(
                     item
                 );
