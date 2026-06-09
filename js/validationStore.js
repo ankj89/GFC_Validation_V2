@@ -398,9 +398,6 @@ document
     "saveValidationBtn"
 )
 ?.addEventListener(
-
     "click",
-
-    saveCurrentPageValidation(true);
-
+    () => saveCurrentPageValidation(true)
 );
