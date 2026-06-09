@@ -1,71 +1,233 @@
-function buildBOQRowsFromPDF(text) {
+// =====================================
+// BOQ PDF IMPORTER
+// =====================================
+
+async function handleBOQPDFImport(
+    file
+) {
+
+    try {
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+        const pdf =
+            await pdfjsLib
+            .getDocument({
+                data: arrayBuffer
+            })
+            .promise;
+
+        let fullText = "";
+
+        for (
+            let pageNum = 1;
+            pageNum <= pdf.numPages;
+            pageNum++
+        ) {
+
+            const page =
+                await pdf.getPage(
+                    pageNum
+                );
+
+            const content =
+                await page.getTextContent();
+
+            fullText +=
+
+                content.items
+                .map(
+                    item => item.str
+                )
+                .join(" ")
+
+                + "\n";
+
+        }
+
+        console.log(
+            "PDF TEXT",
+            fullText
+        );
+
+        const rows =
+            buildBOQRowsFromPDF(
+                fullText
+            );
+
+        console.log(
+            "BOQ ROWS",
+            rows
+        );
+
+        if (
+            rows.length === 0
+        ) {
+
+            alert(
+                "No BOQ items found in PDF"
+            );
+
+            return;
+
+        }
+
+        sourceRows =
+            rows;
+
+        populateReviewGrid(
+            rows,
+            "BOQ"
+        );
+
+    }
+    catch (err) {
+
+        console.error(
+            "BOQ PDF IMPORT FAILED",
+            err
+        );
+
+        alert(
+            "Failed to parse BOQ PDF"
+        );
+
+    }
+
+}
+
+// =====================================
+// PDF → RFV STYLE ROWS
+// =====================================
+
+function buildBOQRowsFromPDF(
+    text
+) {
 
     const rows = [];
 
     let currentRoom = "";
+
     let currentCategory = "";
 
-    const lines = text
+    const lines =
+        text
         .split("\n")
-        .map(x => x.trim())
+        .map(
+            line =>
+                line.trim()
+        )
         .filter(Boolean);
 
-    for (let i = 0; i < lines.length; i++) {
+    for (
+        let i = 0;
+        i < lines.length;
+        i++
+    ) {
 
-        const line = lines[i];
+        const line =
+            lines[i];
 
-        if (line.startsWith("Location")) {
+        // ROOM
+
+        if (
+            line.startsWith(
+                "Location"
+            )
+        ) {
 
             currentRoom =
-                line.split(":")[1]?.trim() || "";
+
+                line
+                .split(":")
+                .slice(1)
+                .join(":")
+                .trim();
 
         }
 
+        // CATEGORY
+
         if (
-            line.startsWith("Super Category")
+            line.startsWith(
+                "Super Category"
+            )
         ) {
 
             currentCategory =
-                line.split(":")[1]?.trim() || "";
+
+                line
+                .split(":")
+                .slice(1)
+                .join(":")
+                .trim();
 
         }
 
+        // SKU
+
         if (
-            line.startsWith("SKU")
+            line.startsWith(
+                "SKU"
+            )
         ) {
 
-            const item =
-                line.split(":")[1]?.trim() || "";
+            const sku =
+
+                line
+                .split(":")
+                .slice(1)
+                .join(":")
+                .trim();
 
             let qty = 0;
 
+            // look ahead
+
             for (
                 let j = i;
-                j < Math.min(i + 10, lines.length);
+                j < Math.min(
+                    i + 20,
+                    lines.length
+                );
                 j++
             ) {
 
+                const searchLine =
+                    lines[j];
+
                 if (
-                    lines[j]
-                    .startsWith("Qty")
+                    searchLine.startsWith(
+                        "Qty"
+                    )
                 ) {
+
+                    const qtyText =
+
+                        searchLine
+
+                        .replace(
+                            "Qty",
+                            ""
+                        )
+
+                        .replace(
+                            ":",
+                            ""
+                        )
+
+                        .trim();
 
                     qty =
                         Number(
-                            lines[j]
-                            .replace(
-                                "Qty",
-                                ""
-                            )
-                            .replace(
-                                ":",
-                                ""
-                            )
-                            .trim()
+                            qtyText
                         ) || 0;
 
                     break;
+
                 }
+
             }
 
             rows.push({
@@ -76,11 +238,12 @@ function buildBOQRowsFromPDF(text) {
 
                 pid: "",
 
-                room: currentRoom,
-
-                item,
+                room:
+                    currentRoom,
 
                 qty,
+
+                sku,
 
                 category:
                     currentCategory
@@ -92,127 +255,5 @@ function buildBOQRowsFromPDF(text) {
     }
 
     return rows;
-
-}
-
-function loadBOQRowsIntoReview(rows) {
-
-    const tbody =
-        document.getElementById(
-            "boqReviewBody"
-        );
-
-    tbody.innerHTML = "";
-
-    rows.forEach(row => {
-
-        tbody.innerHTML += `
-
-        <tr>
-
-            <td>
-                <input class="rfv-input"
-                    value="${row.rfvId}">
-            </td>
-
-            <td>
-                <input class="order-input"
-                    value="${row.orderId}">
-            </td>
-
-            <td>
-                <input class="pid-input"
-                    value="${row.pid}">
-            </td>
-
-            <td>
-                <input class="room-input"
-                    value="${row.room}">
-            </td>
-
-            <td>
-                <input class="qty-input"
-                    value="${row.qty}">
-            </td>
-
-            <td>
-                <input class="item-input"
-                    value="${row.item}">
-            </td>
-
-            <td>
-                <input class="category-input"
-                    value="${row.category}">
-            </td>
-
-        </tr>
-
-        `;
-
-    });
-
-    document
-        .getElementById(
-            "boqReviewSection"
-        )
-        .classList
-        .remove("hidden");
-
-}
-async function handleBOQPDFImport(file) {
-
-    const arrayBuffer =
-        await file.arrayBuffer();
-
-    const pdf =
-        await pdfjsLib
-        .getDocument({
-            data: arrayBuffer
-        }).promise;
-
-    let fullText = "";
-
-    for (
-        let pageNum = 1;
-        pageNum <= pdf.numPages;
-        pageNum++
-    ) {
-
-        const page =
-            await pdf.getPage(
-                pageNum
-            );
-
-        const content =
-            await page.getTextContent();
-
-        fullText +=
-
-            content.items
-            .map(
-                item => item.str
-            )
-            .join(" ")
-
-            + "\n";
-
-    }
-
-    const rows =
-        buildBOQRowsFromPDF(
-            fullText
-        );
-
-    console.log(
-        "BOQ Rows",
-        rows
-    );
-
-    window.sourceType =
-        "BOQ PDF";
-
-    loadBOQRowsIntoReview(
-        rows
-    );
 
 }
