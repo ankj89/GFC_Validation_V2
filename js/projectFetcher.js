@@ -509,9 +509,9 @@ if (boqPdfInput) {
                 return;
             }
 
-            await handleBOQUpload(
-                file
-            );
+           await handleBOQPDFImport(
+    file
+);
 
         }
     );
