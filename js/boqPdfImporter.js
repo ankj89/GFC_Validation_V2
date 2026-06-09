@@ -101,133 +101,39 @@ async function handleBOQPDFImport(
 // PDF → RFV STYLE ROWS
 // =====================================
 
-function buildBOQRowsFromPDF(
-    text
-) {
+function buildBOQRowsFromPDF(text) {
 
     const rows = [];
 
-    let currentRoom = "";
+    const blocks =
+        text.split("QI-");
 
-    let currentCategory = "";
+    blocks.forEach(block => {
 
-    const lines =
-        text
-        .split("\n")
-        .map(
-            line =>
-                line.trim()
-        )
-        .filter(Boolean);
+        try {
 
-    for (
-        let i = 0;
-        i < lines.length;
-        i++
-    ) {
-
-        const line =
-            lines[i];
-
-        // ROOM
-
-        if (
-            line.startsWith(
-                "Location"
-            )
-        ) {
-
-            currentRoom =
-
-                line
-                .split(":")
-                .slice(1)
-                .join(":")
-                .trim();
-
-        }
-
-        // CATEGORY
-
-        if (
-            line.startsWith(
-                "Super Category"
-            )
-        ) {
-
-            currentCategory =
-
-                line
-                .split(":")
-                .slice(1)
-                .join(":")
-                .trim();
-
-        }
-
-        // SKU
-
-        if (
-            line.startsWith(
-                "SKU"
-            )
-        ) {
-
-            const sku =
-
-                line
-                .split(":")
-                .slice(1)
-                .join(":")
-                .trim();
-
-            let qty = 0;
-
-            // look ahead
-
-            for (
-                let j = i;
-                j < Math.min(
-                    i + 20,
-                    lines.length
+            const roomMatch =
+                block.match(
+                    /Location\s*:\s*(.*?)\s*Elevation/i
                 );
-                j++
-            ) {
 
-                const searchLine =
-                    lines[j];
+            const categoryMatch =
+                block.match(
+                    /Super Category\s*:\s*(.*?)\s*Sub Super Category/i
+                );
 
-                if (
-                    searchLine.startsWith(
-                        "Qty"
-                    )
-                ) {
+            const skuMatch =
+                block.match(
+                    /SKU\s*:\s*(.*?)\s*Description/i
+                );
 
-                    const qtyText =
+            const qtyMatch =
+                block.match(
+                    /(?:Nos|SqFt|Rft|Lumpsum|Unit)\s+(\d+)/i
+                );
 
-                        searchLine
-
-                        .replace(
-                            "Qty",
-                            ""
-                        )
-
-                        .replace(
-                            ":",
-                            ""
-                        )
-
-                        .trim();
-
-                    qty =
-                        Number(
-                            qtyText
-                        ) || 0;
-
-                    break;
-
-                }
-
+            if (!skuMatch) {
+                return;
             }
 
             rows.push({
@@ -239,20 +145,38 @@ function buildBOQRowsFromPDF(
                 pid: "",
 
                 room:
-                    currentRoom,
+                    roomMatch
+                    ? roomMatch[1].trim()
+                    : "",
 
-                qty,
+                qty:
+                    qtyMatch
+                    ? Number(
+                        qtyMatch[1]
+                    )
+                    : 0,
 
-                sku,
+                sku:
+                    skuMatch[1].trim(),
 
                 category:
-                    currentCategory
+                    categoryMatch
+                    ? categoryMatch[1].trim()
+                    : ""
 
             });
 
         }
+        catch(err) {
 
-    }
+            console.log(
+                "Skip Block",
+                err
+            );
+
+        }
+
+    });
 
     return rows;
 
