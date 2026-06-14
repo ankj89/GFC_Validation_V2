@@ -48,6 +48,12 @@ const CHECKLIST_CONFIG = {
         "Material Specification Available"
 
     ],
+pcc: [
+
+        "PCC areas marked on plan",
+        "PCC thickness mentioned"
+
+    ],
 
     tiling: [
 
