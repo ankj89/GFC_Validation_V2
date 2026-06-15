@@ -358,13 +358,8 @@ async function restoreValidationForm(
         );
 
     const itemDropdown =
-    document.getElementById(
-        "itemDropdown"
-    );
-
-    const categoryDropdown =
         document.getElementById(
-            "categoryDropdown"
+            "itemDropdown"
         );
 
     const remarks =
@@ -372,7 +367,9 @@ async function restoreValidationForm(
             "overallRemarks"
         );
 
+    // =========================
     // ROOM
+    // =========================
 
     if (
         roomDropdown
@@ -385,7 +382,27 @@ async function restoreValidationForm(
 
     }
 
-    // ITEMS
+    // =========================
+    // RESTORE SKU BASKET
+    // =========================
+
+    selectedSkuBasket =
+        pageData.items || [];
+
+    renderSelectedSKUs();
+
+    // =========================
+    // RESTORE CATEGORY BASKET
+    // =========================
+
+    selectedCategoryBasket =
+        pageData.categories || [];
+
+    renderSelectedCategories();
+
+    // =========================
+    // MARK ITEMS IN DROPDOWN
+    // =========================
 
     if (
         itemDropdown &&
@@ -413,63 +430,15 @@ async function restoreValidationForm(
 
     }
 
-    // CATEGORIES
-
-    if (
-        categoryDropdown &&
-        pageData.categories
-    ) {
-
-        Array.from(
-            categoryDropdown.options
-        ).forEach(option => {
-
-            option.selected =
-                pageData.categories.includes(
-                    option.value
-                );
-
-        });
-
-    }
-
+    // =========================
     // GENERATE CHECKLIST
+    // =========================
 
     generateChecklist();
-selectedSkuBasket =
-pageData.items || [];
 
-
-if (
-    itemDropdown &&
-    pageData.items
-) {
-
-    const savedItems =
-        pageData.items.map(
-            item =>
-                JSON.stringify(
-                    item
-                )
-        );
-
-    Array.from(
-        itemDropdown.options
-    ).forEach(option => {
-
-        option.selected =
-
-            savedItems.includes(
-                option.value
-            );
-
-    });
-
-}
-    
-renderSelectedSKUs();
-
-    // RESTORE CHECKLIST
+    // =========================
+    // RESTORE CHECKLIST VALUES
+    // =========================
 
     if (
         pageData.checklist
@@ -480,7 +449,7 @@ renderSelectedSKUs();
             ".checklist-item"
         )
         .forEach(
-            (row,index) => {
+            (row, index) => {
 
                 const saved =
                     pageData.checklist[
@@ -520,7 +489,57 @@ renderSelectedSKUs();
 
     }
 
+    // =========================
+    // EXTRA ITEMS
+    // =========================
+
+    if (
+        pageData.extraDrawingItems
+    ) {
+
+        const container =
+            document.getElementById(
+                "extraItemsContainer"
+            );
+
+        if (container) {
+
+            container.innerHTML = "";
+
+            pageData.extraDrawingItems
+            .forEach(item => {
+
+                addExtraItemRow();
+
+                const rows =
+                    document.querySelectorAll(
+                        ".extra-item-row"
+                    );
+
+                const lastRow =
+                    rows[
+                        rows.length - 1
+                    ];
+
+                lastRow.querySelector(
+                    ".extra-item-name"
+                ).value =
+                    item.item || "";
+
+                lastRow.querySelector(
+                    ".extra-item-reason"
+                ).value =
+                    item.reason || "";
+
+            });
+
+        }
+
+    }
+
+    // =========================
     // OVERALL REMARKS
+    // =========================
 
     if (
         remarks
