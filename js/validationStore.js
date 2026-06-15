@@ -139,6 +139,15 @@ getCurrentPDFPage();
 
 };
 
+    console.log(
+    "SAVING PAGE",
+    pageNo
+);
+
+console.log(
+    "SAVED ITEMS",
+    selectedSkuBasket
+);
     if (
         existingIndex >= 0
     ) {
@@ -239,7 +248,10 @@ function collectChecklist() {
 function getValidationByPage(
     pageNo
 ) {
-
+console.log(
+    "STORE",
+    validationStore
+);
     return validationStore.find(
 
         row =>
