@@ -87,12 +87,8 @@ function generateChecklist() {
     checklistContainer.innerHTML =
         "";
 
-    const selectedCategories =
-        Array.from(
-            categoryDropdown.selectedOptions
-        ).map(
-            option => option.value
-        );
+const selectedCategories =
+    selectedCategoryBasket;
 
     if (
         selectedCategories.length === 0
