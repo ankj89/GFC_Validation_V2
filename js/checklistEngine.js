@@ -78,83 +78,116 @@ categoryDropdown
 
 function generateChecklist() {
 
-    if (
-        !checklistContainer
-    ) {
-        return;
-    }
+if (!checklistContainer) {
+    return;
+}
 
-    checklistContainer.innerHTML =
-        "";
+const existingBlocks =
+    Array.from(
+        checklistContainer.querySelectorAll(
+            ".category-block"
+        )
+    ).map(
+        block =>
+            block.dataset.category
+    );
 
-const selectedCategories =
-    selectedCategoryBasket;
+selectedCategoryBasket.forEach(
+    category => {
 
-    if (
-        selectedCategories.length === 0
-    ) {
-        return;
-    }
+        if (
+            existingBlocks.includes(
+                category
+            )
+        ) {
+            return;
+        }
 
-    selectedCategories.forEach(
-        category => {
-
+        const block =
             createCategoryBlock(
                 category
             );
 
-        }
-    );
+        checklistContainer.appendChild(
+            block
+        );
+
+    }
+);
+
+document
+.querySelectorAll(
+    ".category-block"
+)
+.forEach(block => {
+
+    const category =
+        block.dataset.category;
+
+    if (
+        !selectedCategoryBasket.includes(
+            category
+        )
+    ) {
+
+        block.remove();
+
+    }
+
+});
 
 }
+
 
 // =========================================
 // CATEGORY BLOCK
 // =========================================
 
 function createCategoryBlock(
-    category
+category
 ) {
 
-    const checklist =
-        CHECKLIST_CONFIG[
-            category
-        ];
+const checklist =
+    CHECKLIST_CONFIG[
+        category
+    ];
 
-    if (!checklist) {
-        return;
-    }
+if (!checklist) {
+    return document.createElement("div");
+}
 
-    const block =
-        document.createElement(
-            "div"
-        );
-
-    block.className =
-        "category-block";
-
-    block.innerHTML =
-
-        `<div class="category-header">
-            ${formatCategoryName(category)}
-        </div>`;
-
-    checklist.forEach(item => {
-
-        block.appendChild(
-            createChecklistItem(
-                category,
-                item
-            )
-        );
-
-    });
-
-    checklistContainer.appendChild(
-        block
+const block =
+    document.createElement(
+        "div"
     );
 
+block.className =
+    "category-block";
+
+block.dataset.category =
+    category;
+
+block.innerHTML =
+
+    `<div class="category-header">
+        ${formatCategoryName(category)}
+    </div>`;
+
+checklist.forEach(item => {
+
+    block.appendChild(
+        createChecklistItem(
+            category,
+            item
+        )
+    );
+
+});
+
+return block;
+
 }
+
 
 // =========================================
 // CHECKLIST ITEM
