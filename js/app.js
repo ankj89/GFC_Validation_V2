@@ -57,17 +57,7 @@ function bindEvents() {
 
     );
 
-    itemDropdown?.addEventListener(
-
-        "change",
-
-        () => {
-
-            autoSuggestCategory();
-
-        }
-
-    );
+   
 
     categoryDropdown?.addEventListener(
 
@@ -163,70 +153,6 @@ function formatCategoryName(
 // AUTO CATEGORY
 // =====================================
 
-function autoSuggestCategory() {
-
-    const itemDropdown =
-        document.getElementById(
-            "itemDropdown"
-        );
-
-    const selectedItems =
-        Array.from(
-            itemDropdown.selectedOptions
-        );
-
-    if (
-        selectedItems.length !== 1
-    ) {
-        return;
-    }
-
-    const selectedItem =
-        JSON.parse(
-            selectedItems[0].value
-        );
-
-    const category =
-        selectedItem.category;
-
-    if (
-        !category
-    ) {
-        return;
-    }
-
-    const dropdown =
-        document.getElementById(
-            "categoryDropdown"
-        );
-
-    Array.from(
-        dropdown.options
-    ).forEach(option => {
-
-        option.selected = false;
-
-        if (
-
-            option.textContent
-                .toLowerCase()
-
-            ===
-
-            category
-                .toLowerCase()
-
-        ) {
-
-            option.selected = true;
-
-        }
-
-    });
-
-    generateChecklist();
-
-}
 
 // =====================================
 // EXTRA ITEMS
