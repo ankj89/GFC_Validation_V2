@@ -357,6 +357,10 @@ async function restoreValidationForm(
             "roomDropdown"
         );
 
+    const itemDropdown =
+    document.getElementById(
+        "itemDropdown"
+    );
 
     const categoryDropdown =
         document.getElementById(
@@ -435,10 +439,6 @@ async function restoreValidationForm(
 selectedSkuBasket =
 pageData.items || [];
 
-const itemDropdown =
-    document.getElementById(
-        "itemDropdown"
-    );
 
 if (
     itemDropdown &&
