@@ -1,6 +1,7 @@
 // =====================================
 // V4 APP CONTROLLER
 // =====================================
+let selectedSkuBasket = [];
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -82,6 +83,48 @@ function bindEvents() {
         }
 
     );
+
+itemDropdown?.addEventListener(
+
+    "change",
+
+    () => {
+
+        Array.from(
+            itemDropdown.selectedOptions
+        ).forEach(option => {
+
+            const item =
+                JSON.parse(
+                    option.value
+                );
+
+            const exists =
+
+                selectedSkuBasket.some(
+                    x =>
+                        x.item ===
+                        item.item
+                );
+
+            if (!exists) {
+
+                selectedSkuBasket.push(
+                    item
+                );
+
+            }
+
+        });
+
+        renderSelectedSKUs();
+
+    }
+
+);
+
+
+    
 
 }
 
@@ -279,28 +322,60 @@ window.addEventListener(
 
 function getSelectedItems() {
 
-    return Array.from(
+    return selectedSkuBasket;
 
-        document
-        .getElementById(
-            "itemDropdown"
-        )
-        .selectedOptions
+}
+// =====================================
+// Render selected SKUs
+// =====================================
+function renderSelectedSKUs() {
 
-    ).map(option =>
+    const container =
 
-        JSON.parse(
-            option.value
-        )
+        document.getElementById(
+            "selectedSkuContainer"
+        );
 
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    selectedSkuBasket.forEach(
+        (item,index) => {
+
+            const chip =
+                document.createElement(
+                    "div"
+                );
+
+            chip.className =
+                "selected-sku";
+
+            chip.innerHTML =
+
+                `${item.item} ✕`;
+
+            chip.onclick = () => {
+
+                selectedSkuBasket.splice(
+                    index,
+                    1
+                );
+
+                renderSelectedSKUs();
+
+            };
+
+            container.appendChild(
+                chip
+            );
+
+        }
     );
 
 }
-
-// =====================================
-// CLEAR FORM
-// =====================================
-
 
 
 // =====================================
@@ -312,3 +387,4 @@ function getProjectMaster() {
     return projectMaster;
 
 }
+
