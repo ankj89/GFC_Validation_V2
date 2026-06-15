@@ -24,21 +24,9 @@ function saveCurrentPageValidation(
 
         getSelectedItems();
 
-    const categories =
+   const categories =
 
-        Array.from(
-
-            document
-            .getElementById(
-                "categoryDropdown"
-            )
-            .selectedOptions
-
-        ).map(
-
-            option => option.value
-
-        );
+    [...selectedCategoryBasket];
 
     const drawingNotAvailable =
 
@@ -104,7 +92,11 @@ getCurrentPDFPage();
         ),
 
     categories:
-        [...categories],
+    JSON.parse(
+        JSON.stringify(
+            selectedCategoryBasket
+        )
+    ),
 
     checklist:
         JSON.parse(
