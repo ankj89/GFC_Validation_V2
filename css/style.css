@@ -372,6 +372,37 @@ header h1{
 
 }
 
+.selected-sku-container {
+
+    border: 1px solid #ccc;
+
+    min-height: 50px;
+
+    padding: 8px;
+
+    margin-bottom: 15px;
+
+    background: #fff;
+
+}
+
+.selected-sku {
+
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    margin: 4px;
+
+    background: #1f4e79;
+
+    color: white;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+}
 /* =====================================
    EXTRA ITEMS
 ===================================== */
