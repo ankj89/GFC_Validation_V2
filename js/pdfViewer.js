@@ -337,6 +337,9 @@ function clearValidationForm() {
         extraItemsContainer.innerHTML = "";
 
     }
+selectedSkuBasket = [];
+
+renderSelectedSKUs();
 
 }
 // =========================================
@@ -433,6 +436,10 @@ async function restoreValidationForm(
     // GENERATE CHECKLIST
 
     generateChecklist();
+selectedSkuBasket =
+pageData.items || [];
+
+renderSelectedSKUs();
 
     // RESTORE CHECKLIST
 
