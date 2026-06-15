@@ -2,7 +2,7 @@
 // V4 APP CONTROLLER
 // =====================================
 let selectedSkuBasket = [];
-
+let selectedCategoryBasket = [];
 document.addEventListener(
     "DOMContentLoaded",
     initializeApp
@@ -58,19 +58,42 @@ function bindEvents() {
 
     );
 
-   
+ categoryDropdown?.addEventListener(
 
-    categoryDropdown?.addEventListener(
+    "change",
 
-        "change",
+    function () {
 
-        () => {
+        const selected =
+            this.value;
 
-            generateChecklist();
+        if (
+            !selected
+        ) {
+            return;
+        }
+
+        if (
+
+            !selectedCategoryBasket
+            .includes(selected)
+
+        ) {
+
+            selectedCategoryBasket
+            .push(selected);
 
         }
 
-    );
+        this.selectedIndex = -1;
+
+        renderSelectedCategories();
+
+        generateChecklist();
+
+    }
+
+);
 
     addExtraItemBtn?.addEventListener(
 
@@ -376,8 +399,78 @@ function renderSelectedSKUs() {
     );
 
 }
+// =====================================
+// Render selected Categories
+// =====================================
+function renderSelectedCategories() {
 
+    const container =
+        document.getElementById(
+            "selectedCategoryContainer"
+        );
 
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    selectedCategoryBasket.forEach(
+        category => {
+
+            const chip =
+                document.createElement(
+                    "span"
+                );
+
+            chip.className =
+                "selected-chip";
+
+            chip.innerHTML = `
+
+                ${formatCategoryName(category)}
+
+                <button
+                    type="button"
+                    data-category="${category}">
+                    ×
+                </button>
+
+            `;
+
+            container.appendChild(
+                chip
+            );
+
+        }
+    );
+
+    container
+    .querySelectorAll(
+        "button"
+    )
+    .forEach(btn => {
+
+        btn.addEventListener(
+            "click",
+            () => {
+
+                selectedCategoryBasket =
+                    selectedCategoryBasket
+                    .filter(
+                        x =>
+                            x !==
+                            btn.dataset.category
+                    );
+
+                renderSelectedCategories();
+
+                generateChecklist();
+
+            }
+        );
+
+    });
+
+}
 // =====================================
 // PROJECT MASTER ACCESS
 // =====================================
