@@ -35,47 +35,77 @@ const CHECKLIST_CONFIG = {
 
     flooring: [
 
-        "Flooring Layout Available",
-        "Tile Start Point Mentioned",
-        "Tile Direction Mentioned",
+        "Flooring Grid Layout Available as per size",
+        "Skirting Layout Available",
+        "Floor Tile Start Point Mentioned",
+        "Floor Tile Size Mentioned",
         "Slope Direction Mentioned",
-        "Level Difference Marked",
-        "Tile Size Mentioned",
-        "Tile Code Mentioned",
-        "Skirting Requirement Mentioned",
         "Skirting Thickness Mentioned",
-        "Grouting Details Mentioned",
-        "Material Specification Available"
+        "Grouting Details Mentioned"
 
     ],
 pcc: [
 
         "PCC areas marked on plan",
+        "Level Difference Marked(if any)",
         "PCC thickness mentioned"
 
     ],
+    
+    coba: [
 
-    tiling: [
+        "Brickbat areas marked on plan",
+        "Level Difference Marked(if any)",
+        "Brickbat thickness mentioned"
 
-        "Dado Layout Available",
-        "Wall Cladding Layout Available",
+    ],
+
+    plaster: [
+
+        "Plaster areas marked on plan",
+        "Plaster areas marked on elevation",
+        "Plaster type mentioned",
+        "Plaster thickness mentioned"
+
+    ],
+       punning: [
+
+        "Punning areas marked on plan",
+        "Punning areas marked on elevation",
+        "Punning type mentioned",
+        "Punning thickness mentioned"
+
+    ],
+     waterproofing: [
+
+        "Waterproofing areas marked on plan with dimensions",
+        "Waterproofing areas marked on elevation with dimensions",
+        "Waterproofing type mentioned",
+        "Waterproofing specifications mentioned"
+
+    ],
+    walltilingorcladding: [
+
+        "Dado Grid Layout as per tile size",
         "Tile Start Point Mentioned",
         "Tile Size Mentioned",
-        "Tile Code Mentioned",
-        "Cutouts Shown",
+        "Cutouts Shown/marked",
         "Cutout Dimensions Mentioned",
         "Tile Area Dimensions Mentioned",
-        "Grouting Details Mentioned"
+        "Grouting Details Mentioned",
+        "Wall Cladding Elevation shown"
 
     ],
 
     falseCeiling: [
 
-        "Ceiling Layout Available",
-        "Section shown",
-        "Ceiling levels Mentioned",
+        "Ceiling plan Layout Available",
+        "False Ceiling type mentioned",
+        "Legends shown",
+        "Ceiling Sections shown: horizontal & vertical cuts",
+        "False Ceiling levels Mentioned",
         "Band Size Mentioned",
-        "Cove Width Mentioned",
+        "Cove Width and section shown",
         "Cove levels Mentioned",
         "Beam Locations Shown",
         "Wardrobe clash checked",
@@ -86,31 +116,31 @@ pcc: [
 
     electricalWall: [
 
-        "Switchboard Layout Available",
-        "Existing Points Shown",
-        "New Points Shown",
-        "Shifted Points Tagged",
-        "Looping Layout Shown",
-        "Conduit Routing Shown",
+        "Switchboard(s) present in elevation Layout",
+        "Switchboard(s) present in plan Layout",
+        "Existing modules Shown in elevation",
+        "All Fixtures(lights etc) shown in elevation",
+        "New modules Shown with location coordinates",
+        "Relocation modules Tagged with location coordinates",
+        "Looping Layout Shown for New modules",
+        "Primary and secondary Looping Layout Shown for wall points/fixtures(lights etc)",
+        "Conduit Routing Shown for New and Relocation modules",
+        "Wire thickness Mentioned (as per BOQ)",
         "Module name Mentioned with socket(5A/15A)",
-        "Wire Specification Mentioned",
-        "Switchboard Coordinates Mentioned",
-        "Legend Available",
+        "Legend Available for all modules",
         "Furniture Clash Checked",
         "Accessibility Checked"
 
     ],
 
     electricalCeiling: [
-
-        "Fixture Layout Shown",
-        "Primary Looping Shown",
-        "Secondary Looping Shown",
-        "Fixture Location Shown",
-        "Fixtures Dimensions Shown",
-        "Fixture Spacing Mentioned",
-        "Fixture Legend Mentioned",
-        "Fan location Mentioned"
+        "All Fixtures (lights,fan,sprinklers, smoke detectors (etc)) shown in layout in plan",
+        "All Fixtures (lights,fan,sprinklers, smoke detectors (etc)) relocations shown(if any)",
+        "Primary Looping Shown with modules",
+        "Secondary Looping Shown with primary point",
+        "All Fixtures Locations and dimensions Shown in plan",
+        "All Fixture c/c Spacing Mentioned",
+        "All Fixture Legend Mentioned"
 
     ],
 
@@ -159,32 +189,24 @@ pcc: [
     // NEW DOOR / DOOR REFURBISHMENT
     // =====================================
 
-    newDoor: [
+    Doors: [
 
-        "Plan Available",
-        "Elevation Available",
-        "Section Available",
-        "Door Width Mentioned",
-        "Door Height Mentioned",
-        "Frame Size Mentioned",
+        "Plan Available with location shown in furniture layout",
+        "Front and back Elevation Available",
+        "All Section Available",
+        "Door L X H mentioned",
+        "Any Design on door, dimensions provided(Like trims,grooves,tpatti,moulding, grills etc)",
+        "Frame type and dimensions Mentioned",
         "Opening Side Shown",
-
-        "Material Mentioned",
-        "Material Thickness Mentioned",
-
-        "Handle Size Mentioned",
-        "Handle Finish Mentioned",
-
-        "Accessories In Scope Mentioned",
-
-        "Finish Type Mentioned",
+        "Door frame panelling dimensions and details shown (elevation and section, as applicable)",
+        "Material types Mentioned for door and design elements",
+        "Door Thickness Mentioned",
+        "Handle location Mentioned",
+        "Handle specification Mentioned",
+        "All Accessories Mentioned(like door closer,Locks, tower bolt etc) ",
+        "Finish Type Mentioned for door along with design elements mentioned",
         "Finish Code Mentioned",
-        "Finish Colour Mentioned",
-
-        "Lintel Height Mentioned",
-
-        "Door Design Dimensioned"
-
+        "Accesibility checked (not clashing with existing furniture, fixtures or creating space constraints)"
     ],
 
     // =====================================
@@ -193,26 +215,25 @@ pcc: [
 
     slidingDoor: [
 
-        "Elevation Available",
-        "Section Available",
-
-        "Track Quantity Mentioned",
-
-        "Door Width Mentioned",
-        "Door Height Mentioned",
-
-        "Opening Direction Mentioned",
-
-        "Panel Quantity Mentioned",
-
-        "Glass Type Mentioned",
+        "Plan Available with location shown in furniture layout",
+        "Front and back Elevation Available",
+        "All Section Available, moving and fixed",
+        "L X H mentioned",
+        "Any Design on door, dimensions provided(Like trims,grooves,tpatti,moulding, grills etc)",
+         "Track location shown",
+         "Hardware details mentioned, tracks, channel",
+        "Opening direction Shown",
+        "Material types Mentioned for door and design elements",
+        "Door Thickness Mentioned",
+        "Handle location Mentioned",
+        "Handle specification Mentioned",
+        "All Accessories deatils Mentioned(like door closer,Locks, tower bolt etc) ",
+        "Finish Type Mentioned for door along with design elements mentioned",
+        "Finish Code Mentioned",
+        "Accesibility checked (not clashing with existing furniture, fixtures or creating space constraints)",
+         "Glass Type Mentioned",
         "Glass Thickness Mentioned",
-        "Glass Colour Mentioned",
-
-        "Material Mentioned",
-        "Material Thickness Mentioned",
-
-        "Accessories Mentioned"
+        "Glass Colour Mentioned"
 
     ],
 
@@ -278,65 +299,75 @@ pcc: [
 
     shoeStorage: [
 
-        "Furniture Layout Available",
+        "Plan Available with location shown in furniture layout",
         "Elevation Available",
-        "Section Available",
-
-        "Width Mentioned",
-        "Height Mentioned",
-        "Depth Mentioned",
-
-        "Material Mentioned",
-        "Material Thickness Mentioned",
-
-        "Finish Type Mentioned",
-        "Finish Code Mentioned",
-
-        "Internal Layout Available",
-
-        "Shelf Quantity Mentioned",
-        "Shelf Sizes Mentioned",
-
-        "Drawer Details Mentioned",
-
-        "Lock Details Mentioned",
-        "Handle Details Mentioned",
-
-        "Jali Details Mentioned",
-
+        "Front and side Section Available (external and interal elevations)",
+        "L x H X D mentioned",
+        "Shutter details shown along with opening side and details of design elements(as applicable)",
+        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
+        "All Material type and specs Mentioned",
+        "All Material Thickness Mentioned",
+        "All Finish Type Mentioned",
+        "All Finish Code Mentioned",
+        "All Lock location and Details Mentioned",
+        "All Handle locations and Details Mentioned",
+        "All Hardware details mentioned",
         "Seat Cushion Details Mentioned",
         "Fabric Code Mentioned",
         "Foam Density Mentioned"
 
     ],
 
+        beds: [
+
+        "Plan Available with location shown in furniture layout",
+        "Fornt and side Elevation Available",
+        "Front and side Section Available (external and interal elevations)",
+        "L x H X D mentioned",
+        "Internal Layout shown with dimensions",
+        "Type of bed mentioned",
+        "All Material type and specifications Mentioned",
+        "All Material Thickness Mentioned",
+        "All Finish Type Mentioned",
+        "All Finish Code Mentioned",
+        "All hardware location and Details Mentioned"
+
+    ],
+
+      headboards: [
+
+        "Plan Available with location shown in furniture layout",
+        "Fornt Elevation Available",
+        "Front and side Section Available (external and interal elevations)",
+        "L x H X D mentioned",
+        "Any curvature dimentions mentioned",
+        "Any design details (like pleating etc) mentioned with dimensions",
+        "All Material type and specifications Mentioned",
+        "All Material Thickness Mentioned",
+        "All Finish Types Mentioned",
+        "All Finish Code (fabric, laminate etc) Mentioned",
+        "Foam Density Mentioned"
+
+    ],
+
     // =====================================
-    // WALL STORAGE
+    // ANY STORAGE
     // =====================================
 
-    wallStorage: [
-
-        "Plan Available",
+    anyStorages: [
+        "Plan Available with location shown in furniture layout",
         "Elevation Available",
-        "Section Available",
-
-        "Full Wall Representation Available",
-
-        "Material Mentioned",
-        "Material Thickness Mentioned",
-
-        "Finish Type Mentioned",
-        "Finish Code Mentioned",
-
-        "Laminate Code Mentioned",
-
-        "Lock Details Mentioned",
-        "Handle Details Mentioned",
-
-        "Drawer Channel Details Mentioned",
-
-        "Wall Fixing Details Mentioned"
-
+        "Front and side Section Available (external and interal elevations)",
+        "L x H X D mentioned",
+        "Shutter details shown along with opening side and details of design elements(as applicable)",
+        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
+        "All Material type and specification Mentioned",
+        "All Material Thickness Mentioned",
+        "All Finish Type Mentioned",
+        "All Finish Code Mentioned",
+        "All Lock location and Details Mentioned",
+        "All Handle locations and Details Mentioned",
+         "All Hardware details mentioned"
     ],
 
     // =====================================
@@ -345,11 +376,8 @@ pcc: [
 
     tvUnit: [
 
-        "Furniture Layout Available",
         "Elevation Available",
         "Section Available",
-
-        "Procurement Source Mentioned",
 
         "Height Mentioned",
         "Width Mentioned",
@@ -361,11 +389,6 @@ pcc: [
 
         "Laminate Code Mentioned",
 
-        "Lock Details Mentioned",
-        "Handle Details Mentioned",
-
-        "Channel Details Mentioned",
-
         "Electrical Connections Shown"
 
     ],
@@ -375,36 +398,21 @@ pcc: [
     // =====================================
 
     mandirUnit: [
-
-        "Furniture Layout Available",
+        "Plan Available with location shown in furniture layout",
         "Elevation Available",
-        "Section Available",
-
-        "Procurement Source Mentioned",
-
-        "Height Mentioned",
-        "Width Mentioned",
-        "Depth Mentioned",
-
-        "Material Thickness Mentioned",
-
-        "Finish Type Mentioned",
-        "Finish Code Mentioned",
-
-        "Lock Details Mentioned",
-        "Handle Details Mentioned",
-
-        "Channel Details Mentioned",
-
-        "Step Dimensions Mentioned",
-
-        "Bell Details Mentioned",
-
-        "Jali Details Mentioned",
-
-        "Lighting Details Mentioned",
-
-        "Furniture Location Shown"
+        "Front and side Section Available (external and interal elevations)",
+        "L x B X H mentioned",
+        "Shutter details shown along with opening side and details of design elements(as applicable)",
+        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
+        "CNC/any other partition details mentioned",
+        "All Material type and specification Mentioned",
+        "All Material Thickness Mentioned",
+        "All Finish Type Mentioned",
+        "All Finish Code Mentioned",
+        "All Lock location and Details Mentioned",
+        "All Handle locations and Details Mentioned",
+        "All Electrical provisions shown?",
+        "All Hardware details mentioned"
 
     ],
 
@@ -470,29 +478,19 @@ pcc: [
 
     vanityUnit: [
 
-        "Plan Available",
+        "Plan Available with location shown in furniture layout",
         "Elevation Available",
-        "Section Available",
-
-        "BWR Ply Mentioned",
-
-        "Material Thickness Mentioned",
-
-        "Finish Code Mentioned",
-
-        "Handle Details Mentioned",
-
-        "Lock Details Mentioned",
-
-        "Drawer Channel Details Mentioned",
-
-        "Internal Layout Available",
-
-        "Shelf Details Mentioned",
-
-        "Sink Support Material Mentioned",
-
-        "Wall Mounted Or Floor Mounted Mentioned"
+        "Front and side Section Available (external and interal elevations)",
+        "L x H X D mentioned",
+        "Shutter details shown along with opening side and details of design elements(as applicable)",
+        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
+        "All Material type and specification Mentioned",
+        "All Material Thickness Mentioned",
+        "All Finish Type Mentioned",
+        "All Finish Code Mentioned",
+        "All Lock location and Details Mentioned",
+        "All Handle locations and Details Mentioned",
+         "All Hardware details mentioned"
 
     ],
 
@@ -602,26 +600,17 @@ pcc: [
     // TRIMS
     // =====================================
 
-    trims: [
+    trimsormouldings: [
 
         "Elevation Available",
-
         "Trim Profile Mentioned",
-
         "Trim Size Mentioned",
-
         "Trim Material Mentioned",
-
         "Finish Type Mentioned",
-
         "Paint Or Polish Mentioned",
-
         "Paint Colour Mentioned",
-
         "Trim Spacing Mentioned",
-
         "Starting Point Mentioned",
-
         "Wall Offset Mentioned"
 
     ],
@@ -778,37 +767,8 @@ pcc: [
 
         "Fixing Details Mentioned"
 
-    ],
-
-    // =====================================
-    // FABRIC HEADBOARD
-    // =====================================
-
-    fabricHeadboard: [
-
-        "Plan Available",
-
-        "Elevation Available",
-
-        "Section Available",
-
-        "Length Mentioned",
-
-        "Height Mentioned",
-
-        "Depth Mentioned",
-
-        "Foam Density Mentioned",
-
-        "Fabric Code Mentioned",
-
-        "Fabric Colour Mentioned",
-
-        "Stitch Pattern Mentioned",
-
-        "Starting Height Mentioned"
-
     ]
+
 
     
 
