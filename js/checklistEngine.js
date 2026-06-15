@@ -386,74 +386,7 @@ function autoSuggestCategories(
 // ITEM CHANGE
 // =========================================
 
-itemDropdown
-?.addEventListener(
-    "change",
-    function () {
 
-        const selected =
-            Array.from(
-                this.selectedOptions
-            );
-
-        if (
-            selected.length !== 1
-        ) {
-            return;
-        }
-
-        let categories = [];
-
-        try {
-
-            const item =
-                JSON.parse(
-                    selected[0].value
-                );
-
-            if (
-                item.category
-            ) {
-
-                categories = [
-                    item.category
-                ];
-
-            }
-            else {
-
-                categories =
-                    autoSuggestCategories(
-                        item.item
-                    );
-
-            }
-
-        }
-        catch {
-
-            categories =
-                autoSuggestCategories(
-                    selected[0].textContent
-                );
-
-        }
-
-        Array.from(
-            categoryDropdown.options
-        ).forEach(option => {
-
-            option.selected =
-                categories.includes(
-                    option.value
-                );
-
-        });
-
-        generateChecklist();
-
-    }
-);
 
 // =========================================
 // INIT
