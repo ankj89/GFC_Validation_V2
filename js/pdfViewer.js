@@ -439,6 +439,38 @@ async function restoreValidationForm(
 selectedSkuBasket =
 pageData.items || [];
 
+const itemDropdown =
+    document.getElementById(
+        "itemDropdown"
+    );
+
+if (
+    itemDropdown &&
+    pageData.items
+) {
+
+    const savedItems =
+        pageData.items.map(
+            item =>
+                JSON.stringify(
+                    item
+                )
+        );
+
+    Array.from(
+        itemDropdown.options
+    ).forEach(option => {
+
+        option.selected =
+
+            savedItems.includes(
+                option.value
+            );
+
+    });
+
+}
+    
 renderSelectedSKUs();
 
     // RESTORE CHECKLIST
