@@ -338,8 +338,11 @@ function clearValidationForm() {
 
     }
 selectedSkuBasket = [];
+selectedCategoryBasket = [];
 
 renderSelectedSKUs();
+renderSelectedCategories();
+
 
 }
 // =========================================
