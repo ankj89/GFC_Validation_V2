@@ -357,10 +357,6 @@ async function restoreValidationForm(
             "roomDropdown"
         );
 
-    const itemDropdown =
-        document.getElementById(
-            "itemDropdown"
-        );
 
     const categoryDropdown =
         document.getElementById(
