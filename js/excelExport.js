@@ -96,16 +96,48 @@ function addValidationSheet(
     workbook
 ) {
 
-    const data = [
-[
-    "Page",
-    "Room",
-    "Drawing Category",
-    "Findings"
-]
-    ];
+    const data = [[
+
+        "Page",
+        "Room",
+        "Drawing Category",
+        "Absent Items",
+        "Findings / Remarks",
+        "Overall Remarks"
+
+    ]];
 
     validationStore.forEach(row => {
+
+        const absentItems =
+            (row.checklist || [])
+            .filter(
+                item =>
+                    item.status === "Absent"
+            );
+
+        const absentList = [];
+
+        const remarkList = [];
+
+        absentItems.forEach(item => {
+
+            absentList.push(
+                item.title
+            );
+
+            if (
+                item.remark &&
+                item.remark.trim()
+            ) {
+
+                remarkList.push(
+                    `${item.title} : ${item.remark}`
+                );
+
+            }
+
+        });
 
         data.push([
 
@@ -113,32 +145,32 @@ function addValidationSheet(
 
             row.room,
 
-(row.categories || [])
-    .join(", "),
+           (row.categories || []).join("\n"),
 
-            buildChecklistSummaryExcel(
-    row
-)
+            absentList.join("\n"),
+
+            remarkList.join("\n"),
+
+            row.overallRemarks || ""
 
         ]);
 
     });
 
     const sheet =
-
         XLSX.utils.aoa_to_sheet(
             data
         );
-formatSheet(
-    sheet
-);
+
+    formatSheet(sheet);
+
     XLSX.utils.book_append_sheet(
 
         workbook,
 
         sheet,
 
-        "Validation"
+        "GFC correction inputs"
 
     );
 
@@ -259,7 +291,7 @@ formatSheet(
 
         sheet,
 
-        "Missing Coverage"
+        "SKUs drawings missing"
 
     );
 
@@ -317,7 +349,7 @@ formatSheet(
 
         sheet,
 
-        "BOQ Mismatch"
+        "Items to be removed from GFC"
 
     );
 
@@ -537,7 +569,19 @@ function formatSheet(sheet) {
 
     sheet["!cols"] =
         cols;
+sheet["!rows"] = [];
 
+for (
+    let i = 0;
+    i < 500;
+    i++
+) {
+
+    sheet["!rows"].push({
+        hpt: 60
+    });
+
+}
  
 }
 // =====================================
