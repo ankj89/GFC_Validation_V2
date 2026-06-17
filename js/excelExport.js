@@ -101,7 +101,6 @@ function addValidationSheet(
         "Page",
         "Room",
         "Drawing Category",
-        "Absent Items",
         "Findings / Remarks",
         "Overall Remarks"
 
@@ -109,35 +108,46 @@ function addValidationSheet(
 
     validationStore.forEach(row => {
 
+        const findings = [];
+
         const absentItems =
+
             (row.checklist || [])
             .filter(
                 item =>
                     item.status === "Absent"
             );
 
-        const absentList = [];
+        if (
+            absentItems.length
+        ) {
 
-        const remarkList = [];
-
-        absentItems.forEach(item => {
-
-            absentList.push(
-                item.title
+            findings.push(
+                "Absent Items:"
             );
 
-            if (
-                item.remark &&
-                item.remark.trim()
-            ) {
+            absentItems.forEach(item => {
 
-                remarkList.push(
-                    `${item.title} : ${item.remark}`
-                );
+                if (
+                    item.remark &&
+                    item.remark.trim()
+                ) {
 
-            }
+                    findings.push(
+                        `• ${item.title} : ${item.remark}`
+                    );
 
-        });
+                } else {
+
+                    findings.push(
+                        `• ${item.title}`
+                    );
+
+                }
+
+            });
+
+        }
 
         data.push([
 
@@ -145,11 +155,10 @@ function addValidationSheet(
 
             row.room,
 
-           (row.categories || []).join("\n"),
+            (row.categories || [])
+                .join("\n"),
 
-            absentList.join("\n"),
-
-            remarkList.join("\n"),
+            findings.join("\n"),
 
             row.overallRemarks || ""
 
@@ -162,7 +171,9 @@ function addValidationSheet(
             data
         );
 
-    formatSheet(sheet);
+    formatSheet(
+        sheet
+    );
 
     XLSX.utils.book_append_sheet(
 
@@ -512,77 +523,32 @@ return text
 
 function formatSheet(sheet) {
 
-    const range =
-        XLSX.utils.decode_range(
-            sheet["!ref"]
-        );
+    sheet["!cols"] = [
 
-    const cols = [];
+        { wch: 8 },    // Page
+        { wch: 20 },   // Room
+        { wch: 25 },   // Category
+        { wch: 90 },   // Findings
+        { wch: 50 }    // Overall Remarks
+
+    ];
+
+    sheet["!rows"] = [];
 
     for (
-        let C = range.s.c;
-        C <= range.e.c;
-        ++C
+        let i = 0;
+        i < 1000;
+        i++
     ) {
 
-        let maxLen = 15;
+        sheet["!rows"].push({
 
-        for (
-            let R = range.s.r;
-            R <= range.e.r;
-            ++R
-        ) {
-
-            const cell =
-                sheet[
-                    XLSX.utils.encode_cell({
-                        r: R,
-                        c: C
-                    })
-                ];
-
-            if (!cell) continue;
-
-            const len =
-                String(
-                    cell.v || ""
-                ).length;
-
-            maxLen =
-                Math.max(
-                    maxLen,
-                    len
-                );
-
-        }
-
-        cols.push({
-
-            wch: Math.min(
-                maxLen + 5,
-                120
-            )
+            hpt: 50
 
         });
 
     }
 
-    sheet["!cols"] =
-        cols;
-sheet["!rows"] = [];
-
-for (
-    let i = 0;
-    i < 500;
-    i++
-) {
-
-    sheet["!rows"].push({
-        hpt: 60
-    });
-
-}
- 
 }
 // =====================================
 // EVENT
