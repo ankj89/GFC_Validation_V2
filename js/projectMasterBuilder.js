@@ -143,17 +143,20 @@ rows.forEach(row => {
 
     }
 
-    rooms[room].push({
+   rooms[room].push({
 
-        room,
+    room,
 
-        item,
+    item,
 
-        qty,
+    qty,
 
-        category
+    category,
 
-    });
+    display:
+        `${qty}|${room}|${item}`
+
+});
 
 });
 
@@ -333,16 +336,7 @@ const items =
             );
 
     option.textContent =
-
-    item.qty +
-
-    "|" +
-
-    item.room +
-
-    "|" +
-
-    item.item;
+    item.display;
 
         option.value =
             JSON.stringify(
@@ -383,10 +377,7 @@ function filterVisibleItems() {
     .filter(item => {
 
         const text =
-
-            `${item.qty} ${item.room} ${item.item}`
-
-            .toLowerCase();
+    item.display.toLowerCase();
 
         return text.includes(
             searchText
@@ -402,8 +393,7 @@ function filterVisibleItems() {
             );
 
         option.textContent =
-
-            `${item.qty}|${item.room}|${item.item}`;
+    item.display;
 
         option.value =
             JSON.stringify(
