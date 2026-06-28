@@ -2,6 +2,23 @@
 // BOQ PDF IMPORTER
 // =====================================
 
+// =====================================
+// PARSER SUMMARY
+// =====================================
+
+let parserSummary = {
+
+    totalItems: 0,
+
+    parsedItems: 0,
+
+    failedItems: []
+
+};
+
+
+
+
 async function handleBOQPDFImport(
     file
 ) {
@@ -88,7 +105,7 @@ async function handleBOQPDFImport(
 
         alert(
 
-            `${rows.length} BOQ rows imported`
+            renderParserSummary();
 
         );
 
@@ -114,6 +131,15 @@ async function handleBOQPDFImport(
 function buildBOQRowsFromPDF(text) {
 
     const rows = [];
+    parserSummary = {
+
+    totalItems: 0,
+
+    parsedItems: 0,
+
+    failedItems: []
+
+};
 
     // =========================
     // FORMAT 1
@@ -124,6 +150,16 @@ function buildBOQRowsFromPDF(text) {
         text.split("QI-");
 
     blocks.forEach(block => {
+
+        const itemCodeMatch =
+    block.match(/^(\d+)/);
+
+const itemCode =
+    itemCodeMatch
+        ? `QI-${itemCodeMatch[1]}`
+        : "Unknown";
+
+parserSummary.totalItems++;
 
         const roomMatch =
             block.match(
@@ -179,16 +215,24 @@ function buildBOQRowsFromPDF(text) {
 
         if (
 
-            row.room ||
-            row.qty ||
-            row.sku ||
-            row.category
+    row.room &&
+    row.qty &&
+    row.sku
 
-        ) {
+) {
 
-            rows.push(row);
+    parserSummary.parsedItems++;
 
-        }
+    rows.push(row);
+
+}
+else {
+
+    parserSummary.failedItems.push(
+        itemCode
+    );
+
+}
 
     });
 
@@ -267,5 +311,55 @@ function buildBOQRowsFromPDF(text) {
     });
 
     return unique;
+
+}
+
+function renderParserSummary() {
+
+    const div =
+        document.getElementById(
+            "parserSummary"
+        );
+
+    if (!div) return;
+
+    div.innerHTML = `
+
+        <h3>BOQ Parser Summary</h3>
+
+        <p>
+            <b>Total Items Identified:</b>
+            ${parserSummary.totalItems}
+        </p>
+
+        <p>
+            <b>Successfully Parsed:</b>
+            ${parserSummary.parsedItems}
+        </p>
+
+        <p>
+            <b>Failed to Parse:</b>
+            ${parserSummary.failedItems.length}
+        </p>
+
+        <hr>
+
+        <b>Items requiring manual review</b>
+
+        <div style="
+            max-height:220px;
+            overflow:auto;
+            margin-top:8px;
+        ">
+
+            ${
+                parserSummary.failedItems.length
+                ? parserSummary.failedItems.join("<br>")
+                : "None"
+            }
+
+        </div>
+
+    `;
 
 }
