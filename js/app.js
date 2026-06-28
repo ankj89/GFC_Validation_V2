@@ -354,7 +354,6 @@ function getSelectedItems() {
 function renderSelectedSKUs() {
 
     const container =
-
         document.getElementById(
             "selectedSkuContainer"
         );
@@ -366,7 +365,7 @@ function renderSelectedSKUs() {
     container.innerHTML = "";
 
     selectedSkuBasket.forEach(
-        (item,index) => {
+        (item, index) => {
 
             const chip =
                 document.createElement(
@@ -376,9 +375,17 @@ function renderSelectedSKUs() {
             chip.className =
                 "selected-sku";
 
-            chip.innerHTML =
+            chip.innerHTML = `
 
-                `${item.item} ✕`;
+                ${
+                    item.display ||
+
+                    `${item.qty}|${item.room}|${item.item}`
+                }
+
+                <span class="remove-sku">✕</span>
+
+            `;
 
             chip.onclick = () => {
 
