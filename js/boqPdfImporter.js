@@ -103,11 +103,13 @@ async function handleBOQPDFImport(
             "BOQ"
         );
 
-        alert(
-
             renderParserSummary();
-
-        );
+document
+    .getElementById("boqReviewSection")
+    .scrollIntoView({
+        behavior: "smooth"
+    });
+        
 
     }
     catch (err) {
