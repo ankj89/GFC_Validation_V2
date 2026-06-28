@@ -327,7 +327,7 @@ function renderParserSummary() {
 
     div.innerHTML = `
 
-        <h3>BOQ Parser Summary</h3>
+        <h3>Canvas PDF upload Summary</h3>
 
         <p>
             <b>Total BOQ line Items Identified:</b>
