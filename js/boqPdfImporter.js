@@ -147,7 +147,7 @@ function buildBOQRowsFromPDF(text) {
     // =========================
 
     const blocks =
-        text.split("QI-");
+        text.split("QI-").slice(1);
 
     blocks.forEach(block => {
 
