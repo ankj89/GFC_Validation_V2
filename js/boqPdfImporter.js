@@ -330,23 +330,23 @@ function renderParserSummary() {
         <h3>BOQ Parser Summary</h3>
 
         <p>
-            <b>Total Items Identified:</b>
+            <b>Total BOQ line Items Identified:</b>
             ${parserSummary.totalItems}
         </p>
 
         <p>
-            <b>Successfully Parsed:</b>
+            <b>Items Successfully uploaded:</b>
             ${parserSummary.parsedItems}
         </p>
 
         <p>
-            <b>Failed to Parse:</b>
+            <b>Items Failed to upload:</b>
             ${parserSummary.failedItems.length}
         </p>
 
         <hr>
 
-        <b>Items requiring manual review</b>
+        <b>Item codes that need to be checked and added manually</b>
 
         <div style="
             max-height:220px;
