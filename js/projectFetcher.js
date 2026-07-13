@@ -248,7 +248,10 @@ function populateReviewGrid(
         row.sku,
 
     category:
-        row.category
+    row.category,
+
+price:
+    row.price
 
 });
 
@@ -315,6 +318,12 @@ function addReviewRow(
             class="qty-input"
             type="number"
             value="${data.qty || ""}">
+    </td>
+  <td>
+        <input
+            class="qty-price"
+            type="number"
+            value="${data.price || ""}">
     </td>
 
     <td>
@@ -459,8 +468,11 @@ rows
             sku:
                 row["SKU Name"],
 
-            category:
-                row["Category"]
+    category:
+    row["Category"],
+
+price:
+    Number(row["Price"] || 0)
 
         }));
 
