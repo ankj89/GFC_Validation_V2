@@ -128,7 +128,11 @@ async function renderPage(
 
     pdfCanvas.height =
         viewport.height;
+pdfCanvas.style.width =
+    viewport.width + "px";
 
+pdfCanvas.style.height =
+    viewport.height + "px";
     await page.render({
 
         canvasContext:
@@ -630,33 +634,33 @@ document
 
 document
 .getElementById("zoomInBtn")
-.addEventListener("click", () => {
+?.addEventListener("click", async () => {
 
     pdfScale += 0.25;
 
-    renderCurrentPage();
+    await renderPage(currentPageNumber);
 
 });
 
 document
 .getElementById("zoomOutBtn")
-.addEventListener("click", () => {
+?.addEventListener("click", async () => {
 
     pdfScale = Math.max(
         0.5,
         pdfScale - 0.25
     );
 
-    renderCurrentPage();
+    await renderPage(currentPageNumber);
 
 });
 
 document
 .getElementById("zoomResetBtn")
-.addEventListener("click", () => {
+?.addEventListener("click", async () => {
 
     pdfScale = 1;
 
-    renderCurrentPage();
+    await renderPage(currentPageNumber);
 
 });
