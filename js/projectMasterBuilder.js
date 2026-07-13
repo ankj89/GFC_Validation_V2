@@ -63,6 +63,12 @@ rows.forEach(row => {
                 ".qty-input"
             )?.value || 0
         );
+    const price =
+    Number(
+        row.querySelector(
+            ".price-input"
+        )?.value || 0
+    );
 
     const item =
         row.querySelector(
@@ -150,7 +156,7 @@ rows.forEach(row => {
     item,
 
     qty,
-
+    price,
     category,
 
     display:
