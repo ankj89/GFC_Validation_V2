@@ -514,7 +514,18 @@ function renderImportSummary(
             0
 
         );
+const totalAmount =
+rows.reduce(
 
+    (sum,row)=>
+
+        sum +
+
+        Number(row.price || 0),
+
+    0
+
+);
     let html =
 
         `<b>${sourceType} Import Summary</b><br><br>`;
@@ -527,13 +538,15 @@ function renderImportSummary(
 
         `Total Qty : ${totalQty}<br>`;
 
-    if(sourceType==="RFV"){
+   if(sourceType==="RFV"){
 
-        html +=
+    html +=
+        `Total Amount : ₹${totalAmount.toLocaleString("en-IN",{
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        })}`;
 
-        `Amount Check : Compare with RFV before proceeding`;
-
-    }
+}
 
     else{
 
