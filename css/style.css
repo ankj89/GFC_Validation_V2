@@ -692,3 +692,18 @@ header h1{
     }
 
 }
+.import-summary{
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    background:#f8f9fa;
+
+    border-radius:6px;
+
+    line-height:1.8;
+
+}
