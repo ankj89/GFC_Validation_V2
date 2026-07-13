@@ -7,6 +7,7 @@ let pdfDocument = null;
 let currentPageNumber = 1;
 
 let totalPages = 0;
+let pdfScale = 1.0;
 
 // =========================================
 // DOM
@@ -117,10 +118,10 @@ async function renderPage(
             pageNumber
         );
 
-    const viewport =
-        page.getViewport({
-            scale: 1.5
-        });
+   const viewport =
+    page.getViewport({
+        scale: pdfScale
+    });
 
     pdfCanvas.width =
         viewport.width;
@@ -626,3 +627,36 @@ document
     }
 
 );
+
+document
+.getElementById("zoomInBtn")
+.addEventListener("click", () => {
+
+    pdfScale += 0.25;
+
+    renderCurrentPage();
+
+});
+
+document
+.getElementById("zoomOutBtn")
+.addEventListener("click", () => {
+
+    pdfScale = Math.max(
+        0.5,
+        pdfScale - 0.25
+    );
+
+    renderCurrentPage();
+
+});
+
+document
+.getElementById("zoomResetBtn")
+.addEventListener("click", () => {
+
+    pdfScale = 1;
+
+    renderCurrentPage();
+
+});
