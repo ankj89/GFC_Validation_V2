@@ -215,7 +215,6 @@ header h1{
 /* =====================================
    PDF PANEL
 ===================================== */
-
 .viewer-panel{
 
     flex:1;
@@ -227,6 +226,10 @@ header h1{
     height:calc(100vh - 30px);
 
     overflow:auto;
+
+    display:flex;
+
+    flex-direction:column;
 
 }
 
@@ -266,11 +269,11 @@ header h1{
 
 #pdfCanvas{
 
-    width:100%;
-
-    min-height:800px;
+    display:block;
 
     border:1px solid #ddd;
+
+    max-width:none;
 
 }
 
