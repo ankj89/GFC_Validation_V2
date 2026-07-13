@@ -257,7 +257,10 @@ function populateReviewGrid(
     section.classList.remove(
         "hidden"
     );
-
+renderImportSummary(
+    rows,
+    sourceType
+);
     window.sourceType =
         sourceType;
 
@@ -422,7 +425,19 @@ async function handleRFVExcelUpload(
         );
 
     const formattedRows =
-        rows.map(row => ({
+rows
+
+.filter(row=>
+
+    row["SKU Name"] ||
+
+    row["Room"] ||
+
+    row["Room name"]
+
+)
+
+.map(row=>({
 
             rfvId:
                 row["RFV ID"],
@@ -458,6 +473,68 @@ async function handleRFVExcelUpload(
     );
 
 }
+
+function renderImportSummary(
+    rows,
+    sourceType
+){
+
+    const summary =
+        document.getElementById(
+            "importSummary"
+        );
+
+    if(!summary) return;
+
+    const totalRows =
+        rows.length;
+
+    const totalQty =
+        rows.reduce(
+
+            (sum,row)=>
+
+                sum +
+                Number(row.qty || 0),
+
+            0
+
+        );
+
+    let html =
+
+        `<b>${sourceType} Import Summary</b><br><br>`;
+
+    html +=
+
+        `Rows Imported : ${totalRows}<br>`;
+
+    html +=
+
+        `Total Qty : ${totalQty}<br>`;
+
+    if(sourceType==="RFV"){
+
+        html +=
+
+        `Amount Check : Compare with RFV before proceeding`;
+
+    }
+
+    else{
+
+        html +=
+
+        `Amount Check : Compare with BOQ before proceeding`;
+
+    }
+
+    summary.innerHTML =
+        html;
+
+}
+
+
 
 // =====================================
 // EVENTS
