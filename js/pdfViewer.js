@@ -7,7 +7,8 @@ let pdfDocument = null;
 let currentPageNumber = 1;
 
 let totalPages = 0;
-let pdfScale = 1.0;
+let fitScale = 1;
+let zoomLevel = 1;
 
 // =========================================
 // DOM
@@ -117,10 +118,27 @@ async function renderPage(
         await pdfDocument.getPage(
             pageNumber
         );
+// Calculate fit-to-width once
+const container =
+    document.querySelector(".pdf-scroll-container");
 
-   const viewport =
+const unscaledViewport =
     page.getViewport({
-        scale: pdfScale
+        scale: 1
+    });
+
+fitScale =
+    container.clientWidth /
+    unscaledViewport.width;
+
+// Actual render scale
+const viewport =
+    page.getViewport({
+
+        scale:
+            fitScale *
+            zoomLevel
+
     });
 
     pdfCanvas.width =
@@ -636,7 +654,12 @@ document
 .getElementById("zoomInBtn")
 ?.addEventListener("click", async () => {
 
-    pdfScale += 0.25;
+    zoomLevel += 0.25;
+
+renderPage(currentPageNumber);
+
+document.getElementById("zoomPercent").innerText =
+    Math.round(zoomLevel * 100) + "%";
 
     await renderPage(currentPageNumber);
 
@@ -646,10 +669,15 @@ document
 .getElementById("zoomOutBtn")
 ?.addEventListener("click", async () => {
 
-    pdfScale = Math.max(
-        0.5,
-        pdfScale - 0.25
-    );
+  zoomLevel = Math.max(
+    0.5,
+    zoomLevel - 0.25
+);
+
+renderPage(currentPageNumber);
+
+document.getElementById("zoomPercent").innerText =
+    Math.round(zoomLevel * 100) + "%";
 
     await renderPage(currentPageNumber);
 
@@ -659,7 +687,11 @@ document
 .getElementById("zoomResetBtn")
 ?.addEventListener("click", async () => {
 
-    pdfScale = 1;
+  zoomLevel = 1;
+
+renderPage(currentPageNumber);
+
+document.getElementById("zoomPercent").innerText = "100%";
 
     await renderPage(currentPageNumber);
 
