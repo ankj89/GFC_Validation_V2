@@ -121,22 +121,29 @@ itemDropdown?.addEventListener(
                 JSON.parse(
                     option.value
                 );
+const key =
 
-            const exists =
+    `${item.qty}|${item.room}|${item.item}`;
 
-                selectedSkuBasket.some(
-                    x =>
-                        x.item ===
-                        item.item
-                );
+const exists =
 
-            if (!exists) {
+    selectedSkuBasket.some(
 
-                selectedSkuBasket.push(
-                    item
-                );
+        x =>
 
-            }
+            `${x.qty}|${x.room}|${x.item}` === key
+
+    );
+
+if (!exists) {
+
+    item.display =
+
+        `${item.qty}|${item.room}|${item.item}`;
+
+    selectedSkuBasket.push(item);
+
+}
 
         });
 
@@ -145,6 +152,12 @@ itemDropdown?.addEventListener(
     }
 
 );
+
+    document.getElementById(
+    "itemSearch"
+).value = "";
+
+filterVisibleItems();
 
 
     
@@ -375,28 +388,43 @@ function renderSelectedSKUs() {
             chip.className =
                 "selected-sku";
 
-            chip.innerHTML = `
+           chip.innerHTML =
 
-                ${
-                    item.display ||
+`
 
-                    `${item.qty}|${item.room}|${item.item}`
-                }
+<b>${item.qty}</b>
 
-                <span class="remove-sku">✕</span>
+&nbsp;|&nbsp;
 
-            `;
+<b>${item.room}</b>
+
+&nbsp;|&nbsp;
+
+${item.item}
+
+<span class="remove-sku">✕</span>
+
+`;
 
             chip.onclick = () => {
 
-                selectedSkuBasket.splice(
-                    index,
-                    1
-                );
+    const key =
 
-                renderSelectedSKUs();
+        `${item.qty}|${item.room}|${item.item}`;
 
-            };
+    selectedSkuBasket =
+
+        selectedSkuBasket.filter(
+
+            x =>
+
+                `${x.qty}|${x.room}|${x.item}` !== key
+
+        );
+
+    renderSelectedSKUs();
+
+};
 
             container.appendChild(
                 chip
