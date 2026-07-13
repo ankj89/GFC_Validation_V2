@@ -321,8 +321,9 @@ function addReviewRow(
     </td>
   <td>
         <input
-            class="qty-price"
+            class="price-input"
             type="number"
+            step="0.01"
             value="${data.price || ""}">
     </td>
 
@@ -369,6 +370,7 @@ function addManualReviewRow() {
     room: "",
 
     qty: "",
+      price: "",
 
     sku: "",
 
