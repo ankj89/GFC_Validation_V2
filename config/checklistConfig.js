@@ -6,15 +6,13 @@ const CHECKLIST_CONFIG = {
 
     demolition: [
 
-        "Demolition Area Clearly Demarcated",
-        "Structural Walls Identified",
-        "Wall Opening Locations Shown",
+        "Demolition Area Clearly Demarcated in Plan",
+        "Demolition Area Celarly demarcated in Elevation",
+        "Structural Walls marked in the Plan",
+        "Wall Opening Locations Shown with dimensions",
         "Demolition Dimensions Mentioned",
-        "Legend Available",
         "Demolition Method Mentioned",
-        "Post Demolition Finishing Mentioned",
-        "Adjacent Surface Protection Mentioned",
-        "Affected Services Identified"
+        "Post Demolition Finishing Mentioned"
 
     ],
 
@@ -25,18 +23,23 @@ const CHECKLIST_CONFIG = {
         "Wall Length Mentioned",
         "Wall Height Mentioned",
         "Opening Dimensions Mentioned",
-        "Lintel Details Mentioned",
-        "Material Specification Mentioned",
-        "Brick Size Mentioned",
-        "Plaster Thickness Mentioned",
+        "Lintel Details Mentioned with dimensions",
         "Core Cutting Coordinates Mentioned"
 
     ],
 
+     wall: [
+
+        "Core cutting shown on elevation with size",
+        "Core Cutting xy Co-ordinates shown"
+    ],
+
+
     flooring: [
 
-        "Flooring Grid Layout Available as per size",
-        "Skirting Layout Available",
+        "Flooring Grid plan shown with dimensions",
+        "Skirting Layout plan shown with dimensions",
+        "Flooring Type shown with legends(Tile/Stone etc)",
         "Floor Tile Start Point Mentioned",
         "Floor Tile Size Mentioned",
         "Slope Direction Mentioned",
@@ -46,7 +49,7 @@ const CHECKLIST_CONFIG = {
     ],
 pcc: [
 
-        "PCC areas marked on plan",
+        "PCC areas marked on plan with dimensions",
         "Level Difference Marked(if any)",
         "PCC thickness mentioned"
 
@@ -54,7 +57,7 @@ pcc: [
     
     coba: [
 
-        "Brickbat areas marked on plan",
+        "Brickbat areas marked on plan with dimensions",
         "Level Difference Marked(if any)",
         "Brickbat thickness mentioned"
 
@@ -62,16 +65,16 @@ pcc: [
 
     plaster: [
 
-        "Plaster areas marked on plan",
-        "Plaster areas marked on elevation",
+        "Plaster areas marked on plan with dimensions",
+        "Plaster areas marked on elevation with dimensions",
         "Plaster type mentioned",
         "Plaster thickness mentioned"
 
     ],
        punning: [
 
-        "Punning areas marked on plan",
-        "Punning areas marked on elevation",
+        "Punning areas marked on plan with dimensions",
+        "Punning areas marked on elevation with dimesions",
         "Punning type mentioned",
         "Punning thickness mentioned"
 
@@ -84,90 +87,123 @@ pcc: [
         "Waterproofing specifications mentioned"
 
     ],
-    walltilingorcladding: [
+    walltiling: [
 
-        "Dado Grid Layout as per tile size",
+        "Dado Grid elevation as per tile size with dimensions",
         "Tile Start Point Mentioned",
         "Tile Size Mentioned",
         "Cutouts Shown/marked",
         "Cutout Dimensions Mentioned",
         "Tile Area Dimensions Mentioned",
-        "Grouting Details Mentioned",
-        "Wall Cladding Elevation shown"
+        "Grouting Details Mentioned"
+
+],
+    wallcladding: [
+
+        "Wall Cladding Elevation shown with dimensions",
+        "Tile Size Mentioned",
+        "Cutouts Shown/marked",
+        "Cutout Dimensions Mentioned",
+        "Tile Area Dimensions Mentioned"
 
     ],
 
     falseCeiling: [
 
-        "Ceiling plan Layout Available",
-        "False Ceiling type mentioned",
-        "Legends shown",
-        "Ceiling Sections shown: horizontal & vertical cuts",
+        "Ceiling plan Layout shown with clear dimensions",
+        "False Ceiling type mentioned with Legends",
+        "Ceiling Sections shown: horizontal & vertical cuts with clear dimensions",
         "False Ceiling levels Mentioned",
-        "Band Size Mentioned",
-        "Cove Width and section shown",
+        "Band Size Mentioned with clear dimension",
+        "Cove Width and section shown with clear dimesnions",
         "Cove levels Mentioned",
-        "Beam Locations Shown",
+        "Beam Locations Shown with clear dimensions",
         "Wardrobe clash checked",
-        "AC pelmet/pocket shown",
-        "Curtain Pelmet/pocket shown"
+        "Fan/light clash checked",
+        "AC pelmet/pocket marked with clear dimensions",
+        "Curtain Pelmet/pocket marked with clear dimensions"
+
+    ],
+
+    Pelmet: [
+
+        "AC/Curtain Pelmet elevation shown with clear dimensions",
+        "AC/Curtain Pelmet Section shown with drop/cove dimensions",
+        "AC/Curtain Pelmet distance from FFL shown",
+        "AC/Curtain pelmet shown with dimensions",
+        "AC/Curtain pocket shown"
 
     ],
 
     electricalWall: [
-
-        "Switchboard(s) present in elevation Layout",
-        "Switchboard(s) present in plan Layout",
-        "Existing modules Shown in elevation",
-        "All Fixtures(lights etc) shown in elevation",
-        "New modules Shown with location coordinates",
-        "Relocation modules Tagged with location coordinates",
-        "Looping Layout Shown for New modules",
-        "Primary and secondary Looping Layout Shown for wall points/fixtures(lights etc)",
-        "Conduit Routing Shown for New and Relocation modules",
-        "Wire thickness Mentioned (as per BOQ)",
-        "Module name Mentioned with socket(5A/15A)",
-        "Legend Available for all modules",
+        
+        "New modules Shown in elevation with clear location xy coordinates",
+        "Relocation modules shown in elevation with clear location xy coordinates",
+        "Existing modules Shown in elevation with clear xy coordinates",
+        "Module name and configuration Mentioned with socket(5A/15A)",
+        "All Fixtures(lights etc) shown in elevation with xy coordinates",
+        "Unique Legend and nomenclature shown for new/relocated/existing boards",
+        "Primary and secondary Looping Shown in elevation for wall points/fixtures(lights etc)",
+        "Looping Layout Shown for New modules",        
+        "Conduit Routing Shown for New and Relocation modules(from nearest board or junction box)",
+        "Unique Legend and nomenclature shown for light points",
         "Furniture Clash Checked",
-        "Accessibility Checked"
+        "RCC clash checked",
+        "Accessibility for wiring Checked"
 
     ],
 
     electricalCeiling: [
-        "All Fixtures (lights,fan,sprinklers, smoke detectors (etc)) shown in layout in plan",
-        "All Fixtures (lights,fan,sprinklers, smoke detectors (etc)) relocations shown(if any)",
-        "Primary Looping Shown with modules",
-        "Secondary Looping Shown with primary point",
+        "All new Fixtures (lights,fan,sprinklers, smoke detectors (etc)) shown in layout in plan",
+        "All Fixtures (lights,fan,sprinklers, smoke detectors (etc)) relocations shown(if any) shown in plan",
+        "Modules shown in the layout for looping",
+        "Primary Looping Shown with modules with color code",
+        "Secondary Looping Shown with primary points with color code",
+        "Cove light/track light/profile light clear dimensions shown",
         "All Fixtures Locations and dimensions Shown in plan",
-        "All Fixture c/c Spacing Mentioned",
-        "All Fixture Legend Mentioned"
+        "All Fixture c/c Spacing and xy coordinates mentioned",
+        "All Fixture Legend shown"
 
     ],
 
-    plumbing: [
+    kitchenplumbing: [
 
-        "Plan Layout Available",
-        "Elevation Layout Available",
+        "Plan Layout shown with dimensions",
+        "Elevation Layout shown with dimensions",
         "Legend Available",
-        "Existing Points shown with coordinates",
-        "New Points shown with co-ordinates",
-        "Relocated Points shown with co-ordinates",
-        "Fixture Locations shown with co-ordinates",
-        "Drain Points Shown",
-        "Waterproofing Extent Shown",
-        "Waterproofing Product Mentioned",
-        "Fixture heights as per interior standards"
+        "Existing Points shown with xy coordinates",
+        "New Points shown with xy co-ordinates",
+        "Relocated Points shown with xy co-ordinates",
+        "Fixture Locations shown with xy co-ordinates",
+        "Drain Points Shown on plan wiyh xy co-ordinats",
+        "Waterproofing area Shown on floor and wall"
+
+    ],
+     bathroomplumbing: [
+
+        "Plan Layout shown with dimensions",
+        "Elevation Layout shown with dimensions",
+        "Legend Available",
+        "Existing Points shown with xy coordinates",
+        "New Points shown with xy co-ordinates",
+        "Relocated Points shown with xy co-ordinates",
+        "Fixture Locations shown with xy co-ordinates",
+        "Drain Points Shown on plan wiyh xy co-ordinats",
+        "Waterproofing area Shown on floor and wall",
+        "Shower cubicle clash checked",
+        "Vanity/furniture clash checked",
+        "Fixture heights are as per interior standards"
 
     ],
 
     painting: [
 
-        "Paint Layout Available",
+        "Paint Layout shown in plan with dimensions",
         "Elevation Layout Available",
         "Paint Area Identified",
-        "Paint specification Mentioned",
-        "Geometric/play of paint elevation shown",
-        "Texture paint elevation shown"
+        "Paint type  specification/type Mentioned",
+        "Geometric/multicolor/block paint elevation shown with dimensions",
+        "Texture paint elevation shown with dimensions"
 
     ],
 
@@ -397,24 +433,45 @@ pcc: [
     // MANDIR UNIT
     // =====================================
 
-    mandirUnit: [
-        "Plan Available with location shown in furniture layout",
-        "Elevation Available",
-        "Front and side Section Available (external and interal elevations)",
-        "L x B X H mentioned",
-        "Shutter details shown along with opening side and details of design elements(as applicable)",
-        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
-        "CNC/any other partition details mentioned",
-        "All Material type and specification Mentioned",
-        "All Material Thickness Mentioned",
-        "All Finish Type Mentioned",
-        "All Finish Code Mentioned",
-        "All Lock location and Details Mentioned",
-        "All Handle locations and Details Mentioned",
-        "All Electrical provisions shown?",
-        "All Hardware details mentioned"
+   mandirUnit: [
 
-    ],
+    "Furniture plan available and Mandir location clearly identified",
+
+    "All elevations provided (Front, Side and Internal where applicable)",
+
+    "All sections provided (External and Internal wherever required)",
+
+    "Overall dimensions (Length × Width × Height) mentioned",
+
+    "All individual component dimensions mentioned (shelves, drawers, partitions, pedestals, skirting, top, etc.)",
+    "All Individual component quantity (drawers, shelves etc) verified with the BOQ description",
+    "Shutter details as per BOQ (quantity, size, opening direction and shutter type)",
+
+    "Shutter design details as per BOQ with dimensions (grooves, CNC, glass, jali, fluting, profile, moulding or any decorative element, wherever applicable)",
+
+    "Pocket door details complete (opening mechanism, dimensions, wherever applicable)",
+
+    "Internal layout complete with dimensions for every storage compartment",
+    
+    "All partition details shown with dimensions (CNC partitions, vertical partitions, horizontal partitions, dividers, etc.)",
+
+    "All material specifications mentioned for every component (Plywood/MDF/HDF/Solid Wood/Glass/Stone/Metal etc.)",
+
+    "Material thickness specified for every component",
+
+    "Finish type specified for every visible surface (Laminate, PU, Veneer, Acrylic, Duco, Paint, Polish, etc.)",
+
+    "Finish code specified for every finished component",
+
+    "Handle details complete (location and quantity)",
+
+    "Lock details complete (location and quantity)",
+
+    "Electrical provisions complete (light points, LED strips, switch placement wherever applicable)"
+
+   
+
+]
 
     // =====================================
     // WALL PANELLING
@@ -422,23 +479,15 @@ pcc: [
 
     wallPanelling: [
 
-        "Elevation Available",
-        "Section Available",
-
-        "Panel Width Mentioned",
-        "Panel Height Mentioned",
-        "Panel Depth Mentioned",
-
-        "Material Mentioned",
-
-        "Material Thickness Mentioned",
-
+        "Elevation shown with dimensions",
+        "Section shown with dimensions",
+        "Lenght, width and dept of panelling mentioned",
+        "Any designs on Panelling like groove,T patti shown with dimensions",
+        "Material Mentioned with specification(thickness, type)",
         "Laminate Code Mentioned",
-
         "Both Side Elevations Available",
-
-        "Frame Details Mentioned",
-
+        "Cove Details (if any) shown in the section with details",
+        "Covelight shown along with electrical provision",
         "Skirting Interface Mentioned"
 
     ],
@@ -451,24 +500,13 @@ pcc: [
 
         "Elevation Available",
         "Section Available",
-
         "Mirror Thickness Mentioned",
-
-        "Mirror Company Mentioned",
-
         "Mirror Type Mentioned",
-
         "Bevel Details Mentioned",
-
         "Frame Details Mentioned",
-
         "Backing Material Mentioned",
-
         "Backing Thickness Mentioned",
-
-        "All Dimensions Mentioned",
-
-        "Pattern Dimensions Mentioned"
+        "All Dimensions Mentioned"
 
     ],
 
@@ -478,19 +516,25 @@ pcc: [
 
     vanityUnit: [
 
-        "Plan Available with location shown in furniture layout",
-        "Elevation Available",
-        "Front and side Section Available (external and interal elevations)",
-        "L x H X D mentioned",
+        "Plan shown with location shown in furniture layout",
+        "Elevation shown with external and internal elevation",
+        "Front and side Section shown with dimensions",
+        "Internal elevation shown with dimensions and components",
+        "Vertical/partition panels shown (As applicable)",
+        "L x H X D dimensions are shown",
         "Shutter details shown along with opening side and details of design elements(as applicable)",
-        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
-        "All Material type and specification Mentioned",
-        "All Material Thickness Mentioned",
-        "All Finish Type Mentioned",
-        "All Finish Code Mentioned",
+        "Internal Layout shown with dimensions (of shelves, drawers etc)",
+        "Qty of drawers shown is as per BOQ",
+        "Qty of shelves shown is as per BOQ",
+        "Channels type is shown and is as per BOQ",
+        "Material type and specification is mentioned and matches with BOQ",
+        "Material Thickness (Ply,laminate etc) is mentioned and matches with BOQ",
+        "Internal Finish Type mentioned and matches with BOQ",
+        "External Finish Type mentioned and matches with BOQ",
+        "Laminate/Veneer Code Mentioned (as applicable)",
         "All Lock location and Details Mentioned",
         "All Handle locations and Details Mentioned",
-         "All Hardware details mentioned"
+         "Any other Hardware details mentioned"
 
     ],
 
