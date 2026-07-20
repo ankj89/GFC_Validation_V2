@@ -936,3 +936,34 @@ header h1{
     cursor:pointer;
 
 }
+.qty-room-group{
+
+    margin-bottom:20px;
+
+}
+
+.qty-room-header{
+
+    background:#f5f5f5;
+
+    font-weight:600;
+
+    font-size:15px;
+
+    padding:8px 12px;
+
+    border:1px solid #ddd;
+
+    border-bottom:none;
+
+    border-radius:6px 6px 0 0;
+
+}
+
+.qty-room-group .qty-table{
+
+    margin-top:0;
+
+    border-radius:0 0 6px 6px;
+
+}
