@@ -3,7 +3,7 @@
 // =====================================
 
 let validationStore = [];
-
+let qtyValidationData = [];
 // =====================================
 // SAVE PAGE VALIDATION
 // =====================================
@@ -90,7 +90,14 @@ getCurrentPDFPage();
                 selectedItems
             )
         ),
+qtyValidation:
+    JSON.parse(
+        JSON.stringify(
+            qtyValidationData
+        )
+    ),
 
+       
     categories:
     JSON.parse(
         JSON.stringify(
