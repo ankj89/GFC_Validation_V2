@@ -922,3 +922,17 @@ header h1{
     padding:6px;
 
 }
+
+.delete-qty-btn{
+
+    border:none;
+
+    background:none;
+
+    color:#d32f2f;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
