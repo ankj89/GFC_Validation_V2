@@ -19,6 +19,11 @@ function generateReports() {
     generateMissingCoverageReport(
         container
     );
+    
+     // NEW
+    generateQtyMismatchReport(
+        container
+    );
 
     generateExtraScopeReport(
         container
@@ -30,7 +35,100 @@ function generateReports() {
 // =====================================
 // VALIDATION FINDINGS
 // =====================================
+// =====================================
+// QTY MISMATCH REPORT
+// =====================================
 
+function generateQtyMismatchReport(container) {
+
+    const section =
+        document.createElement("div");
+
+    section.innerHTML = `
+        <h3>
+            Quantity Validation Report
+        </h3>
+    `;
+
+    // Show only mismatches
+    const mismatches = qtyValidationData.filter(row =>
+        row.status !== "Match" &&
+        row.status !== "Pending"
+    );
+
+    if (mismatches.length === 0) {
+
+        section.innerHTML += `
+            <p>
+                No Quantity Mismatches Found
+            </p>
+        `;
+
+        container.appendChild(section);
+        return;
+
+    }
+
+    const table =
+        document.createElement("table");
+
+    table.className = "report-table";
+
+    table.innerHTML = `
+
+        <tr>
+
+            <th>Page</th>
+
+            <th>Room</th>
+
+            <th>Item</th>
+
+            <th>BOQ Qty</th>
+
+            <th>GFC Qty</th>
+
+            <th>Status</th>
+
+        </tr>
+
+    `;
+
+    mismatches.forEach(row => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${row.page ?? ""}</td>
+
+                <td>${row.room}</td>
+
+                <td>${row.item}</td>
+
+                <td style="text-align:center">
+                    ${row.boqQty}
+                </td>
+
+                <td style="text-align:center">
+                    ${row.gfcQty}
+                </td>
+
+                <td>
+                    ${row.status === "Short" ? "Less" : "More"}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+    section.appendChild(table);
+
+    container.appendChild(section);
+
+}
 function generateValidationFindingsReport(
     container
 ) {
