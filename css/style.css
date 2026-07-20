@@ -885,3 +885,40 @@ header h1{
     color:#777;
 
 }
+.qty-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.qty-table th{
+
+    background:#1f4e79;
+
+    color:white;
+
+    padding:8px;
+
+    font-size:13px;
+
+}
+
+.qty-table td{
+
+    border:1px solid #ddd;
+
+    padding:8px;
+
+    font-size:13px;
+
+}
+
+.qty-table input{
+
+    width:70px;
+
+    padding:6px;
+
+}
