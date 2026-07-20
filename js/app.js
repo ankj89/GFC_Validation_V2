@@ -235,23 +235,15 @@ function renderQtyValidation() {
 
     <table class="qty-table">
 
-        <thead>
-
-            <tr>
-
-                <th>Room</th>
-
-                <th>Item</th>
-
-                <th>BOQ</th>
-
-                <th>GFC</th>
-
-                <th>Status</th>
-
-            </tr>
-
-        </thead>
+       <thead>
+<tr>
+    <th style="width:50%">Item</th>
+    <th style="width:10%">BOQ</th>
+    <th style="width:15%">GFC</th>
+    <th style="width:15%">Status</th>
+    <th style="width:10%"></th>
+</tr>
+</thead>
 
         <tbody>
 
@@ -259,41 +251,88 @@ function renderQtyValidation() {
 
     qtyValidationData.forEach((row,index)=>{
 
-        html += `
+       html += `
+<tr>
 
-        <tr>
+    <td title="${row.item}">
+        ${truncateText(row.item,35)}
+    </td>
 
-            <td>${row.room}</td>
+    <td style="text-align:center">
+        ${row.boqQty}
+    </td>
 
-            <td>${row.item}</td>
+    <td>
 
-            <td>${row.boqQty}</td>
+        <input
+            type="number"
+            value="${row.gfcQty}"
+            onchange="updateQtyValidation(${index},this.value)">
 
-            <td>
+    </td>
 
-                <input
+    <td style="text-align:center">
 
-                    type="number"
+        ${getQtyStatusIcon(row.status)}
 
-                    value="${row.gfcQty}"
+    </td>
 
-                    onchange="updateQtyValidation(${index},this.value)"
+    <td>
 
-                    style="width:70px;">
+        <button
+            onclick="removeQtyItem(${index})"
+            class="delete-qty-btn">
 
-            </td>
+            ✕
 
-            <td>${row.status}</td>
+        </button>
 
-        </tr>
+    </td>
 
-        `;
+</tr>
+`;
 
     });
 
     html += "</tbody></table>";
 
     container.innerHTML = html;
+
+}
+
+
+function removeQtyItem(index){
+
+    qtyValidationData.splice(index,1);
+
+    renderQtyValidation();
+
+}
+function truncateText(text,length){
+
+    if(text.length<=length)
+        return text;
+
+    return text.substring(0,length)+"...";
+
+}
+
+function getQtyStatusIcon(status){
+
+    switch(status){
+
+        case "Match":
+            return "🟢";
+
+        case "Short":
+            return "🔴";
+
+        case "Excess":
+            return "🟠";
+
+        default:
+            return "⚪";
+    }
 
 }
 
