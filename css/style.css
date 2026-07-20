@@ -391,7 +391,7 @@ header h1{
 
     display:grid;
 
-    grid-template-columns:55% 45%;
+    grid-template-columns:40% 60%;
 
     gap:20px;
 
