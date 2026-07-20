@@ -19,6 +19,10 @@ function exportExcel() {
     addMissingCoverageSheet(
         workbook
     );
+    // NEW
+addQtyValidationSheet(
+    workbook
+);
 
     addMismatchSheet(
         workbook
@@ -87,7 +91,77 @@ formatSheet(
     );
 
 }
+// =====================================
+// QTY VALIDATION
+// =====================================
 
+function addQtyValidationSheet(
+    workbook
+) {
+
+    const data = [
+
+        [
+            "Page",
+            "Room",
+            "Item",
+            "BOQ Qty",
+            "GFC Qty",
+            "Status"
+        ]
+
+    ];
+
+    qtyValidationData
+
+        .filter(row =>
+            row.status !== "Match" &&
+            row.status !== "Pending"
+        )
+
+        .forEach(row => {
+
+            data.push([
+
+                row.page || "",
+
+                row.room,
+
+                row.item,
+
+                row.boqQty,
+
+                row.gfcQty,
+
+                row.status === "Short"
+                    ? "Less"
+                    : "More"
+
+            ]);
+
+        });
+
+    const sheet =
+
+        XLSX.utils.aoa_to_sheet(
+            data
+        );
+
+    formatSheet(
+        sheet
+    );
+
+    XLSX.utils.book_append_sheet(
+
+        workbook,
+
+        sheet,
+
+        "Qty Validation"
+
+    );
+
+}
 // =====================================
 // VALIDATION FINDINGS
 // =====================================
