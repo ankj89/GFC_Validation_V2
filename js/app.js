@@ -215,86 +215,128 @@ function addSelectedItemsToQtyValidation() {
 function renderQtyValidation() {
 
     const container =
-
-        document.getElementById(
-            "qtyValidationContainer"
-        );
+        document.getElementById("qtyValidationContainer");
 
     if (!container) return;
 
     if (qtyValidationData.length === 0) {
 
-        container.innerHTML =
-            "<p>No items added.</p>";
-
+        container.innerHTML = "<p>No items added.</p>";
         return;
-
     }
 
-    let html = `
+    // Group rows by Room
+    const grouped = {};
 
-    <table class="qty-table">
+    qtyValidationData.forEach((row, index) => {
 
-       <thead>
-<tr>
-    <th style="width:50%">Item</th>
-    <th style="width:10%">BOQ</th>
-    <th style="width:15%">GFC</th>
-    <th style="width:15%">Status</th>
-    <th style="width:10%"></th>
-</tr>
-</thead>
+        if (!grouped[row.room]) {
+            grouped[row.room] = [];
+        }
 
-        <tbody>
-
-    `;
-
-    qtyValidationData.forEach((row,index)=>{
-
-       html += `
-<tr>
-
-    <td title="${row.item}">
-        ${truncateText(row.item,35)}
-    </td>
-
-    <td style="text-align:center">
-        ${row.boqQty}
-    </td>
-
-    <td>
-
-        <input
-            type="number"
-            value="${row.gfcQty}"
-            onchange="updateQtyValidation(${index},this.value)">
-
-    </td>
-
-    <td style="text-align:center">
-
-        ${getQtyStatusIcon(row.status)}
-
-    </td>
-
-    <td>
-
-        <button
-            onclick="removeQtyItem(${index})"
-            class="delete-qty-btn">
-
-            ✕
-
-        </button>
-
-    </td>
-
-</tr>
-`;
+        grouped[row.room].push({
+            ...row,
+            originalIndex: index
+        });
 
     });
 
-    html += "</tbody></table>";
+    let html = "";
+
+    Object.keys(grouped).forEach(room => {
+
+        html += `
+
+            <div class="qty-room-group">
+
+                <div class="qty-room-header">
+
+                    ${room}
+
+                </div>
+
+                <table class="qty-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:50%">Item</th>
+
+                            <th style="width:10%">BOQ</th>
+
+                            <th style="width:15%">GFC</th>
+
+                            <th style="width:15%">Status</th>
+
+                            <th style="width:10%"></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+        `;
+
+        grouped[room].forEach(row => {
+
+            html += `
+
+                <tr>
+
+                    <td title="${row.item}">
+                        ${truncateText(row.item,35)}
+                    </td>
+
+                    <td style="text-align:center">
+                        ${row.boqQty}
+                    </td>
+
+                    <td>
+
+                        <input
+                            type="number"
+                            value="${row.gfcQty}"
+                            onchange="updateQtyValidation(${row.originalIndex},this.value)">
+
+                    </td>
+
+                    <td style="text-align:center">
+
+                        ${getQtyStatusIcon(row.status)}
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            onclick="removeQtyItem(${row.originalIndex})"
+                            class="delete-qty-btn">
+
+                            ✕
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+        html += `
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    });
 
     container.innerHTML = html;
 
