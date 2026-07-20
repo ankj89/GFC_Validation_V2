@@ -203,21 +203,26 @@ header h1{
    MAIN LAYOUT
 ===================================== */
 
-.main-layout{
+.workspace{
 
-    display:flex;
+    display:grid;
+
+    grid-template-columns:60% 40%;
+
     gap:20px;
 
-    align-items:flex-start;
+    align-items:stretch;
 
 }
 
 /* =====================================
    PDF PANEL
 ===================================== */
-.viewer-panel{
+.pdf-panel{
 
-    flex:1;
+    display:flex;
+
+    flex-direction:column;
 
     position:sticky;
 
@@ -225,11 +230,17 @@ header h1{
 
     height:calc(100vh - 30px);
 
+    overflow:hidden;
+
+}
+
+.pdf-scroll-container{
+
+    flex:1;
+
     overflow:auto;
 
-    display:flex;
-
-    flex-direction:column;
+    border:1px solid #ddd;
 
 }
 
@@ -294,31 +305,50 @@ header h1{
 }
 
 /* =====================================
-   VALIDATION PANEL
+   VALIDATION WORKSPACE
 ===================================== */
 
-.validation-panel{
+.validation-workspace{
 
-    width:520px;
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
 
     height:calc(100vh - 30px);
 
+}
+
+/* ---------- CATEGORY PANEL ---------- */
+
+.category-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    flex:1;
+
     overflow-y:auto;
 
-    padding-right:12px;
-
 }
-.validation-panel h2{
+
+.category-panel h2{
 
     margin-bottom:15px;
 
 }
 
-.validation-panel label{
+.category-panel label{
 
     display:block;
 
-    margin-top:15px;
+    margin-top:12px;
 
     margin-bottom:6px;
 
@@ -326,9 +356,9 @@ header h1{
 
 }
 
-.validation-panel select,
-.validation-panel textarea,
-.validation-panel input{
+.category-panel input,
+.category-panel textarea,
+.category-panel select{
 
     width:100%;
 
@@ -337,6 +367,100 @@ header h1{
     border:1px solid #ccc;
 
     border-radius:6px;
+
+}
+
+.category-panel textarea{
+
+    min-height:80px;
+
+    resize:vertical;
+
+}
+
+/* ---------- BOTTOM ROW ---------- */
+
+.bottom-workspace{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+    flex:1;
+
+    min-height:0;
+
+}
+
+/* ---------- SKU PANEL ---------- */
+
+.sku-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    overflow-y:auto;
+
+}
+
+.sku-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+.sku-panel label{
+
+    display:block;
+
+    margin-top:12px;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+.sku-panel input,
+.sku-panel textarea,
+.sku-panel select{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+}
+
+/* ---------- QTY PANEL ---------- */
+
+.qty-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    overflow-y:auto;
+
+}
+
+.qty-panel h2{
+
+    margin-bottom:15px;
 
 }
 
@@ -358,13 +482,7 @@ header h1{
 
 }
 
-.validation-panel textarea{
 
-    min-height:80px;
-
-    resize:vertical;
-
-}
 
 .selected-sku-container {
 
@@ -668,25 +786,28 @@ header h1{
 
 @media(max-width:1200px){
 
-    .main-layout{
+   .workspace{
 
-        flex-direction:column;
+    grid-template-columns:1fr;
 
-    }
+}
 
-    .viewer-panel{
-
-        width:100%;
-
-    }
-
-    .validation-panel{
+    .pdf-panel{
 
         width:100%;
 
-        max-height:none;
-
     }
+
+   .validation-workspace{
+
+    height:auto;
+
+}
+   .bottom-workspace{
+
+    grid-template-columns:1fr;
+
+}
 
     .button-row{
 
@@ -708,5 +829,44 @@ header h1{
     border-radius:6px;
 
     line-height:1.8;
+
+}
+#addToQtyBtn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+#addToQtyBtn:hover{
+
+    background:#163a5c;
+
+}
+
+#qtyValidationContainer{
+
+    min-height:250px;
+
+    border:1px dashed #ccc;
+
+    border-radius:6px;
+
+    padding:15px;
+
+    color:#777;
 
 }
