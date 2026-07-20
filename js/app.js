@@ -3,6 +3,7 @@
 // =====================================
 let selectedSkuBasket = [];
 let selectedCategoryBasket = [];
+
 document.addEventListener(
     "DOMContentLoaded",
     initializeApp
@@ -197,7 +198,8 @@ function addSelectedItemsToQtyValidation() {
 
                 gfcQty: "",
 
-                status: "Pending"
+                status: "Pending",
+                page: ""
 
             });
 
@@ -385,6 +387,7 @@ function getQtyStatusIcon(status){
 function updateQtyValidation(index,value){
 
     qtyValidationData[index].gfcQty = value;
+     qtyValidationData[index].page = currentPage;
 
     if(value===""){
 
