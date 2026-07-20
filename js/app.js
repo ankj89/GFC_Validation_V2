@@ -45,6 +45,12 @@ function bindEvents() {
         document.getElementById(
             "addExtraItemBtn"
         );
+    document
+.getElementById("addToQtyBtn")
+?.addEventListener(
+    "click",
+    addSelectedItemsToQtyValidation
+);
 
     roomDropdown?.addEventListener(
 
@@ -161,6 +167,169 @@ filterVisibleItems();
 
 
     
+
+}
+
+
+// =====================================
+// ADD TO QTY VALIDATION
+// =====================================
+
+function addSelectedItemsToQtyValidation() {
+
+    selectedSkuBasket.forEach(item => {
+
+        const exists = qtyValidationData.some(row =>
+
+            row.room === item.room &&
+            row.item === item.item
+        );
+
+        if (!exists) {
+
+            qtyValidationData.push({
+
+                room: item.room,
+
+                item: item.item,
+
+                boqQty: Number(item.qty),
+
+                gfcQty: "",
+
+                status: "Pending"
+
+            });
+
+        }
+
+    });
+
+    renderQtyValidation();
+
+}
+// =====================================
+// RENDER QTY VALIDATION
+// =====================================
+
+function renderQtyValidation() {
+
+    const container =
+
+        document.getElementById(
+            "qtyValidationContainer"
+        );
+
+    if (!container) return;
+
+    if (qtyValidationData.length === 0) {
+
+        container.innerHTML =
+            "<p>No items added.</p>";
+
+        return;
+
+    }
+
+    let html = `
+
+    <table class="qty-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Room</th>
+
+                <th>Item</th>
+
+                <th>BOQ</th>
+
+                <th>GFC</th>
+
+                <th>Status</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+    `;
+
+    qtyValidationData.forEach((row,index)=>{
+
+        html += `
+
+        <tr>
+
+            <td>${row.room}</td>
+
+            <td>${row.item}</td>
+
+            <td>${row.boqQty}</td>
+
+            <td>
+
+                <input
+
+                    type="number"
+
+                    value="${row.gfcQty}"
+
+                    onchange="updateQtyValidation(${index},this.value)"
+
+                    style="width:70px;">
+
+            </td>
+
+            <td>${row.status}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+    html += "</tbody></table>";
+
+    container.innerHTML = html;
+
+}
+
+// =====================================
+// UPDATE QTY
+// =====================================
+
+function updateQtyValidation(index,value){
+
+    qtyValidationData[index].gfcQty = value;
+
+    if(value===""){
+
+        qtyValidationData[index].status="Pending";
+
+    }
+
+    else if(Number(value)===qtyValidationData[index].boqQty){
+
+        qtyValidationData[index].status="Match";
+
+    }
+
+    else if(Number(value)<qtyValidationData[index].boqQty){
+
+        qtyValidationData[index].status="Short";
+
+    }
+
+    else{
+
+        qtyValidationData[index].status="Excess";
+
+    }
+
+    renderQtyValidation();
 
 }
 
