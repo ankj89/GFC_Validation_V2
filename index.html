@@ -261,7 +261,78 @@
 
         <!-- VALIDATION PANEL -->
 
-  <div class="validation-workspace">
+ <div class="validation-workspace">
+
+    <!-- ================= TOP ================= -->
+
+    <div class="top-workspace">
+
+        <!-- SKU PANEL -->
+
+        <div class="sku-panel">
+
+            <h2>SKU Search & Selection</h2>
+
+            <label>Select Room</label>
+
+            <select id="roomDropdown"></select>
+
+            <label>Search Items</label>
+
+            <input
+                type="text"
+                id="itemSearch"
+                placeholder="Search SKU, Room, Qty...">
+
+            <label>Visible Items</label>
+
+            <select
+                id="itemDropdown"
+                multiple>
+            </select>
+
+            <h3>Selected SKUs</h3>
+
+            <div
+                id="selectedSkuContainer"
+                class="selected-sku-container">
+            </div>
+
+            <button
+                id="addToQtyBtn"
+                type="button">
+                Add to Qty Validation
+            </button>
+
+            <hr style="margin:20px 0;">
+
+            <h3>Extra Items visible in GFC but not RFV</h3>
+
+            <div id="extraItemsContainer"></div>
+
+            <button
+                id="addExtraItemBtn"
+                type="button">
+                Add More
+            </button>
+
+        </div>
+
+        <!-- QTY PANEL -->
+
+        <div class="qty-panel">
+
+            <h2>BOQ vs GFC Quantity Validation</h2>
+
+            <div id="qtyValidationContainer">
+
+                <p>No items added.</p>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <!-- ================= CATEGORY ================= -->
 
@@ -295,9 +366,7 @@
 
         <div id="checklistContainer"></div>
 
-        <label>
-            Overall Remarks
-        </label>
+        <label>Overall Remarks</label>
 
         <textarea id="overallRemarks"></textarea>
 
@@ -306,99 +375,6 @@
             Save Page Validation
 
         </button>
-
-    </div>
-
-    <!-- ================= BOTTOM ================= -->
-
-    <div class="bottom-workspace">
-
-        <!-- SKU PANEL -->
-
-        <div class="sku-panel">
-
-            <h2>SKU Search & Selection</h2>
-
-            <label>
-                Select Room
-            </label>
-
-            <select id="roomDropdown"></select>
-
-            <label>
-                Search Items
-            </label>
-
-            <input
-                type="text"
-                id="itemSearch"
-                placeholder="Search SKU, Room, Qty...">
-
-            <label>
-                Visible Items
-            </label>
-
-            <select
-                id="itemDropdown"
-                multiple>
-            </select>
-
-            <h3>Selected SKUs</h3>
-
-            <div
-                id="selectedSkuContainer"
-                class="selected-sku-container">
-            </div>
-
-            <button
-                id="addToQtyBtn"
-                type="button">
-
-                Add to Qty Validation
-
-            </button>
-
-            <hr style="margin:20px 0;">
-
-            <h3>
-
-                Extra Items visible in GFC but not RFV
-
-            </h3>
-
-            <div id="extraItemsContainer"></div>
-
-            <button
-                id="addExtraItemBtn"
-                type="button">
-
-                Add More
-
-            </button>
-
-        </div>
-
-        <!-- QTY PANEL -->
-
-        <div class="qty-panel">
-
-            <h2>
-
-                BOQ vs GFC Quantity Validation
-
-            </h2>
-
-            <div id="qtyValidationContainer">
-
-                <p>
-
-                    No items added.
-
-                </p>
-
-            </div>
-
-        </div>
 
     </div>
 
