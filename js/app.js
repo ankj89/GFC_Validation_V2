@@ -387,7 +387,7 @@ function getQtyStatusIcon(status){
 function updateQtyValidation(index,value){
 
     qtyValidationData[index].gfcQty = value;
-     qtyValidationData[index].page = currentPage;
+     qtyValidationData[index].page = currentPageNumber;
 
     if(value===""){
 
