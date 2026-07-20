@@ -140,7 +140,18 @@ function addQtyValidationSheet(
             ]);
 
         });
+ if (data.length === 1) {
 
+        data.push([
+            "",
+            "",
+            "No Quantity Mismatches Found",
+            "",
+            "",
+            ""
+        ]);
+
+    }
     const sheet =
 
         XLSX.utils.aoa_to_sheet(
