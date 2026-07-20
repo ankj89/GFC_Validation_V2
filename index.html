@@ -181,11 +181,11 @@
     id="validationSection"
     class="hidden">
 
-    <div class="main-layout">
+    <div class="workspace">
 
         <!-- PDF PANEL -->
 
-        <div class="viewer-panel">
+        <div class="pdf-panel">
 
             <div class="viewer-toolbar">
 
@@ -261,126 +261,148 @@
 
         <!-- VALIDATION PANEL -->
 
-        <div class="validation-panel">
+  <div class="validation-workspace">
 
-            <h2>
-                Validation
-            </h2>
+    <!-- ================= CATEGORY ================= -->
 
-            <!-- ROOM -->
+    <div class="category-panel">
+
+        <h2>Category Validation</h2>
+
+        <label>Search Category</label>
+
+        <input
+            type="text"
+            id="categorySearch"
+            placeholder="Search category...">
+
+        <label>
+            Drawing Category (Select all categories visible in the page)
+        </label>
+
+        <div>
+
+            <label>Selected Categories</label>
+
+            <div id="selectedCategoryContainer"></div>
+
+        </div>
+
+        <select
+            id="categoryDropdown"
+            multiple>
+        </select>
+
+        <div id="checklistContainer"></div>
+
+        <label>
+            Overall Remarks
+        </label>
+
+        <textarea id="overallRemarks"></textarea>
+
+        <button id="saveValidationBtn">
+
+            Save Page Validation
+
+        </button>
+
+    </div>
+
+    <!-- ================= BOTTOM ================= -->
+
+    <div class="bottom-workspace">
+
+        <!-- SKU PANEL -->
+
+        <div class="sku-panel">
+
+            <h2>SKU Search & Selection</h2>
 
             <label>
-                 Select Room from dropdown(Select FULL HOME in case the GFC page is full home)
+                Select Room
             </label>
 
-            <select
-                id="roomDropdown">
-
-            </select>
-
-            <!-- ITEMS -->
+            <select id="roomDropdown"></select>
 
             <label>
-                Visible Items (Select all SKUs which are visible in the GFC page)
+                Search Items
             </label>
 
-<h3>
-Selected SKUs
-</h3>
+            <input
+                type="text"
+                id="itemSearch"
+                placeholder="Search SKU, Room, Qty...">
 
-<div
-    id="selectedSkuContainer"
-    class="selected-sku-container">
+            <label>
+                Visible Items
+            </label>
 
-</div>
-
-            
-<label>Search Items</label>
-
-<input
-    type="text"
-    id="itemSearch"
-    placeholder="Search SKU, Room, Qty..."
->
-            
             <select
                 id="itemDropdown"
                 multiple>
-
             </select>
 
-            <!-- CATEGORY -->
-
-            <label>
-                Drawing Category (Select all categories that are visible in the page)
-            </label>
-<div>
-
-    <label>
-        Selected Categories
-    </label>
-
-    <div
-        id="selectedCategoryContainer">
-    </div>
-
-</div>
-            <select
-                id="categoryDropdown"
-                multiple>
-
-            </select>
-
-            <!-- EXTRA ITEMS -->
-
-            <h3>
-Mention items visible in GFC page but not in converted RFV
-</h3>
-
-<div id="extraItemsContainer">
-
-</div>
-
-<button
-    id="addExtraItemBtn"
-    type="button">
-
-    Add More
-
-</button>
-
-            <!-- DRAWING STATUS -->
-
-            
-
-            <!-- CHECKLIST -->
+            <h3>Selected SKUs</h3>
 
             <div
-                id="checklistContainer">
-
+                id="selectedSkuContainer"
+                class="selected-sku-container">
             </div>
 
-            <!-- REMARKS -->
+            <button
+                id="addToQtyBtn"
+                type="button">
 
-            <label>
-                Overall Remarks
-            </label>
+                Add to Qty Validation
 
-            <textarea
-                id="overallRemarks">
+            </button>
 
-            </textarea>
+            <hr style="margin:20px 0;">
+
+            <h3>
+
+                Extra Items visible in GFC but not RFV
+
+            </h3>
+
+            <div id="extraItemsContainer"></div>
 
             <button
-                id="saveValidationBtn">
+                id="addExtraItemBtn"
+                type="button">
 
-                Save Page Validation
+                Add More
 
             </button>
 
         </div>
 
+        <!-- QTY PANEL -->
+
+        <div class="qty-panel">
+
+            <h2>
+
+                BOQ vs GFC Quantity Validation
+
+            </h2>
+
+            <div id="qtyValidationContainer">
+
+                <p>
+
+                    No items added.
+
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
+
+</div>
 
 </section>
 
